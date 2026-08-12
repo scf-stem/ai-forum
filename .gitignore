@@ -2,16 +2,15 @@
 .trae/
 .trae-html-share-packages/
 
-# AI Forum project
-ai-forum/frontend/node_modules/
-ai-forum/frontend/.next/
-ai-forum/backend/.venv/
-ai-forum/backend/__pycache__/
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
 
-# Personal Portfolio project
-personal-portfolio/site/node_modules/
-personal-portfolio/site/dist/
+# Backend (FastAPI)
+backend/.venv/
+backend/__pycache__/
 
+# Environment
 .env
 
 # Redis RDB 数据文件（本地运行生成）
