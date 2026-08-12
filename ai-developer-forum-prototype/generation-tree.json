@@ -1,0 +1,244 @@
+{
+  "nodeId": "gen-project-shell",
+  "kind": "project-shell",
+  "pageIds": [],
+  "output": "partials/project-shell.html",
+  "sharedRegions": [
+    "global-header",
+    "global-footer",
+    "background-surface",
+    "type-scale",
+    "nav-chrome"
+  ],
+  "privateRegions": [],
+  "mutableSlots": [
+    "activeNavItem",
+    "pageTitle",
+    "mainContent"
+  ],
+  "status": "planned",
+  "children": [
+    {
+      "nodeId": "gen-page-index",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-index"
+      ],
+      "output": "pages/index.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "hero",
+        "recommended-feed",
+        "board-nav",
+        "ai-quick-entry"
+      ],
+      "mutableSlots": [
+        "activeNavItem=home",
+        "pageTitle=首页",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    },
+    {
+      "nodeId": "gen-page-board",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-board"
+      ],
+      "output": "pages/board.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "board-header",
+        "tier-tabs",
+        "post-list",
+        "filters"
+      ],
+      "mutableSlots": [
+        "activeNavItem=boards",
+        "pageTitle=版块详情",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    },
+    {
+      "nodeId": "gen-page-post",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-post"
+      ],
+      "output": "pages/post.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "post-body",
+        "ai-answer",
+        "community-replies",
+        "interaction-bar",
+        "author-card"
+      ],
+      "mutableSlots": [
+        "activeNavItem=none",
+        "pageTitle=帖子详情",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    },
+    {
+      "nodeId": "gen-page-ask",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-ask"
+      ],
+      "output": "pages/ask.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "editor-form",
+        "ai-writing-toolbar",
+        "publish-controls"
+      ],
+      "mutableSlots": [
+        "activeNavItem=ask",
+        "pageTitle=发帖/提问",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    },
+    {
+      "nodeId": "gen-page-profile",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-profile"
+      ],
+      "output": "pages/profile.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "profile-header",
+        "reputation",
+        "badges",
+        "history-tabs"
+      ],
+      "mutableSlots": [
+        "activeNavItem=profile",
+        "pageTitle=个人主页",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    },
+    {
+      "nodeId": "gen-page-auth",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-auth"
+      ],
+      "output": "pages/auth.html",
+      "sharedRegions": [
+        "global-header-minimal",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "auth-card",
+        "login-form",
+        "register-form",
+        "oauth-entry"
+      ],
+      "mutableSlots": [
+        "activeNavItem=none",
+        "pageTitle=登录/注册",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    },
+    {
+      "nodeId": "gen-page-notifications",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-notifications"
+      ],
+      "output": "pages/notifications.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "notification-list",
+        "filter-tabs"
+      ],
+      "mutableSlots": [
+        "activeNavItem=notifications",
+        "pageTitle=通知",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    },
+    {
+      "nodeId": "gen-page-search",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-search"
+      ],
+      "output": "pages/search.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "search-input",
+        "result-tabs",
+        "result-lists"
+      ],
+      "mutableSlots": [
+        "activeNavItem=none",
+        "pageTitle=搜索结果",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    },
+    {
+      "nodeId": "gen-page-settings",
+      "kind": "page-leaf",
+      "pageIds": [
+        "page-settings"
+      ],
+      "output": "pages/settings.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer"
+      ],
+      "privateRegions": [
+        "settings-menu",
+        "account-form",
+        "notification-preferences",
+        "privacy-settings"
+      ],
+      "mutableSlots": [
+        "activeNavItem=settings",
+        "pageTitle=设置",
+        "mainContent"
+      ],
+      "status": "planned",
+      "children": []
+    }
+  ]
+}

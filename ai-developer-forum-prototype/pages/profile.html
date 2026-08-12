@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页 - AI开发者论坛</title>
+    <style id="theme-vars">
+/* AI辅助开发者论坛 · 品牌变量系统 */
+
+:root {
+  /* 品牌主色阶 (Indigo) - 唯一身份色 */
+  --aidev-primary-50: #eef2ff;
+  --aidev-primary-100: #e0e7ff;
+  --aidev-primary-200: #c7d2fe;
+  --aidev-primary-300: #a5b4fc;
+  --aidev-primary-400: #818cf8;
+  --aidev-primary-500: #6366f1;
+  --aidev-primary-600: #4f46e5;
+  --aidev-primary-700: #4338ca;
+  --aidev-primary-800: #3730a3;
+  --aidev-primary-900: #312e81;
+
+  /* 中性色阶 */
+  --aidev-neutral-0: #ffffff;
+  --aidev-neutral-50: #f8fafc;
+  --aidev-neutral-100: #f1f5f9;
+  --aidev-neutral-200: #e2e8f0;
+  --aidev-neutral-300: #cbd5e1;
+  --aidev-neutral-400: #94a3b8;
+  --aidev-neutral-500: #64748b;
+  --aidev-neutral-600: #475569;
+  --aidev-neutral-700: #334155;
+  --aidev-neutral-800: #1e293b;
+  --aidev-neutral-900: #0f172a;
+
+  /* 状态语义色 */
+  --aidev-state-success: #059669;
+  --aidev-state-success-bg: rgba(5, 150, 105, 0.08);
+  --aidev-state-warning: #d97706;
+  --aidev-state-warning-bg: rgba(217, 119, 6, 0.08);
+  --aidev-state-error: #dc2626;
+  --aidev-state-error-bg: rgba(220, 38, 38, 0.08);
+  --aidev-state-info: #2563eb;
+  --aidev-state-info-bg: rgba(37, 99, 235, 0.08);
+
+  /* 代码/深色表面 */
+  --aidev-code-bg: #1e1b2e;
+  --aidev-code-ink: #e2e0f0;
+
+  /* 语义别名 */
+  --aidev-background: var(--aidev-neutral-50);
+  --aidev-foreground: var(--aidev-neutral-900);
+  --aidev-card: var(--aidev-neutral-0);
+  --aidev-card-foreground: var(--aidev-neutral-900);
+  --aidev-popover: var(--aidev-neutral-0);
+  --aidev-popover-foreground: var(--aidev-neutral-900);
+  --aidev-primary: var(--aidev-primary-600);
+  --aidev-primary-foreground: var(--aidev-neutral-0);
+  --aidev-muted: var(--aidev-neutral-100);
+  --aidev-muted-foreground: var(--aidev-neutral-500);
+  --aidev-border: var(--aidev-neutral-200);
+  --aidev-input: var(--aidev-neutral-200);
+  --aidev-ring: var(--aidev-primary-600);
+
+  /* 圆角 */
+  --aidev-radius-sm: 4px;
+  --aidev-radius-md: 8px;
+  --aidev-radius-lg: 12px;
+  --aidev-radius-full: 9999px;
+
+  /* 阴影 - 静态表面 ≤ 0.05 alpha */
+  --aidev-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --aidev-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-float: 0 16px 48px rgba(15, 23, 42, 0.12);
+
+  /* 字体系统 */
+  --aidev-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  --aidev-font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* 间距 */
+  --aidev-space-1: 0.25rem;
+  --aidev-space-2: 0.5rem;
+  --aidev-space-3: 0.75rem;
+  --aidev-space-4: 1rem;
+  --aidev-space-5: 1.25rem;
+  --aidev-space-6: 1.5rem;
+  --aidev-space-8: 2rem;
+  --aidev-space-10: 2.5rem;
+  --aidev-space-12: 3rem;
+
+  /* 尺寸 */
+  --aidev-header-height: 64px;
+  --aidev-max-content: 1200px;
+  --aidev-sidebar-width: 240px;
+}
+
+html.dark {
+  --aidev-background: #0b0f19;
+  --aidev-foreground: #f1f5f9;
+  --aidev-card: #111827;
+  --aidev-card-foreground: #f1f5f9;
+  --aidev-popover: #111827;
+  --aidev-popover-foreground: #f1f5f9;
+  --aidev-muted: #1e293b;
+  --aidev-muted-foreground: #94a3b8;
+  --aidev-border: #1e293b;
+  --aidev-input: #334155;
+  --aidev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --aidev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --aidev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --aidev-code-bg: #1a1625;
+}
+
+/* 排版工具类 */
+.font-sans { font-family: var(--aidev-font-sans); }
+.font-mono { font-family: var(--aidev-font-mono); }
+
+.text-display {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-headline {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-title {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--aidev-background);
+    --color-foreground: var(--aidev-foreground);
+    --color-card: var(--aidev-card);
+    --color-card-foreground: var(--aidev-card-foreground);
+    --color-popover: var(--aidev-popover);
+    --color-popover-foreground: var(--aidev-popover-foreground);
+    --color-primary: var(--aidev-primary);
+    --color-primary-foreground: var(--aidev-primary-foreground);
+    --color-muted: var(--aidev-muted);
+    --color-muted-foreground: var(--aidev-muted-foreground);
+    --color-border: var(--aidev-border);
+    --color-input: var(--aidev-input);
+    --color-ring: var(--aidev-ring);
+    --radius-sm: var(--aidev-radius-sm);
+    --radius-md: var(--aidev-radius-md);
+    --radius-lg: var(--aidev-radius-lg);
+  }
+  @layer base {
+    body { background: var(--aidev-background); color: var(--aidev-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--aidev-background); }
+      .text-background { color: var(--aidev-background); }
+      .border-background { border-color: var(--aidev-background); }
+      .ring-background { --tw-ring-color: var(--aidev-background); }
+      .bg-foreground { background-color: var(--aidev-foreground); }
+      .text-foreground { color: var(--aidev-foreground); }
+      .border-foreground { border-color: var(--aidev-foreground); }
+      .ring-foreground { --tw-ring-color: var(--aidev-foreground); }
+      .bg-card { background-color: var(--aidev-card); }
+      .text-card { color: var(--aidev-card); }
+      .border-card { border-color: var(--aidev-card); }
+      .ring-card { --tw-ring-color: var(--aidev-card); }
+      .bg-card-foreground { background-color: var(--aidev-card-foreground); }
+      .text-card-foreground { color: var(--aidev-card-foreground); }
+      .border-card-foreground { border-color: var(--aidev-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--aidev-card-foreground); }
+      .bg-popover { background-color: var(--aidev-popover); }
+      .text-popover { color: var(--aidev-popover); }
+      .border-popover { border-color: var(--aidev-popover); }
+      .ring-popover { --tw-ring-color: var(--aidev-popover); }
+      .bg-popover-foreground { background-color: var(--aidev-popover-foreground); }
+      .text-popover-foreground { color: var(--aidev-popover-foreground); }
+      .border-popover-foreground { border-color: var(--aidev-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--aidev-popover-foreground); }
+      .bg-primary { background-color: var(--aidev-primary); }
+      .text-primary { color: var(--aidev-primary); }
+      .border-primary { border-color: var(--aidev-primary); }
+      .ring-primary { --tw-ring-color: var(--aidev-primary); }
+      .bg-primary-foreground { background-color: var(--aidev-primary-foreground); }
+      .text-primary-foreground { color: var(--aidev-primary-foreground); }
+      .border-primary-foreground { border-color: var(--aidev-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--aidev-primary-foreground); }
+      .bg-muted { background-color: var(--aidev-muted); }
+      .text-muted { color: var(--aidev-muted); }
+      .border-muted { border-color: var(--aidev-muted); }
+      .ring-muted { --tw-ring-color: var(--aidev-muted); }
+      .bg-muted-foreground { background-color: var(--aidev-muted-foreground); }
+      .text-muted-foreground { color: var(--aidev-muted-foreground); }
+      .border-muted-foreground { border-color: var(--aidev-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--aidev-muted-foreground); }
+      .bg-border { background-color: var(--aidev-border); }
+      .text-border { color: var(--aidev-border); }
+      .border-border { border-color: var(--aidev-border); }
+      .ring-border { --tw-ring-color: var(--aidev-border); }
+      .bg-input { background-color: var(--aidev-input); }
+      .text-input { color: var(--aidev-input); }
+      .border-input { border-color: var(--aidev-input); }
+      .ring-input { --tw-ring-color: var(--aidev-input); }
+      .bg-ring { background-color: var(--aidev-ring); }
+      .text-ring { color: var(--aidev-ring); }
+      .border-ring { border-color: var(--aidev-ring); }
+      .ring-ring { --tw-ring-color: var(--aidev-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+  <!-- 关键布局样式：即使 Tailwind 浏览器编译延迟，也能保证首屏结构不塌陷 -->
+  <style id="critical-layout">
+    /* 项目外壳：Sticky header + 主内容 + footer */
+    .aidev-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: var(--aidev-background);
+      color: var(--aidev-foreground);
+      font-family: var(--aidev-font-sans);
+    }
+
+    .aidev-shell-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+      height: var(--aidev-header-height);
+      background-color: var(--aidev-card);
+      border-bottom: 1px solid var(--aidev-border);
+      box-shadow: var(--aidev-shadow-sm);
+    }
+
+    .aidev-shell-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      max-width: var(--aidev-max-content);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 var(--aidev-space-6);
+    }
+
+    .aidev-shell-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      color: var(--aidev-foreground);
+      font-size: 1.125rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-brand:hover {
+      color: var(--aidev-primary);
+    }
+
+    .aidev-shell-logo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--aidev-radius-md);
+      background: linear-gradient(135deg, var(--aidev-primary-500), var(--aidev-primary-700));
+      color: var(--aidev-primary-foreground);
+    }
+
+    .aidev-shell-logo-icon svg,
+    .aidev-shell-logo-icon [data-lucide] {
+      width: 18px;
+      height: 18px;
+    }
+
+    .aidev-shell-search {
+      position: relative;
+      flex: 1 1 auto;
+      max-width: 420px;
+      min-width: 160px;
+    }
+
+    .aidev-shell-search-icon {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: var(--aidev-muted-foreground);
+      pointer-events: none;
+    }
+
+    .aidev-shell-search-input {
+      width: 100%;
+      height: 40px;
+      padding: 0 var(--aidev-space-4) 0 var(--aidev-space-10);
+      border: 1px solid var(--aidev-input);
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-muted);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .aidev-shell-search-input::placeholder {
+      color: var(--aidev-muted-foreground);
+    }
+
+    .aidev-shell-search-input:hover {
+      border-color: var(--aidev-primary-300);
+    }
+
+    .aidev-shell-search-input:focus {
+      outline: none;
+      border-color: var(--aidev-ring);
+      background-color: var(--aidev-card);
+      box-shadow: 0 0 0 3px var(--aidev-primary-100);
+    }
+
+    .aidev-shell-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      padding: var(--aidev-space-2) var(--aidev-space-3);
+      border-radius: var(--aidev-radius-md);
+      color: var(--aidev-neutral-600);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .aidev-shell-nav-link:hover {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .aidev-shell-nav-link:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-shell-nav-link svg,
+    .aidev-shell-nav-link [data-lucide] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-nav-link.is-active {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .aidev-shell-auth {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-primary-100);
+      color: var(--aidev-primary-700);
+      border: 1px solid var(--aidev-border);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .aidev-shell-auth-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 var(--aidev-space-4);
+      border: 1px solid transparent;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .aidev-shell-auth-button:hover {
+      background-color: var(--aidev-primary-700);
+    }
+
+    .aidev-shell-auth-button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--aidev-primary-200);
+    }
+
+    .aidev-shell-main {
+      flex: 1 0 auto;
+      width: 100%;
+      max-width: var(--aidev-max-content);
+      margin: 0 auto;
+      padding: var(--aidev-space-6);
+    }
+
+    .aidev-shell-footer {
+      width: 100%;
+      border-top: 1px solid var(--aidev-border);
+      background-color: var(--aidev-card);
+    }
+
+    .aidev-shell-footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      max-width: var(--aidev-max-content);
+      margin: 0 auto;
+      padding: var(--aidev-space-6);
+    }
+
+    .aidev-shell-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-4);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .aidev-shell-footer-links a {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .aidev-shell-footer-links a:hover {
+      color: var(--aidev-primary);
+    }
+
+    .aidev-shell-slogan {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1024px) {
+      .aidev-shell-header-inner {
+        padding: 0 var(--aidev-space-4);
+      }
+
+      .aidev-shell-nav-link span {
+        display: none;
+      }
+
+      .aidev-shell-nav-link {
+        padding: var(--aidev-space-2);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .aidev-shell-header-inner {
+        gap: var(--aidev-space-3);
+      }
+
+      .aidev-shell-search {
+        display: none;
+      }
+
+      .aidev-shell-main {
+        padding: var(--aidev-space-4);
+      }
+
+      .aidev-shell-footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--aidev-space-5) var(--aidev-space-4);
+      }
+    }
+
+    /* 个人主页关键布局 */
+    .profile-hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--aidev-space-6);
+      align-items: start;
+      padding: var(--aidev-space-6);
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      margin-bottom: var(--aidev-space-6);
+    }
+
+    .profile-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 96px;
+      height: 96px;
+      border-radius: var(--aidev-radius-full);
+      background: linear-gradient(135deg, var(--aidev-primary-400), var(--aidev-primary-600));
+      color: var(--aidev-primary-foreground);
+      font-size: 2.25rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .profile-info {
+      min-width: 0;
+    }
+
+    .profile-name-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      margin-bottom: var(--aidev-space-2);
+    }
+
+    .profile-name {
+      font-size: 1.75rem;
+      line-height: 1.2;
+      font-weight: 700;
+      color: var(--aidev-foreground);
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .profile-handle {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.9375rem;
+    }
+
+    .profile-bio {
+      color: var(--aidev-neutral-600);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: var(--aidev-space-3) 0;
+      max-width: 720px;
+    }
+
+    .profile-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--aidev-space-2);
+    }
+
+    .profile-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--aidev-space-1) var(--aidev-space-3);
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-muted);
+      color: var(--aidev-neutral-700);
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--aidev-space-4);
+      margin-bottom: var(--aidev-space-6);
+    }
+
+    .profile-stat {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-5);
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      text-align: center;
+    }
+
+    .profile-stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--aidev-foreground);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.2;
+    }
+
+    .profile-stat-label {
+      font-size: 0.875rem;
+      color: var(--aidev-muted-foreground);
+    }
+
+    .badge-wall {
+      margin-bottom: var(--aidev-space-6);
+    }
+
+    .badge-wall-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--aidev-space-4);
+    }
+
+    .badge-wall-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--aidev-foreground);
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--aidev-space-4);
+    }
+
+    .badge-card {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--aidev-space-3);
+      padding: var(--aidev-space-4);
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .badge-card:hover {
+      border-color: var(--aidev-primary-300);
+      box-shadow: var(--aidev-shadow-md);
+    }
+
+    .badge-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary-600);
+      flex-shrink: 0;
+    }
+
+    .badge-icon svg,
+    .badge-icon [data-lucide] {
+      width: 22px;
+      height: 22px;
+    }
+
+    .badge-name {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--aidev-foreground);
+      margin-bottom: 2px;
+    }
+
+    .badge-desc {
+      font-size: 0.8125rem;
+      color: var(--aidev-muted-foreground);
+      line-height: 1.5;
+    }
+
+    .history-tabs {
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      overflow: hidden;
+    }
+
+    .history-tab-list {
+      display: flex;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-3) var(--aidev-space-4);
+      border-bottom: 1px solid var(--aidev-border);
+      background-color: var(--aidev-neutral-50);
+    }
+
+    .history-tab-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .history-tab-label {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      padding: var(--aidev-space-2) var(--aidev-space-4);
+      border-radius: var(--aidev-radius-md);
+      color: var(--aidev-neutral-600);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .history-tab-label:hover {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .history-tab-input:checked + .history-tab-label {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+      font-weight: 600;
+    }
+
+    .history-tab-input:focus-visible + .history-tab-label {
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .history-tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-muted);
+      color: var(--aidev-neutral-600);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .history-tab-input:checked + .history-tab-label .history-tab-count {
+      background-color: var(--aidev-primary-100);
+      color: var(--aidev-primary-700);
+    }
+
+    .history-panels {
+      padding: var(--aidev-space-4);
+    }
+
+    .history-panel {
+      display: none;
+    }
+
+    #tab-posts:checked ~ .history-panels #panel-posts,
+    #tab-answers:checked ~ .history-panels #panel-answers,
+    #tab-tips:checked ~ .history-panels #panel-tips {
+      display: block;
+    }
+
+    .history-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .history-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-2);
+      padding: var(--aidev-space-4) 0;
+      border-bottom: 1px solid var(--aidev-border);
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-item-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--aidev-foreground);
+      text-decoration: none;
+      line-height: 1.4;
+      text-wrap: pretty;
+      word-break: keep-all;
+    }
+
+    .history-item-title:hover {
+      color: var(--aidev-primary);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .history-item-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      color: var(--aidev-muted-foreground);
+      font-size: 0.8125rem;
+    }
+
+    .history-item-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+    }
+
+    .history-item-meta svg,
+    .history-item-meta [data-lucide] {
+      width: 14px;
+      height: 14px;
+    }
+
+    .history-board-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary-700);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .history-empty {
+      display: none;
+      text-align: center;
+      padding: var(--aidev-space-10) var(--aidev-space-4);
+      color: var(--aidev-muted-foreground);
+    }
+
+    @media (max-width: 1024px) {
+      .profile-hero {
+        grid-template-columns: 1fr;
+        gap: var(--aidev-space-4);
+      }
+
+      .badge-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .profile-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        font-size: 1.75rem;
+      }
+
+      .profile-name {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .badge-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .history-tab-label {
+        padding: var(--aidev-space-2) var(--aidev-space-3);
+        font-size: 0.875rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aidev-shell-nav-link,
+      .aidev-shell-search-input,
+      .aidev-shell-auth-button,
+      .badge-card,
+      .history-tab-label,
+      .history-item-title {
+        transition: none;
+      }
+    }
+  </style>
+
+  <div class="aidev-shell">
+    <header class="aidev-shell-header" role="banner">
+      <div class="aidev-shell-header-inner">
+        <a class="aidev-shell-brand" href="/" aria-label="AI 开发者论坛首页">
+          <span class="aidev-shell-logo-icon" aria-hidden="true">
+            <i data-lucide="sparkles"></i>
+          </span>
+          <span class="aidev-shell-logo-text">AI 开发者论坛</span>
+        </a>
+
+        <div class="aidev-shell-search" role="search">
+          <span class="aidev-shell-search-icon" aria-hidden="true">
+            <i data-lucide="search" style="width:18px;height:18px;"></i>
+          </span>
+          <input
+            class="aidev-shell-search-input"
+            type="search"
+            placeholder="搜索问题、话题、开发者..."
+            aria-label="全局搜索"
+            autocomplete="off"
+          />
+        </div>
+
+        <nav class="aidev-shell-nav" aria-label="主导航">
+          <a class="aidev-shell-nav-link" href="/" data-nav-key="home" data-dom-id="nav-home">
+            <i data-lucide="home"></i>
+            <span>首页</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/boards" data-nav-key="boards" data-dom-id="nav-boards">
+            <i data-lucide="layout-grid"></i>
+            <span>版块</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/ask" data-nav-key="ask" data-dom-id="nav-ask">
+            <i data-lucide="help-circle"></i>
+            <span>提问</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/notifications" data-nav-key="notifications" data-dom-id="nav-notifications">
+            <i data-lucide="bell"></i>
+            <span>通知</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/settings" data-nav-key="settings" data-dom-id="nav-settings">
+            <i data-lucide="settings"></i>
+            <span>设置</span>
+          </a>
+          <a class="aidev-shell-nav-link is-active" href="/profile" data-nav-key="profile" data-dom-id="nav-profile">
+            <i data-lucide="user"></i>
+            <span>主页</span>
+          </a>
+        </nav>
+
+        <div class="aidev-shell-auth">
+          <a class="aidev-shell-auth-button" href="/settings" data-dom-id="action-edit-profile">编辑资料</a>
+          <a class="aidev-shell-avatar" href="/profile" aria-label="林深的个人主页" data-dom-id="auth-profile">
+            <i data-lucide="user" style="width:18px;height:18px;"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="aidev-shell-main" id="main-content">
+      <!-- 个人资料头图 -->
+      <section class="profile-hero" aria-labelledby="profile-name">
+        <div class="profile-avatar" aria-hidden="true">林</div>
+        <div class="profile-info">
+          <div class="profile-name-row">
+            <h1 class="profile-name" id="profile-name">林深</h1>
+            <span class="profile-handle">@linshen_ai · 加入 2 年</span>
+          </div>
+          <p class="profile-bio">
+            专注大模型应用工程化，热爱开源与工具链建设。前大厂推荐系统工程师，现全职做 AI 开发者社区贡献。信奉“代码即文档”，习惯把复杂问题拆成可验证的小模块。
+          </p>
+          <div class="profile-tags" aria-label="技术栈">
+            <span class="profile-tag">Python</span>
+            <span class="profile-tag">PyTorch</span>
+            <span class="profile-tag">LangChain</span>
+            <span class="profile-tag">React</span>
+            <span class="profile-tag">TypeScript</span>
+            <span class="profile-tag">Docker</span>
+            <span class="profile-tag">Kubernetes</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 声望数据行 -->
+      <section class="profile-stats" aria-label="声望统计">
+        <div class="profile-stat">
+          <span class="profile-stat-value">3,842</span>
+          <span class="profile-stat-label">声望</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-value">Lv.7</span>
+          <span class="profile-stat-label">资深开发者</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-value">1,205</span>
+          <span class="profile-stat-label">获赞</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-value">86</span>
+          <span class="profile-stat-label">被采纳</span>
+        </div>
+      </section>
+
+      <!-- 徽章墙 -->
+      <section class="badge-wall" aria-labelledby="badge-wall-title">
+        <div class="badge-wall-header">
+          <h2 class="badge-wall-title" id="badge-wall-title">声望徽章</h2>
+          <a href="/badges" class="text-sm" style="color:var(--aidev-primary);text-decoration:none;">查看全部</a>
+        </div>
+        <div class="badge-grid">
+          <article class="badge-card">
+            <span class="badge-icon" aria-hidden="true"><i data-lucide="award"></i></span>
+            <div>
+              <h3 class="badge-name">高质量回答者</h3>
+              <p class="badge-desc">连续 3 个月答案被采纳率超过 40%</p>
+            </div>
+          </article>
+          <article class="badge-card">
+            <span class="badge-icon" aria-hidden="true"><i data-lucide="zap"></i></span>
+            <div>
+              <h3 class="badge-name">闪电回复</h3>
+              <p class="badge-desc">30 分钟内回复并获得 50+ 赞</p>
+            </div>
+          </article>
+          <article class="badge-card">
+            <span class="badge-icon" aria-hidden="true"><i data-lucide="star"></i></span>
+            <div>
+              <h3 class="badge-name">社区之星</h3>
+              <p class="badge-desc">单周收获 200+ 声望</p>
+            </div>
+          </article>
+          <article class="badge-card">
+            <span class="badge-icon" aria-hidden="true"><i data-lucide="flame"></i></span>
+            <div>
+              <h3 class="badge-name">连续活跃</h3>
+              <p class="badge-desc">连续登录并贡献 60 天</p>
+            </div>
+          </article>
+          <article class="badge-card">
+            <span class="badge-icon" aria-hidden="true"><i data-lucide="trophy"></i></span>
+            <div>
+              <h3 class="badge-name">月度榜眼</h3>
+              <p class="badge-desc">2026 年 7 月声望榜第二名</p>
+            </div>
+          </article>
+          <article class="badge-card">
+            <span class="badge-icon" aria-hidden="true"><i data-lucide="heart"></i></span>
+            <div>
+              <h3 class="badge-name">热心打赏</h3>
+              <p class="badge-desc">累计打赏 50+ 位优质贡献者</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 历史记录标签页 -->
+      <section class="history-tabs" aria-label="内容历史">
+        <div class="history-tab-list" role="tablist" aria-label="历史分类">
+          <input class="history-tab-input" type="radio" name="history-tab" id="tab-posts" checked />
+          <label class="history-tab-label" for="tab-posts" role="tab" aria-controls="panel-posts" data-dom-id="tab-posts">
+            发帖
+            <span class="history-tab-count">8</span>
+          </label>
+          <input class="history-tab-input" type="radio" name="history-tab" id="tab-answers" />
+          <label class="history-tab-label" for="tab-answers" role="tab" aria-controls="panel-answers" data-dom-id="tab-answers">
+            回答
+            <span class="history-tab-count">24</span>
+          </label>
+          <input class="history-tab-input" type="radio" name="history-tab" id="tab-tips" />
+          <label class="history-tab-label" for="tab-tips" role="tab" aria-controls="panel-tips" data-dom-id="tab-tips">
+            打赏
+            <span class="history-tab-count">12</span>
+          </label>
+        </div>
+
+        <div class="history-panels">
+          <div class="history-panel" id="panel-posts" role="tabpanel" aria-labelledby="tab-posts">
+            <ul class="history-list">
+              <li class="history-item">
+                <a class="history-item-title" href="/post/101" data-dom-id="link-post">如何用 LoRA 在消费级显卡上微调 7B 模型？</a>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">模型微调</span>
+                  <span><i data-lucide="clock"></i> 3 天前</span>
+                  <span><i data-lucide="eye"></i> 2,341 浏览</span>
+                  <span><i data-lucide="thumbs-up"></i> 89 赞</span>
+                </div>
+              </li>
+              <li class="history-item">
+                <a class="history-item-title" href="/post/102" data-dom-id="link-post">LangChain 表达式语言（LCEL）最佳实践清单</a>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">Agent 开发</span>
+                  <span><i data-lucide="clock"></i> 1 周前</span>
+                  <span><i data-lucide="eye"></i> 1,876 浏览</span>
+                  <span><i data-lucide="thumbs-up"></i> 67 赞</span>
+                </div>
+              </li>
+              <li class="history-item">
+                <a class="history-item-title" href="/post/103" data-dom-id="link-post">从 0 搭建 RAG 评估流水线：指标、数据集与陷阱</a>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">RAG</span>
+                  <span><i data-lucide="clock"></i> 2 周前</span>
+                  <span><i data-lucide="eye"></i> 3,102 浏览</span>
+                  <span><i data-lucide="thumbs-up"></i> 124 赞</span>
+                </div>
+              </li>
+              <li class="history-item">
+                <a class="history-item-title" href="/post/104" data-dom-id="link-post">我的开源向量数据库对比：Milvus、Weaviate、Qdrant</a>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">基础设施</span>
+                  <span><i data-lucide="clock"></i> 3 周前</span>
+                  <span><i data-lucide="eye"></i> 4,509 浏览</span>
+                  <span><i data-lucide="thumbs-up"></i> 215 赞</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="history-panel" id="panel-answers" role="tabpanel" aria-labelledby="tab-answers">
+            <ul class="history-list">
+              <li class="history-item">
+                <a class="history-item-title" href="/post/201" data-dom-id="link-post">Re: Transformer 推理加速有哪些成熟方案？</a>
+                <p class="profile-bio" style="margin:0;font-size:0.875rem;color:var(--aidev-muted-foreground);">推荐从 vLLM / TGI / TensorRT-LLM 三条线入手，并给出显存与吞吐量的实测对比...</p>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">推理优化</span>
+                  <span><i data-lucide="check-circle"></i> 被采纳</span>
+                  <span><i data-lucide="clock"></i> 1 天前</span>
+                  <span><i data-lucide="thumbs-up"></i> 34 赞</span>
+                </div>
+              </li>
+              <li class="history-item">
+                <a class="history-item-title" href="/post/202" data-dom-id="link-post">Re: 如何解决大模型微调时的灾难性遗忘？</a>
+                <p class="profile-bio" style="margin:0;font-size:0.875rem;color:var(--aidev-muted-foreground);">我的经验是先用 replay 小样本做 warm-up，再用低学习率做 domain-adapt...</p>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">模型微调</span>
+                  <span><i data-lucide="clock"></i> 4 天前</span>
+                  <span><i data-lucide="thumbs-up"></i> 28 赞</span>
+                </div>
+              </li>
+              <li class="history-item">
+                <a class="history-item-title" href="/post/203" data-dom-id="link-post">Re: 小白提问：Prompt Engineering 有没有系统学习路径？</a>
+                <p class="profile-bio" style="margin:0;font-size:0.875rem;color:var(--aidev-muted-foreground);">按“任务定义 → 样本构造 → 链式思考 → 工具调用 → 评估迭代”五个阶段来...</p>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">新手问答</span>
+                  <span><i data-lucide="check-circle"></i> 被采纳</span>
+                  <span><i data-lucide="clock"></i> 1 周前</span>
+                  <span><i data-lucide="thumbs-up"></i> 56 赞</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="history-panel" id="panel-tips" role="tabpanel" aria-labelledby="tab-tips">
+            <ul class="history-list">
+              <li class="history-item">
+                <a class="history-item-title" href="/post/301" data-dom-id="link-post">打赏了《深入解析 GPT-4o 多模态提示技巧》</a>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">给 @mason_ai</span>
+                  <span><i data-lucide="coins"></i> 50 积分</span>
+                  <span><i data-lucide="clock"></i> 2 天前</span>
+                </div>
+              </li>
+              <li class="history-item">
+                <a class="history-item-title" href="/post/302" data-dom-id="link-post">打赏了《MCP 协议实战：让 LLM 调用本地工具》</a>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">给 @codeyuan</span>
+                  <span><i data-lucide="coins"></i> 100 积分</span>
+                  <span><i data-lucide="clock"></i> 1 周前</span>
+                </div>
+              </li>
+              <li class="history-item">
+                <a class="history-item-title" href="/post/303" data-dom-id="link-post">打赏了《从零训练一个 Code LLM 的踩坑记录》</a>
+                <div class="history-item-meta">
+                  <span class="history-board-tag">给 @sarah_dev</span>
+                  <span><i data-lucide="coins"></i> 80 积分</span>
+                  <span><i data-lucide="clock"></i> 2 周前</span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="aidev-shell-footer" role="contentinfo">
+      <div class="aidev-shell-footer-inner">
+        <ul class="aidev-shell-footer-links">
+          <li><a href="/about">关于我们</a></li>
+          <li><a href="/guidelines">社区规范</a></li>
+          <li><a href="/help">帮助中心</a></li>
+          <li><a href="/privacy">隐私政策</a></li>
+          <li><a href="/terms">服务条款</a></li>
+        </ul>
+        <p class="aidev-shell-slogan">连接每一位 AI 开发者，共建智能未来。</p>
+      </div>
+    </footer>
+  </div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

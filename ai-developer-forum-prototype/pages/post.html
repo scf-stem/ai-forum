@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帖子详情 - AI开发者论坛</title>
+    <style id="theme-vars">
+/* AI辅助开发者论坛 · 品牌变量系统 */
+
+:root {
+  /* 品牌主色阶 (Indigo) - 唯一身份色 */
+  --aidev-primary-50: #eef2ff;
+  --aidev-primary-100: #e0e7ff;
+  --aidev-primary-200: #c7d2fe;
+  --aidev-primary-300: #a5b4fc;
+  --aidev-primary-400: #818cf8;
+  --aidev-primary-500: #6366f1;
+  --aidev-primary-600: #4f46e5;
+  --aidev-primary-700: #4338ca;
+  --aidev-primary-800: #3730a3;
+  --aidev-primary-900: #312e81;
+
+  /* 中性色阶 */
+  --aidev-neutral-0: #ffffff;
+  --aidev-neutral-50: #f8fafc;
+  --aidev-neutral-100: #f1f5f9;
+  --aidev-neutral-200: #e2e8f0;
+  --aidev-neutral-300: #cbd5e1;
+  --aidev-neutral-400: #94a3b8;
+  --aidev-neutral-500: #64748b;
+  --aidev-neutral-600: #475569;
+  --aidev-neutral-700: #334155;
+  --aidev-neutral-800: #1e293b;
+  --aidev-neutral-900: #0f172a;
+
+  /* 状态语义色 */
+  --aidev-state-success: #059669;
+  --aidev-state-success-bg: rgba(5, 150, 105, 0.08);
+  --aidev-state-warning: #d97706;
+  --aidev-state-warning-bg: rgba(217, 119, 6, 0.08);
+  --aidev-state-error: #dc2626;
+  --aidev-state-error-bg: rgba(220, 38, 38, 0.08);
+  --aidev-state-info: #2563eb;
+  --aidev-state-info-bg: rgba(37, 99, 235, 0.08);
+
+  /* 代码/深色表面 */
+  --aidev-code-bg: #1e1b2e;
+  --aidev-code-ink: #e2e0f0;
+
+  /* 语义别名 */
+  --aidev-background: var(--aidev-neutral-50);
+  --aidev-foreground: var(--aidev-neutral-900);
+  --aidev-card: var(--aidev-neutral-0);
+  --aidev-card-foreground: var(--aidev-neutral-900);
+  --aidev-popover: var(--aidev-neutral-0);
+  --aidev-popover-foreground: var(--aidev-neutral-900);
+  --aidev-primary: var(--aidev-primary-600);
+  --aidev-primary-foreground: var(--aidev-neutral-0);
+  --aidev-muted: var(--aidev-neutral-100);
+  --aidev-muted-foreground: var(--aidev-neutral-500);
+  --aidev-border: var(--aidev-neutral-200);
+  --aidev-input: var(--aidev-neutral-200);
+  --aidev-ring: var(--aidev-primary-600);
+
+  /* 圆角 */
+  --aidev-radius-sm: 4px;
+  --aidev-radius-md: 8px;
+  --aidev-radius-lg: 12px;
+  --aidev-radius-full: 9999px;
+
+  /* 阴影 - 静态表面 ≤ 0.05 alpha */
+  --aidev-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --aidev-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-float: 0 16px 48px rgba(15, 23, 42, 0.12);
+
+  /* 字体系统 */
+  --aidev-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  --aidev-font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* 间距 */
+  --aidev-space-1: 0.25rem;
+  --aidev-space-2: 0.5rem;
+  --aidev-space-3: 0.75rem;
+  --aidev-space-4: 1rem;
+  --aidev-space-5: 1.25rem;
+  --aidev-space-6: 1.5rem;
+  --aidev-space-8: 2rem;
+  --aidev-space-10: 2.5rem;
+  --aidev-space-12: 3rem;
+
+  /* 尺寸 */
+  --aidev-header-height: 64px;
+  --aidev-max-content: 1200px;
+  --aidev-sidebar-width: 240px;
+}
+
+html.dark {
+  --aidev-background: #0b0f19;
+  --aidev-foreground: #f1f5f9;
+  --aidev-card: #111827;
+  --aidev-card-foreground: #f1f5f9;
+  --aidev-popover: #111827;
+  --aidev-popover-foreground: #f1f5f9;
+  --aidev-muted: #1e293b;
+  --aidev-muted-foreground: #94a3b8;
+  --aidev-border: #1e293b;
+  --aidev-input: #334155;
+  --aidev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --aidev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --aidev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --aidev-code-bg: #1a1625;
+}
+
+/* 排版工具类 */
+.font-sans { font-family: var(--aidev-font-sans); }
+.font-mono { font-family: var(--aidev-font-mono); }
+
+.text-display {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-headline {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-title {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--aidev-background);
+    --color-foreground: var(--aidev-foreground);
+    --color-card: var(--aidev-card);
+    --color-card-foreground: var(--aidev-card-foreground);
+    --color-popover: var(--aidev-popover);
+    --color-popover-foreground: var(--aidev-popover-foreground);
+    --color-primary: var(--aidev-primary);
+    --color-primary-foreground: var(--aidev-primary-foreground);
+    --color-muted: var(--aidev-muted);
+    --color-muted-foreground: var(--aidev-muted-foreground);
+    --color-border: var(--aidev-border);
+    --color-input: var(--aidev-input);
+    --color-ring: var(--aidev-ring);
+    --radius-sm: var(--aidev-radius-sm);
+    --radius-md: var(--aidev-radius-md);
+    --radius-lg: var(--aidev-radius-lg);
+  }
+  @layer base {
+    body { background: var(--aidev-background); color: var(--aidev-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--aidev-background); }
+      .text-background { color: var(--aidev-background); }
+      .border-background { border-color: var(--aidev-background); }
+      .ring-background { --tw-ring-color: var(--aidev-background); }
+      .bg-foreground { background-color: var(--aidev-foreground); }
+      .text-foreground { color: var(--aidev-foreground); }
+      .border-foreground { border-color: var(--aidev-foreground); }
+      .ring-foreground { --tw-ring-color: var(--aidev-foreground); }
+      .bg-card { background-color: var(--aidev-card); }
+      .text-card { color: var(--aidev-card); }
+      .border-card { border-color: var(--aidev-card); }
+      .ring-card { --tw-ring-color: var(--aidev-card); }
+      .bg-card-foreground { background-color: var(--aidev-card-foreground); }
+      .text-card-foreground { color: var(--aidev-card-foreground); }
+      .border-card-foreground { border-color: var(--aidev-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--aidev-card-foreground); }
+      .bg-popover { background-color: var(--aidev-popover); }
+      .text-popover { color: var(--aidev-popover); }
+      .border-popover { border-color: var(--aidev-popover); }
+      .ring-popover { --tw-ring-color: var(--aidev-popover); }
+      .bg-popover-foreground { background-color: var(--aidev-popover-foreground); }
+      .text-popover-foreground { color: var(--aidev-popover-foreground); }
+      .border-popover-foreground { border-color: var(--aidev-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--aidev-popover-foreground); }
+      .bg-primary { background-color: var(--aidev-primary); }
+      .text-primary { color: var(--aidev-primary); }
+      .border-primary { border-color: var(--aidev-primary); }
+      .ring-primary { --tw-ring-color: var(--aidev-primary); }
+      .bg-primary-foreground { background-color: var(--aidev-primary-foreground); }
+      .text-primary-foreground { color: var(--aidev-primary-foreground); }
+      .border-primary-foreground { border-color: var(--aidev-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--aidev-primary-foreground); }
+      .bg-muted { background-color: var(--aidev-muted); }
+      .text-muted { color: var(--aidev-muted); }
+      .border-muted { border-color: var(--aidev-muted); }
+      .ring-muted { --tw-ring-color: var(--aidev-muted); }
+      .bg-muted-foreground { background-color: var(--aidev-muted-foreground); }
+      .text-muted-foreground { color: var(--aidev-muted-foreground); }
+      .border-muted-foreground { border-color: var(--aidev-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--aidev-muted-foreground); }
+      .bg-border { background-color: var(--aidev-border); }
+      .text-border { color: var(--aidev-border); }
+      .border-border { border-color: var(--aidev-border); }
+      .ring-border { --tw-ring-color: var(--aidev-border); }
+      .bg-input { background-color: var(--aidev-input); }
+      .text-input { color: var(--aidev-input); }
+      .border-input { border-color: var(--aidev-input); }
+      .ring-input { --tw-ring-color: var(--aidev-input); }
+      .bg-ring { background-color: var(--aidev-ring); }
+      .text-ring { color: var(--aidev-ring); }
+      .border-ring { border-color: var(--aidev-ring); }
+      .ring-ring { --tw-ring-color: var(--aidev-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+  <style id="critical-layout">
+    /* 项目外壳关键布局 */
+    .aidev-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: var(--aidev-background);
+      color: var(--aidev-foreground);
+      font-family: var(--aidev-font-sans);
+    }
+
+    .aidev-shell-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+      height: var(--aidev-header-height);
+      background-color: var(--aidev-card);
+      border-bottom: 1px solid var(--aidev-border);
+      box-shadow: var(--aidev-shadow-sm);
+    }
+
+    .aidev-shell-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      max-width: var(--aidev-max-content);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 var(--aidev-space-6);
+    }
+
+    .aidev-shell-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      color: var(--aidev-foreground);
+      font-size: 1.125rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-brand:hover {
+      color: var(--aidev-primary);
+    }
+
+    .aidev-shell-logo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--aidev-radius-md);
+      background: linear-gradient(135deg, var(--aidev-primary-500), var(--aidev-primary-700));
+      color: var(--aidev-primary-foreground);
+    }
+
+    .aidev-shell-logo-icon [data-lucide] {
+      width: 18px;
+      height: 18px;
+    }
+
+    .aidev-shell-search {
+      position: relative;
+      flex: 1 1 auto;
+      max-width: 420px;
+      min-width: 160px;
+    }
+
+    .aidev-shell-search-icon {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: var(--aidev-muted-foreground);
+      pointer-events: none;
+    }
+
+    .aidev-shell-search-input {
+      width: 100%;
+      height: 40px;
+      padding: 0 var(--aidev-space-4) 0 var(--aidev-space-10);
+      border: 1px solid var(--aidev-input);
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-muted);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    .aidev-shell-search-input::placeholder {
+      color: var(--aidev-muted-foreground);
+    }
+
+    .aidev-shell-search-input:hover {
+      border-color: var(--aidev-primary-300);
+    }
+
+    .aidev-shell-search-input:focus {
+      outline: none;
+      border-color: var(--aidev-ring);
+      background-color: var(--aidev-card);
+      box-shadow: 0 0 0 3px var(--aidev-primary-100);
+    }
+
+    .aidev-shell-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      padding: var(--aidev-space-2) var(--aidev-space-3);
+      border-radius: var(--aidev-radius-md);
+      color: var(--aidev-neutral-600);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .aidev-shell-nav-link:hover {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .aidev-shell-nav-link:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-shell-nav-link [data-lucide] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-auth {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-primary-100);
+      color: var(--aidev-primary-700);
+      border: 1px solid var(--aidev-border);
+    }
+
+    .aidev-shell-auth-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 var(--aidev-space-4);
+      border: 1px solid transparent;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .aidev-shell-auth-button:hover {
+      background-color: var(--aidev-primary-700);
+    }
+
+    .aidev-shell-auth-button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--aidev-primary-200);
+    }
+
+    .aidev-shell-main {
+      flex: 1 0 auto;
+      width: 100%;
+      max-width: var(--aidev-max-content);
+      margin: 0 auto;
+      padding: var(--aidev-space-6);
+    }
+
+    .aidev-shell-footer {
+      width: 100%;
+      border-top: 1px solid var(--aidev-border);
+      background-color: var(--aidev-card);
+    }
+
+    .aidev-shell-footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      max-width: var(--aidev-max-content);
+      margin: 0 auto;
+      padding: var(--aidev-space-6);
+    }
+
+    .aidev-shell-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-4);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .aidev-shell-footer-links a {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .aidev-shell-footer-links a:hover {
+      color: var(--aidev-primary);
+    }
+
+    .aidev-shell-slogan {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+      white-space: nowrap;
+    }
+
+    /* 帖子详情页关键布局 */
+    .post-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--aidev-space-6);
+    }
+
+    .post-main {
+      min-width: 0;
+    }
+
+    .post-sidebar {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .post-layout {
+        grid-template-columns: minmax(0, 1fr) 280px;
+        gap: var(--aidev-space-8);
+      }
+
+      .post-sidebar {
+        display: block;
+      }
+
+      .post-sidebar-sticky {
+        position: sticky;
+        top: calc(var(--aidev-header-height) + var(--aidev-space-6));
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .aidev-shell-header-inner {
+        padding: 0 var(--aidev-space-4);
+      }
+
+      .aidev-shell-nav-link span {
+        display: none;
+      }
+
+      .aidev-shell-nav-link {
+        padding: var(--aidev-space-2);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .aidev-shell-header-inner {
+        gap: var(--aidev-space-3);
+      }
+
+      .aidev-shell-search {
+        display: none;
+      }
+
+      .aidev-shell-main {
+        padding: var(--aidev-space-4);
+      }
+
+      .aidev-shell-footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--aidev-space-5) var(--aidev-space-4);
+      }
+    }
+  </style>
+
+  <div class="aidev-shell">
+    <header class="aidev-shell-header" role="banner">
+      <div class="aidev-shell-header-inner">
+        <a class="aidev-shell-brand" href="/" aria-label="AI 开发者论坛首页" data-dom-id="nav-home">
+          <span class="aidev-shell-logo-icon" aria-hidden="true">
+            <i data-lucide="sparkles"></i>
+          </span>
+          <span class="aidev-shell-logo-text">AI 开发者论坛</span>
+        </a>
+
+        <div class="aidev-shell-search" role="search">
+          <span class="aidev-shell-search-icon" aria-hidden="true">
+            <i data-lucide="search" width="18" height="18"></i>
+          </span>
+          <input
+            class="aidev-shell-search-input"
+            type="search"
+            placeholder="搜索问题、话题、开发者..."
+            aria-label="全局搜索"
+            autocomplete="off"
+          />
+        </div>
+
+        <nav class="aidev-shell-nav" aria-label="主导航">
+          <a class="aidev-shell-nav-link" href="/" data-nav-key="home" data-dom-id="nav-home">
+            <i data-lucide="home"></i>
+            <span>首页</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/boards" data-nav-key="boards" data-dom-id="nav-boards">
+            <i data-lucide="layout-grid"></i>
+            <span>版块</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/ask" data-nav-key="ask" data-dom-id="nav-ask">
+            <i data-lucide="circle-help"></i>
+            <span>提问</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/notifications" data-nav-key="notifications" data-dom-id="nav-notifications">
+            <i data-lucide="bell"></i>
+            <span>通知</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/settings" data-nav-key="settings" data-dom-id="nav-settings">
+            <i data-lucide="settings"></i>
+            <span>设置</span>
+          </a>
+        </nav>
+
+        <div class="aidev-shell-auth">
+          <a class="aidev-shell-auth-button" href="/ask" data-dom-id="nav-ask">登录 / 注册</a>
+          <a class="aidev-shell-avatar" href="/profile" aria-label="用户头像" role="img" data-dom-id="nav-profile">
+            <i data-lucide="user" width="18" height="18"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="aidev-shell-main" id="main-content">
+      <div class="post-layout">
+        <article class="post-main">
+          <!-- 返回版块 -->
+          <nav class="post-breadcrumb" aria-label="面包屑导航">
+            <a class="post-back-link" href="/boards" data-dom-id="back-board">
+              <i data-lucide="arrow-left" width="16" height="16"></i>
+              <span>返回 LangChain 版块</span>
+            </a>
+          </nav>
+
+          <!-- 帖子头部 -->
+          <header class="post-header">
+            <div class="post-meta-row">
+              <a class="post-board-tag" href="/boards/langchain">LangChain</a>
+              <span class="post-status-tag">已解决</span>
+            </div>
+            <h1 class="post-title">LangChain RAG 检索结果召回率低，如何优化向量存储与重排序？</h1>
+            <div class="post-author-bar">
+              <a class="post-author" href="/profile/linwei" data-dom-id="link-profile">
+                <span class="post-avatar" aria-hidden="true">林</span>
+                <span class="post-author-name">林炜</span>
+              </a>
+              <span class="post-author-meta">@linwei · 前端工程师</span>
+              <span class="post-time" aria-label="发布时间">
+                <i data-lucide="clock" width="14" height="14"></i>
+                <span>2 天前</span>
+              </span>
+              <span class="post-views" aria-label="浏览量">
+                <i data-lucide="eye" width="14" height="14"></i>
+                <span>1,248 次浏览</span>
+              </span>
+            </div>
+          </header>
+
+          <!-- 帖子正文 -->
+          <section class="post-body">
+            <p class="post-paragraph">
+              最近在用 LangChain 搭建一个内部知识库问答系统，数据源是几百份 Markdown 技术文档。整体流程是：文档切分 → OpenAI text-embedding-3-small 向量化 → 存入 Chroma → 检索时用 <code>similarity_search</code> 取 Top 5 → 直接交给 GPT-4 生成答案。
+            </p>
+            <p class="post-paragraph">
+              目前遇到两个比较头疼的问题：
+            </p>
+            <ol class="post-list">
+              <li>用户问一些跨段落、需要综合多份文档的问题时，Top 5 经常召回不全，导致答案漏掉关键约束。</li>
+              <li>有些查询明明关键词匹配度很高，但向量相似度排名把真正相关的片段挤到了后面。</li>
+            </ol>
+            <p class="post-paragraph">
+              我已经尝试过调整 chunk_size（512 / 1024 / 2048）和 overlap（50 / 100 / 200），效果都不太稳定。想请教 community 里做过生产级 RAG 的同学，除了换 embedding 模型，还有哪些行之有效的优化路径？
+            </p>
+            <div class="post-code-block">
+              <div class="post-code-header">
+                <span class="post-code-lang">python</span>
+                <button class="post-code-copy" type="button" aria-label="复制代码">
+                  <i data-lucide="copy" width="14" height="14"></i>
+                </button>
+              </div>
+              <pre class="post-code"><code>retriever = vectorstore.as_retriever(
+    search_type="mmr",
+    search_kwargs={"k": 8, "fetch_k": 20, "lambda_mult": 0.5}
+)
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=retriever,
+    return_source_documents=True,
+)</code></pre>
+            </div>
+            <p class="post-paragraph">
+              另外，我也在考虑引入重排序（reranker），比如 Cohere Rerank 或 bge-reranker-large，但不确定在 LangChain 里怎么和现有的检索链整合最优雅。如果有完整的代码示例或踩坑经验，非常感谢！
+            </p>
+          </section>
+
+          <!-- 交互栏 -->
+          <div class="post-action-bar" role="toolbar" aria-label="帖子操作">
+            <button class="post-action-btn is-active" type="button" aria-label="点赞">
+              <i data-lucide="thumbs-up" width="16" height="16"></i>
+              <span>42</span>
+            </button>
+            <button class="post-action-btn" type="button" aria-label="点踩">
+              <i data-lucide="thumbs-down" width="16" height="16"></i>
+              <span>2</span>
+            </button>
+            <button class="post-action-btn" type="button" aria-label="收藏">
+              <i data-lucide="bookmark" width="16" height="16"></i>
+              <span>收藏</span>
+            </button>
+            <button class="post-action-btn" type="button" aria-label="分享">
+              <i data-lucide="share-2" width="16" height="16"></i>
+              <span>分享</span>
+            </button>
+            <button class="post-action-btn" type="button" aria-label="打赏">
+              <i data-lucide="coins" width="16" height="16"></i>
+              <span>打赏</span>
+            </button>
+            <button class="post-action-btn post-action-ask" type="button" data-dom-id="cta-ask">
+              <i data-lucide="pen-line" width="16" height="16"></i>
+              <span>提类似问题</span>
+            </button>
+          </div>
+
+          <!-- AI 结构化答案 -->
+          <section class="ai-answer-card" aria-labelledby="ai-answer-title">
+            <div class="ai-answer-header">
+              <div class="ai-answer-identity">
+                <span class="ai-answer-icon" aria-hidden="true">
+                  <i data-lucide="bot" width="20" height="20"></i>
+                </span>
+                <div>
+                  <h2 class="ai-answer-title" id="ai-answer-title">AI 结构化答案</h2>
+                  <p class="ai-answer-subtitle">基于社区高赞回答与官方文档综合生成</p>
+                </div>
+              </div>
+              <span class="ai-confidence-badge">
+                <i data-lucide="shield-check" width="14" height="14"></i>
+                高置信度
+              </span>
+            </div>
+
+            <div class="ai-answer-body">
+              <p class="post-paragraph">
+                针对你的 RAG 召回问题，建议从「检索策略」和「结果精排」两个层面同时优化，而不是只调整 chunk 参数。
+              </p>
+
+              <h3 class="ai-answer-section-title">1. 检索策略升级</h3>
+              <ul class="post-list">
+                <li><strong>混合检索（Hybrid Search）</strong>：向量相似度对关键词精确匹配不够敏感，可叠加 BM25/TF-IDF 关键词检索，再用 Reciprocal Rank Fusion（RRF）合并两个榜单。</li>
+                <li><strong>查询扩展（Query Expansion）</strong>：让 LLM 先把用户问题改写为 2-3 个同义查询，分别检索后合并结果，可显著缓解语义漂移。</li>
+                <li><strong>父文档检索（Parent Document Retrieval）</strong>：小块用于匹配，返回时把完整父文档段落一起送入 LLM，兼顾定位精度与上下文完整。</li>
+              </ul>
+
+              <h3 class="ai-answer-section-title">2. 重排序接入</h3>
+              <p class="post-paragraph">
+                在 LangChain 中，最简洁的做法是使用 <code>ContextualCompressionRetriever</code> 包装基础检索器，再传入一个基于 Cohere 或 Hugging Face 的 compressor。
+              </p>
+              <div class="post-code-block">
+                <div class="post-code-header">
+                  <span class="post-code-lang">python</span>
+                </div>
+                <pre class="post-code"><code>from langchain.retrievers import ContextualCompressionRetriever
+from langchain_cohere import CohereRerank
+
+compressor = CohereRerank(top_n=5)
+compression_retriever = ContextualCompressionRetriever(
+    base_compressor=compressor,
+    base_retriever=retriever
+)</code></pre>
+              </div>
+
+              <h3 class="ai-answer-section-title">3. 关键指标建议</h3>
+              <div class="ai-metrics">
+                <div class="ai-metric">
+                  <span class="ai-metric-value">Top 5 → Top 10</span>
+                  <span class="ai-metric-label">召回后再精排</span>
+                </div>
+                <div class="ai-metric">
+                  <span class="ai-metric-value">RRF k=60</span>
+                  <span class="ai-metric-label">混合检索融合参数</span>
+                </div>
+                <div class="ai-metric">
+                  <span class="ai-metric-value">rerank top_n=5</span>
+                  <span class="ai-metric-label">最终送入 LLM</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ai-answer-sources">
+              <h3 class="ai-sources-title">
+                <i data-lucide="link" width="14" height="14"></i>
+                参考来源
+              </h3>
+              <ol class="ai-sources-list">
+                <li>
+                  <a href="https://python.langchain.com/docs/modules/data_connection/retrievers/contextual_compression" target="_blank" rel="noopener noreferrer">
+                    LangChain 官方文档：Contextual Compression
+                  </a>
+                  <span class="ai-source-score">相关度 0.97</span>
+                </li>
+                <li>
+                  <a href="https://docs.cohere.com/docs/rerank" target="_blank" rel="noopener noreferrer">
+                    Cohere Rerank 官方指南
+                  </a>
+                  <span class="ai-source-score">相关度 0.94</span>
+                </li>
+                <li>
+                  <a href="/posts/hybrid-search-rag" data-dom-id="link-post">
+                    社区高赞：混合检索在 RAG 中的实践
+                  </a>
+                  <span class="ai-source-score">相关度 0.91</span>
+                </li>
+                <li>
+                  <a href="/posts/parent-document-retrieval" data-dom-id="link-post">
+                    社区高赞：父文档检索设计模式
+                  </a>
+                  <span class="ai-source-score">相关度 0.89</span>
+                </li>
+              </ol>
+            </div>
+
+            <div class="ai-answer-footer">
+              <span class="ai-answer-disclaimer">答案由 AI 整理，关键代码请结合官方文档核对。</span>
+              <button class="post-action-btn" type="button" aria-label="赞同 AI 答案">
+                <i data-lucide="thumbs-up" width="16" height="16"></i>
+                <span>128</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 社区回复区 -->
+          <section class="replies-section" aria-labelledby="replies-title">
+            <div class="replies-header">
+              <h2 class="replies-title" id="replies-title">
+                <i data-lucide="message-square" width="18" height="18"></i>
+                社区补充
+              </h2>
+              <span class="replies-count">4 条回复</span>
+            </div>
+
+            <ol class="replies-list">
+              <!-- 回复 1：已采纳 -->
+              <li class="reply-card is-accepted">
+                <div class="reply-vote">
+                  <button class="reply-vote-btn" type="button" aria-label="赞同">
+                    <i data-lucide="chevron-up" width="18" height="18"></i>
+                  </button>
+                  <span class="reply-vote-score">86</span>
+                  <button class="reply-vote-btn" type="button" aria-label="反对">
+                    <i data-lucide="chevron-down" width="18" height="18"></i>
+                  </button>
+                </div>
+                <div class="reply-content">
+                  <div class="reply-header">
+                    <a class="reply-author" href="/profile/chenhao" data-dom-id="link-profile">
+                      <span class="reply-avatar" aria-hidden="true">陈</span>
+                      <span class="reply-author-name">陈浩</span>
+                    </a>
+                    <span class="reply-badge is-accepted">
+                      <i data-lucide="check-circle-2" width="14" height="14"></i>
+                      已采纳
+                    </span>
+                    <span class="reply-time">1 天前</span>
+                  </div>
+                  <div class="reply-body">
+                    <p class="post-paragraph">
+                      生产环境里我们最管用的三招：① 把默认的 similarity_search 换成 MMR，提升多样性；② 引入 Cohere Rerank，把 20 个候选压到 5 个；③ 对文档做层次切分，父块 1024 token、子块 256 token，检索时命中子块、返回父块。
+                    </p>
+                    <p class="post-paragraph">
+                      另外，建议把查询也做向量化前先做一次 HyDE：让 LLM 根据问题生成一个假设答案，再用假设答案去做向量检索，对开放性问题召回率提升很明显。
+                    </p>
+                  </div>
+                  <div class="reply-actions">
+                    <button class="reply-action-btn" type="button">
+                      <i data-lucide="message-circle" width="14" height="14"></i>
+                      <span>回复</span>
+                    </button>
+                    <button class="reply-action-btn" type="button">
+                      <i data-lucide="thumbs-up" width="14" height="14"></i>
+                      <span>12</span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+
+              <!-- 回复 2 -->
+              <li class="reply-card">
+                <div class="reply-vote">
+                  <button class="reply-vote-btn" type="button" aria-label="赞同">
+                    <i data-lucide="chevron-up" width="18" height="18"></i>
+                  </button>
+                  <span class="reply-vote-score">34</span>
+                  <button class="reply-vote-btn" type="button" aria-label="反对">
+                    <i data-lucide="chevron-down" width="18" height="18"></i>
+                  </button>
+                </div>
+                <div class="reply-content">
+                  <div class="reply-header">
+                    <a class="reply-author" href="/profile/wangyue" data-dom-id="link-profile">
+                      <span class="reply-avatar" aria-hidden="true">王</span>
+                      <span class="reply-author-name">王悦</span>
+                    </a>
+                    <span class="reply-time">1 天前</span>
+                  </div>
+                  <div class="reply-body">
+                    <p class="post-paragraph">
+                      如果你的文档里有大量代码和配置参数，建议切分前先按标题做语义分段，而不是固定长度切。我们用了 LangChain 的 <code>MarkdownHeaderTextSplitter</code>，召回率从 62% 提升到 81%。
+                    </p>
+                  </div>
+                  <div class="reply-actions">
+                    <button class="reply-action-btn" type="button">
+                      <i data-lucide="message-circle" width="14" height="14"></i>
+                      <span>回复</span>
+                    </button>
+                    <button class="reply-action-btn" type="button">
+                      <i data-lucide="thumbs-up" width="14" height="14"></i>
+                      <span>5</span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+
+              <!-- 回复 3 -->
+              <li class="reply-card">
+                <div class="reply-vote">
+                  <button class="reply-vote-btn" type="button" aria-label="赞同">
+                    <i data-lucide="chevron-up" width="18" height="18"></i>
+                  </button>
+                  <span class="reply-vote-score">21</span>
+                  <button class="reply-vote-btn" type="button" aria-label="反对">
+                    <i data-lucide="chevron-down" width="18" height="18"></i>
+                  </button>
+                </div>
+                <div class="reply-content">
+                  <div class="reply-header">
+                    <a class="reply-author" href="/profile/zhangming" data-dom-id="link-profile">
+                      <span class="reply-avatar" aria-hidden="true">张</span>
+                      <span class="reply-author-name">张明</span>
+                    </a>
+                    <span class="reply-time">20 小时前</span>
+                  </div>
+                  <div class="reply-body">
+                    <p class="post-paragraph">
+                      bge-reranker-large 我们自己跑过，效果比 Cohere 稍差但完全离线、成本更低。集成方式类似，用 <code>BgeRerank</code> 替换 CohereRerank 即可。注意第一次加载模型会比较慢，建议做本地缓存。
+                    </p>
+                  </div>
+                  <div class="reply-actions">
+                    <button class="reply-action-btn" type="button">
+                      <i data-lucide="message-circle" width="14" height="14"></i>
+                      <span>回复</span>
+                    </button>
+                    <button class="reply-action-btn" type="button">
+                      <i data-lucide="thumbs-up" width="14" height="14"></i>
+                      <span>3</span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+
+              <!-- 回复 4 -->
+              <li class="reply-card">
+                <div class="reply-vote">
+                  <button class="reply-vote-btn" type="button" aria-label="赞同">
+                    <i data-lucide="chevron-up" width="18" height="18"></i>
+                  </button>
+                  <span class="reply-vote-score">9</span>
+                  <button class="reply-vote-btn" type="button" aria-label="反对">
+                    <i data-lucide="chevron-down" width="18" height="18"></i>
+                  </button>
+                </div>
+                <div class="reply-content">
+                  <div class="reply-header">
+                    <a class="reply-author" href="/profile/liuxin" data-dom-id="link-profile">
+                      <span class="reply-avatar" aria-hidden="true">刘</span>
+                      <span class="reply-author-name">刘欣</span>
+                    </a>
+                    <span class="reply-time">8 小时前</span>
+                  </div>
+                  <div class="reply-body">
+                    <p class="post-paragraph">
+                      除了技术手段，也建议建立一个标注闭环：把用户点踩/不满意的 case 收集起来，定期用这些 hard negatives 去微调 embedding 或 reranker，长期效果会比一次性调参好很多。
+                    </p>
+                  </div>
+                  <div class="reply-actions">
+                    <button class="reply-action-btn" type="button">
+                      <i data-lucide="message-circle" width="14" height="14"></i>
+                      <span>回复</span>
+                    </button>
+                    <button class="reply-action-btn" type="button">
+                      <i data-lucide="thumbs-up" width="14" height="14"></i>
+                      <span>1</span>
+                    </button>
+                  </div>
+                </div>
+              </li>
+            </ol>
+
+            <div class="replies-more">
+              <button class="post-action-btn" type="button">加载更多回复</button>
+            </div>
+          </section>
+        </article>
+
+        <!-- 侧边栏：作者信息 -->
+        <aside class="post-sidebar" aria-label="作者信息">
+          <div class="post-sidebar-sticky">
+            <section class="author-card">
+              <div class="author-card-header">
+                <a class="author-card-avatar" href="/profile/linwei" data-dom-id="link-profile">林</a>
+                <div class="author-card-intro">
+                  <a class="author-card-name" href="/profile/linwei" data-dom-id="link-profile">林炜</a>
+                  <span class="author-card-role">前端工程师</span>
+                </div>
+              </div>
+              <p class="author-card-bio">专注 LLM 应用落地，热爱开源与工程化。</p>
+              <div class="author-card-stats">
+                <div class="author-stat">
+                  <span class="author-stat-value">127</span>
+                  <span class="author-stat-label">帖子</span>
+                </div>
+                <div class="author-stat">
+                  <span class="author-stat-value">1.8k</span>
+                  <span class="author-stat-label">获赞</span>
+                </div>
+                <div class="author-stat">
+                  <span class="author-stat-value">56</span>
+                  <span class="author-stat-label">关注</span>
+                </div>
+              </div>
+              <div class="author-card-actions">
+                <button class="author-card-btn is-primary" type="button">关注</button>
+                <button class="author-card-btn" type="button">私信</button>
+              </div>
+            </section>
+
+            <section class="related-posts-card">
+              <h3 class="related-posts-title">相关帖子</h3>
+              <ul class="related-posts-list">
+                <li>
+                  <a href="/posts/hybrid-search-rag" data-dom-id="link-post">混合检索在 RAG 中的实践</a>
+                  <span>32 回复</span>
+                </li>
+                <li>
+                  <a href="/posts/chunk-size-guide" data-dom-id="link-post">RAG 文档切分最佳实践</a>
+                  <span>18 回复</span>
+                </li>
+                <li>
+                  <a href="/posts/evaluation-rag" data-dom-id="link-post">如何评估 RAG 系统效果</a>
+                  <span>24 回复</span>
+                </li>
+              </ul>
+            </section>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="aidev-shell-footer" role="contentinfo">
+      <div class="aidev-shell-footer-inner">
+        <ul class="aidev-shell-footer-links">
+          <li><a href="/about">关于我们</a></li>
+          <li><a href="/guidelines">社区规范</a></li>
+          <li><a href="/help">帮助中心</a></li>
+          <li><a href="/privacy">隐私政策</a></li>
+          <li><a href="/terms">服务条款</a></li>
+        </ul>
+        <p class="aidev-shell-slogan">连接每一位 AI 开发者，共建智能未来。</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>lucide.createIcons();</script>
+
+  <style id="post-page-styles">
+    /* 帖子详情页视觉样式 */
+    .post-breadcrumb {
+      margin-bottom: var(--aidev-space-4);
+    }
+
+    .post-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .post-back-link:hover {
+      color: var(--aidev-primary);
+    }
+
+    .post-header {
+      margin-bottom: var(--aidev-space-6);
+    }
+
+    .post-meta-row {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      margin-bottom: var(--aidev-space-3);
+    }
+
+    .post-board-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--aidev-space-1) var(--aidev-space-3);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary-700);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.15s ease;
+    }
+
+    .post-board-tag:hover {
+      background-color: var(--aidev-primary-100);
+    }
+
+    .post-status-tag {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--aidev-space-1) var(--aidev-space-3);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-state-success-bg);
+      color: var(--aidev-state-success);
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+
+    .post-title {
+      margin: 0 0 var(--aidev-space-4);
+      color: var(--aidev-foreground);
+      font-size: clamp(1.375rem, 3vw, 2rem);
+      line-height: 1.3;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .post-author-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+    }
+
+    .post-author {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      color: var(--aidev-foreground);
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .post-author:hover {
+      color: var(--aidev-primary);
+    }
+
+    .post-avatar,
+    .reply-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-primary-100);
+      color: var(--aidev-primary-700);
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .post-author-meta {
+      color: var(--aidev-muted-foreground);
+    }
+
+    .post-time,
+    .post-views {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+    }
+
+    .post-body {
+      margin-bottom: var(--aidev-space-6);
+      padding-bottom: var(--aidev-space-6);
+      border-bottom: 1px solid var(--aidev-border);
+    }
+
+    .post-paragraph {
+      margin: 0 0 var(--aidev-space-4);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      line-height: 1.75;
+    }
+
+    .post-paragraph:last-child {
+      margin-bottom: 0;
+    }
+
+    .post-paragraph code {
+      padding: 0.125rem 0.375rem;
+      border-radius: var(--aidev-radius-sm);
+      background-color: var(--aidev-muted);
+      color: var(--aidev-primary-700);
+      font-family: var(--aidev-font-mono);
+      font-size: 0.875rem;
+    }
+
+    .post-list {
+      margin: 0 0 var(--aidev-space-4);
+      padding-left: var(--aidev-space-6);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      line-height: 1.75;
+    }
+
+    .post-list li {
+      margin-bottom: var(--aidev-space-2);
+    }
+
+    .post-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .post-list strong {
+      color: var(--aidev-foreground);
+      font-weight: 600;
+    }
+
+    .post-code-block {
+      margin: var(--aidev-space-5) 0;
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-code-bg);
+      overflow: hidden;
+    }
+
+    .post-code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--aidev-space-2) var(--aidev-space-4);
+      background-color: var(--aidev-code-bg);
+      border-bottom: 1px solid var(--aidev-neutral-700);
+    }
+
+    .post-code-lang {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .post-code-copy {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: none;
+      border-radius: var(--aidev-radius-sm);
+      background-color: transparent;
+      color: var(--aidev-muted-foreground);
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .post-code-copy:hover {
+      background-color: var(--aidev-neutral-700);
+      color: var(--aidev-code-ink);
+    }
+
+    .post-code {
+      margin: 0;
+      padding: var(--aidev-space-4);
+      overflow-x: auto;
+      color: var(--aidev-code-ink);
+      font-family: var(--aidev-font-mono);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .post-code code {
+      color: inherit;
+      background: none;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .post-action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      margin-bottom: var(--aidev-space-8);
+    }
+
+    .post-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      height: 36px;
+      padding: 0 var(--aidev-space-3);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-card);
+      color: var(--aidev-neutral-600);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .post-action-btn:hover {
+      border-color: var(--aidev-primary-300);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary);
+    }
+
+    .post-action-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .post-action-btn.is-active {
+      border-color: var(--aidev-primary-300);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary);
+    }
+
+    .post-action-ask {
+      margin-left: auto;
+      border-color: transparent;
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+    }
+
+    .post-action-ask:hover {
+      background-color: var(--aidev-primary-700);
+      color: var(--aidev-primary-foreground);
+    }
+
+    .ai-answer-card {
+      margin-bottom: var(--aidev-space-8);
+      border: 1px solid var(--aidev-primary-200);
+      border-radius: var(--aidev-radius-lg);
+      background: linear-gradient(180deg, var(--aidev-primary-50) 0%, var(--aidev-card) 120px);
+      box-shadow: var(--aidev-shadow-md);
+      overflow: hidden;
+    }
+
+    .ai-answer-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      padding: var(--aidev-space-5);
+      border-bottom: 1px solid var(--aidev-primary-100);
+    }
+
+    .ai-answer-identity {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-3);
+    }
+
+    .ai-answer-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+    }
+
+    .ai-answer-title {
+      margin: 0;
+      color: var(--aidev-foreground);
+      font-size: 1.125rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .ai-answer-subtitle {
+      margin: 0.125rem 0 0;
+      color: var(--aidev-muted-foreground);
+      font-size: 0.8125rem;
+    }
+
+    .ai-confidence-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-1) var(--aidev-space-3);
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-state-success-bg);
+      color: var(--aidev-state-success);
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+
+    .ai-answer-body {
+      padding: var(--aidev-space-5);
+    }
+
+    .ai-answer-section-title {
+      margin: var(--aidev-space-5) 0 var(--aidev-space-3);
+      color: var(--aidev-foreground);
+      font-size: 1rem;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .ai-answer-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .ai-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: var(--aidev-space-3);
+      margin-top: var(--aidev-space-4);
+    }
+
+    .ai-metric {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-3);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+    }
+
+    .ai-metric-value {
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ai-metric-label {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.75rem;
+    }
+
+    .ai-answer-sources {
+      padding: var(--aidev-space-5);
+      border-top: 1px solid var(--aidev-border);
+      background-color: var(--aidev-card);
+    }
+
+    .ai-sources-title {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      margin: 0 0 var(--aidev-space-3);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+
+    .ai-sources-list {
+      margin: 0;
+      padding-left: var(--aidev-space-5);
+      color: var(--aidev-foreground);
+      font-size: 0.875rem;
+      line-height: 1.7;
+    }
+
+    .ai-sources-list li {
+      margin-bottom: var(--aidev-space-2);
+    }
+
+    .ai-sources-list a {
+      color: var(--aidev-primary);
+      text-decoration: none;
+      transition: text-decoration 0.15s ease;
+    }
+
+    .ai-sources-list a:hover {
+      text-decoration: underline;
+    }
+
+    .ai-source-score {
+      margin-left: var(--aidev-space-2);
+      color: var(--aidev-muted-foreground);
+      font-size: 0.75rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ai-answer-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      padding: var(--aidev-space-3) var(--aidev-space-5);
+      border-top: 1px solid var(--aidev-border);
+      background-color: var(--aidev-muted);
+    }
+
+    .ai-answer-disclaimer {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.75rem;
+    }
+
+    .replies-section {
+      margin-bottom: var(--aidev-space-8);
+    }
+
+    .replies-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      margin-bottom: var(--aidev-space-5);
+    }
+
+    .replies-title {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      margin: 0;
+      color: var(--aidev-foreground);
+      font-size: 1.125rem;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .replies-count {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+    }
+
+    .replies-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-4);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .reply-card {
+      display: flex;
+      gap: var(--aidev-space-4);
+      padding: var(--aidev-space-5);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      background-color: var(--aidev-card);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .reply-card.is-accepted {
+      border-color: var(--aidev-state-success);
+      background-color: var(--aidev-state-success-bg);
+    }
+
+    .reply-vote {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      flex-shrink: 0;
+    }
+
+    .reply-vote-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: none;
+      border-radius: var(--aidev-radius-sm);
+      background-color: transparent;
+      color: var(--aidev-muted-foreground);
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .reply-vote-btn:hover {
+      background-color: var(--aidev-muted);
+      color: var(--aidev-primary);
+    }
+
+    .reply-vote-score {
+      color: var(--aidev-foreground);
+      font-size: 0.875rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .reply-content {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .reply-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      margin-bottom: var(--aidev-space-3);
+    }
+
+    .reply-author {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .reply-author:hover {
+      color: var(--aidev-primary);
+    }
+
+    .reply-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-1) var(--aidev-space-2);
+      border-radius: var(--aidev-radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .reply-badge.is-accepted {
+      background-color: var(--aidev-state-success-bg);
+      color: var(--aidev-state-success);
+    }
+
+    .reply-time {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.8125rem;
+    }
+
+    .reply-body {
+      margin-bottom: var(--aidev-space-3);
+    }
+
+    .reply-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+    }
+
+    .reply-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-1) var(--aidev-space-2);
+      border: none;
+      border-radius: var(--aidev-radius-sm);
+      background-color: transparent;
+      color: var(--aidev-muted-foreground);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .reply-action-btn:hover {
+      background-color: var(--aidev-muted);
+      color: var(--aidev-primary);
+    }
+
+    .replies-more {
+      display: flex;
+      justify-content: center;
+      margin-top: var(--aidev-space-5);
+    }
+
+    .author-card,
+    .related-posts-card {
+      padding: var(--aidev-space-5);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      background-color: var(--aidev-card);
+      margin-bottom: var(--aidev-space-5);
+    }
+
+    .author-card-header {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      margin-bottom: var(--aidev-space-3);
+    }
+
+    .author-card-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-primary-100);
+      color: var(--aidev-primary-700);
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background-color 0.15s ease;
+    }
+
+    .author-card-avatar:hover {
+      background-color: var(--aidev-primary-200);
+    }
+
+    .author-card-intro {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+
+    .author-card-name {
+      color: var(--aidev-foreground);
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .author-card-name:hover {
+      color: var(--aidev-primary);
+    }
+
+    .author-card-role {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.8125rem;
+    }
+
+    .author-card-bio {
+      margin: 0 0 var(--aidev-space-4);
+      color: var(--aidev-neutral-600);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .author-card-stats {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-4);
+      margin-bottom: var(--aidev-space-4);
+      padding-bottom: var(--aidev-space-4);
+      border-bottom: 1px solid var(--aidev-border);
+    }
+
+    .author-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+
+    .author-stat-value {
+      color: var(--aidev-foreground);
+      font-size: 1rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .author-stat-label {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.75rem;
+    }
+
+    .author-card-actions {
+      display: flex;
+      gap: var(--aidev-space-2);
+    }
+
+    .author-card-btn {
+      flex: 1 1 auto;
+      height: 36px;
+      padding: 0 var(--aidev-space-3);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-card);
+      color: var(--aidev-neutral-600);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .author-card-btn:hover {
+      border-color: var(--aidev-primary-300);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary);
+    }
+
+    .author-card-btn.is-primary {
+      border-color: transparent;
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+    }
+
+    .author-card-btn.is-primary:hover {
+      background-color: var(--aidev-primary-700);
+      color: var(--aidev-primary-foreground);
+    }
+
+    .related-posts-title {
+      margin: 0 0 var(--aidev-space-4);
+      color: var(--aidev-foreground);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .related-posts-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-3);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .related-posts-list li {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+
+    .related-posts-list a {
+      color: var(--aidev-foreground);
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      line-height: 1.5;
+      transition: color 0.15s ease;
+    }
+
+    .related-posts-list a:hover {
+      color: var(--aidev-primary);
+    }
+
+    .related-posts-list span {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 640px) {
+      .post-action-bar {
+        gap: var(--aidev-space-2);
+      }
+
+      .post-action-ask {
+        width: 100%;
+        margin-left: 0;
+        margin-top: var(--aidev-space-2);
+        justify-content: center;
+      }
+
+      .ai-answer-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .reply-card {
+        flex-direction: column;
+        gap: var(--aidev-space-3);
+      }
+
+      .reply-vote {
+        flex-direction: row;
+        justify-content: flex-start;
+      }
+
+      .author-card-stats {
+        justify-content: space-between;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</body>
+</html>

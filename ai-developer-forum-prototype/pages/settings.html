@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 - AI开发者论坛</title>
+    <style id="theme-vars">
+/* AI辅助开发者论坛 · 品牌变量系统 */
+
+:root {
+  /* 品牌主色阶 (Indigo) - 唯一身份色 */
+  --aidev-primary-50: #eef2ff;
+  --aidev-primary-100: #e0e7ff;
+  --aidev-primary-200: #c7d2fe;
+  --aidev-primary-300: #a5b4fc;
+  --aidev-primary-400: #818cf8;
+  --aidev-primary-500: #6366f1;
+  --aidev-primary-600: #4f46e5;
+  --aidev-primary-700: #4338ca;
+  --aidev-primary-800: #3730a3;
+  --aidev-primary-900: #312e81;
+
+  /* 中性色阶 */
+  --aidev-neutral-0: #ffffff;
+  --aidev-neutral-50: #f8fafc;
+  --aidev-neutral-100: #f1f5f9;
+  --aidev-neutral-200: #e2e8f0;
+  --aidev-neutral-300: #cbd5e1;
+  --aidev-neutral-400: #94a3b8;
+  --aidev-neutral-500: #64748b;
+  --aidev-neutral-600: #475569;
+  --aidev-neutral-700: #334155;
+  --aidev-neutral-800: #1e293b;
+  --aidev-neutral-900: #0f172a;
+
+  /* 状态语义色 */
+  --aidev-state-success: #059669;
+  --aidev-state-success-bg: rgba(5, 150, 105, 0.08);
+  --aidev-state-warning: #d97706;
+  --aidev-state-warning-bg: rgba(217, 119, 6, 0.08);
+  --aidev-state-error: #dc2626;
+  --aidev-state-error-bg: rgba(220, 38, 38, 0.08);
+  --aidev-state-info: #2563eb;
+  --aidev-state-info-bg: rgba(37, 99, 235, 0.08);
+
+  /* 代码/深色表面 */
+  --aidev-code-bg: #1e1b2e;
+  --aidev-code-ink: #e2e0f0;
+
+  /* 语义别名 */
+  --aidev-background: var(--aidev-neutral-50);
+  --aidev-foreground: var(--aidev-neutral-900);
+  --aidev-card: var(--aidev-neutral-0);
+  --aidev-card-foreground: var(--aidev-neutral-900);
+  --aidev-popover: var(--aidev-neutral-0);
+  --aidev-popover-foreground: var(--aidev-neutral-900);
+  --aidev-primary: var(--aidev-primary-600);
+  --aidev-primary-foreground: var(--aidev-neutral-0);
+  --aidev-muted: var(--aidev-neutral-100);
+  --aidev-muted-foreground: var(--aidev-neutral-500);
+  --aidev-border: var(--aidev-neutral-200);
+  --aidev-input: var(--aidev-neutral-200);
+  --aidev-ring: var(--aidev-primary-600);
+
+  /* 圆角 */
+  --aidev-radius-sm: 4px;
+  --aidev-radius-md: 8px;
+  --aidev-radius-lg: 12px;
+  --aidev-radius-full: 9999px;
+
+  /* 阴影 - 静态表面 ≤ 0.05 alpha */
+  --aidev-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --aidev-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-float: 0 16px 48px rgba(15, 23, 42, 0.12);
+
+  /* 字体系统 */
+  --aidev-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  --aidev-font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* 间距 */
+  --aidev-space-1: 0.25rem;
+  --aidev-space-2: 0.5rem;
+  --aidev-space-3: 0.75rem;
+  --aidev-space-4: 1rem;
+  --aidev-space-5: 1.25rem;
+  --aidev-space-6: 1.5rem;
+  --aidev-space-8: 2rem;
+  --aidev-space-10: 2.5rem;
+  --aidev-space-12: 3rem;
+
+  /* 尺寸 */
+  --aidev-header-height: 64px;
+  --aidev-max-content: 1200px;
+  --aidev-sidebar-width: 240px;
+}
+
+html.dark {
+  --aidev-background: #0b0f19;
+  --aidev-foreground: #f1f5f9;
+  --aidev-card: #111827;
+  --aidev-card-foreground: #f1f5f9;
+  --aidev-popover: #111827;
+  --aidev-popover-foreground: #f1f5f9;
+  --aidev-muted: #1e293b;
+  --aidev-muted-foreground: #94a3b8;
+  --aidev-border: #1e293b;
+  --aidev-input: #334155;
+  --aidev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --aidev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --aidev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --aidev-code-bg: #1a1625;
+}
+
+/* 排版工具类 */
+.font-sans { font-family: var(--aidev-font-sans); }
+.font-mono { font-family: var(--aidev-font-mono); }
+
+.text-display {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-headline {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-title {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--aidev-background);
+    --color-foreground: var(--aidev-foreground);
+    --color-card: var(--aidev-card);
+    --color-card-foreground: var(--aidev-card-foreground);
+    --color-popover: var(--aidev-popover);
+    --color-popover-foreground: var(--aidev-popover-foreground);
+    --color-primary: var(--aidev-primary);
+    --color-primary-foreground: var(--aidev-primary-foreground);
+    --color-muted: var(--aidev-muted);
+    --color-muted-foreground: var(--aidev-muted-foreground);
+    --color-border: var(--aidev-border);
+    --color-input: var(--aidev-input);
+    --color-ring: var(--aidev-ring);
+    --radius-sm: var(--aidev-radius-sm);
+    --radius-md: var(--aidev-radius-md);
+    --radius-lg: var(--aidev-radius-lg);
+  }
+  @layer base {
+    body { background: var(--aidev-background); color: var(--aidev-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--aidev-background); }
+      .text-background { color: var(--aidev-background); }
+      .border-background { border-color: var(--aidev-background); }
+      .ring-background { --tw-ring-color: var(--aidev-background); }
+      .bg-foreground { background-color: var(--aidev-foreground); }
+      .text-foreground { color: var(--aidev-foreground); }
+      .border-foreground { border-color: var(--aidev-foreground); }
+      .ring-foreground { --tw-ring-color: var(--aidev-foreground); }
+      .bg-card { background-color: var(--aidev-card); }
+      .text-card { color: var(--aidev-card); }
+      .border-card { border-color: var(--aidev-card); }
+      .ring-card { --tw-ring-color: var(--aidev-card); }
+      .bg-card-foreground { background-color: var(--aidev-card-foreground); }
+      .text-card-foreground { color: var(--aidev-card-foreground); }
+      .border-card-foreground { border-color: var(--aidev-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--aidev-card-foreground); }
+      .bg-popover { background-color: var(--aidev-popover); }
+      .text-popover { color: var(--aidev-popover); }
+      .border-popover { border-color: var(--aidev-popover); }
+      .ring-popover { --tw-ring-color: var(--aidev-popover); }
+      .bg-popover-foreground { background-color: var(--aidev-popover-foreground); }
+      .text-popover-foreground { color: var(--aidev-popover-foreground); }
+      .border-popover-foreground { border-color: var(--aidev-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--aidev-popover-foreground); }
+      .bg-primary { background-color: var(--aidev-primary); }
+      .text-primary { color: var(--aidev-primary); }
+      .border-primary { border-color: var(--aidev-primary); }
+      .ring-primary { --tw-ring-color: var(--aidev-primary); }
+      .bg-primary-foreground { background-color: var(--aidev-primary-foreground); }
+      .text-primary-foreground { color: var(--aidev-primary-foreground); }
+      .border-primary-foreground { border-color: var(--aidev-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--aidev-primary-foreground); }
+      .bg-muted { background-color: var(--aidev-muted); }
+      .text-muted { color: var(--aidev-muted); }
+      .border-muted { border-color: var(--aidev-muted); }
+      .ring-muted { --tw-ring-color: var(--aidev-muted); }
+      .bg-muted-foreground { background-color: var(--aidev-muted-foreground); }
+      .text-muted-foreground { color: var(--aidev-muted-foreground); }
+      .border-muted-foreground { border-color: var(--aidev-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--aidev-muted-foreground); }
+      .bg-border { background-color: var(--aidev-border); }
+      .text-border { color: var(--aidev-border); }
+      .border-border { border-color: var(--aidev-border); }
+      .ring-border { --tw-ring-color: var(--aidev-border); }
+      .bg-input { background-color: var(--aidev-input); }
+      .text-input { color: var(--aidev-input); }
+      .border-input { border-color: var(--aidev-input); }
+      .ring-input { --tw-ring-color: var(--aidev-input); }
+      .bg-ring { background-color: var(--aidev-ring); }
+      .text-ring { color: var(--aidev-ring); }
+      .border-ring { border-color: var(--aidev-ring); }
+      .ring-ring { --tw-ring-color: var(--aidev-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+<style id="critical-layout">
+  /* 设置页关键布局：分栏桌面 / 堆叠移动端，不依赖 Tailwind 编译 */
+  .aidev-settings-layout {
+    display: flex;
+    gap: var(--aidev-space-8);
+    align-items: flex-start;
+  }
+
+  .aidev-settings-sidebar {
+    position: sticky;
+    top: calc(var(--aidev-header-height) + var(--aidev-space-6));
+    width: var(--aidev-sidebar-width);
+    flex-shrink: 0;
+  }
+
+  .aidev-settings-panels {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--aidev-space-6);
+  }
+
+  .aidev-settings-panel {
+    background-color: var(--aidev-card);
+    border: 1px solid var(--aidev-border);
+    border-radius: var(--aidev-radius-lg);
+    box-shadow: var(--aidev-shadow-sm);
+  }
+
+  .aidev-settings-panel-header {
+    padding: var(--aidev-space-6);
+    border-bottom: 1px solid var(--aidev-border);
+  }
+
+  .aidev-settings-panel-body {
+    padding: var(--aidev-space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--aidev-space-5);
+  }
+
+  .aidev-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--aidev-space-2);
+  }
+
+  .aidev-field-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--aidev-foreground);
+  }
+
+  .aidev-field-hint {
+    font-size: 0.8125rem;
+    color: var(--aidev-muted-foreground);
+    line-height: 1.5;
+  }
+
+  .aidev-text-input,
+  .aidev-textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: var(--aidev-space-2) var(--aidev-space-3);
+    border: 1px solid var(--aidev-input);
+    border-radius: var(--aidev-radius-md);
+    background-color: var(--aidev-card);
+    color: var(--aidev-foreground);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .aidev-textarea {
+    min-height: 96px;
+    resize: vertical;
+  }
+
+  .aidev-text-input:hover,
+  .aidev-textarea:hover {
+    border-color: var(--aidev-primary-300);
+  }
+
+  .aidev-text-input:focus,
+  .aidev-textarea:focus {
+    outline: none;
+    border-color: var(--aidev-ring);
+    box-shadow: 0 0 0 3px var(--aidev-primary-100);
+  }
+
+  .aidev-avatar-upload {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-4);
+  }
+
+  .aidev-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-primary-100);
+    color: var(--aidev-primary-700);
+    border: 2px solid var(--aidev-border);
+    overflow: hidden;
+  }
+
+  .aidev-avatar svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .aidev-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aidev-space-2);
+  }
+
+  .aidev-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-1);
+    padding: var(--aidev-space-1) var(--aidev-space-2);
+    border-radius: var(--aidev-radius-md);
+    background-color: var(--aidev-muted);
+    color: var(--aidev-muted-foreground);
+    font-size: 0.8125rem;
+  }
+
+  .aidev-toggle-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--aidev-space-4);
+    padding: var(--aidev-space-4) 0;
+    border-bottom: 1px solid var(--aidev-border);
+  }
+
+  .aidev-toggle-row:last-child {
+    border-bottom: none;
+  }
+
+  .aidev-toggle-label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--aidev-foreground);
+  }
+
+  .aidev-toggle-switch {
+    position: relative;
+    display: inline-flex;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .aidev-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .aidev-toggle-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-neutral-300);
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+  }
+
+  .aidev-toggle-slider::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-neutral-0);
+    box-shadow: var(--aidev-shadow-sm);
+    transition: transform 0.2s ease;
+  }
+
+  .aidev-toggle-switch input:checked + .aidev-toggle-slider {
+    background-color: var(--aidev-primary);
+  }
+
+  .aidev-toggle-switch input:checked + .aidev-toggle-slider::before {
+    transform: translateX(20px);
+  }
+
+  .aidev-toggle-switch input:focus-visible + .aidev-toggle-slider {
+    box-shadow: 0 0 0 3px var(--aidev-primary-200);
+  }
+
+  .aidev-sidebar-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--aidev-space-1);
+  }
+
+  .aidev-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-3);
+    padding: var(--aidev-space-3) var(--aidev-space-4);
+    border-radius: var(--aidev-radius-md);
+    color: var(--aidev-neutral-600);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .aidev-sidebar-link:hover {
+    color: var(--aidev-primary);
+    background-color: var(--aidev-primary-50);
+  }
+
+  .aidev-sidebar-link:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--aidev-ring);
+  }
+
+  .aidev-sidebar-link.is-active {
+    color: var(--aidev-primary);
+    background-color: var(--aidev-primary-50);
+  }
+
+  .aidev-sidebar-link svg,
+  .aidev-sidebar-link i {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .aidev-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 var(--aidev-space-5);
+    border: 1px solid transparent;
+    border-radius: var(--aidev-radius-md);
+    background-color: var(--aidev-primary);
+    color: var(--aidev-primary-foreground);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .aidev-btn-primary:hover {
+    background-color: var(--aidev-primary-700);
+    transform: translateY(-1px);
+  }
+
+  .aidev-btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .aidev-btn-primary:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--aidev-primary-200);
+  }
+
+  @media (max-width: 960px) {
+    .aidev-settings-layout {
+      flex-direction: column;
+    }
+
+    .aidev-settings-sidebar {
+      position: static;
+      width: 100%;
+    }
+
+    .aidev-sidebar-menu {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .aidev-sidebar-link span {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+<!-- 共享项目外壳 -->
+<style id="aidev-shell-layout">
+  .aidev-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--aidev-background);
+    color: var(--aidev-foreground);
+    font-family: var(--aidev-font-sans);
+  }
+
+  .aidev-shell-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    height: var(--aidev-header-height);
+    background-color: var(--aidev-card);
+    border-bottom: 1px solid var(--aidev-border);
+    box-shadow: var(--aidev-shadow-sm);
+  }
+
+  .aidev-shell-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--aidev-space-4);
+    max-width: var(--aidev-max-content);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--aidev-space-6);
+  }
+
+  .aidev-shell-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    color: var(--aidev-foreground);
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-brand:hover {
+    color: var(--aidev-primary);
+  }
+
+  .aidev-shell-logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--aidev-radius-md);
+    background: linear-gradient(135deg, var(--aidev-primary-500), var(--aidev-primary-700));
+    color: var(--aidev-primary-foreground);
+  }
+
+  .aidev-shell-logo-icon svg,
+  .aidev-shell-logo-icon i {
+    width: 18px;
+    height: 18px;
+  }
+
+  .aidev-shell-search {
+    position: relative;
+    flex: 1 1 auto;
+    max-width: 420px;
+    min-width: 160px;
+  }
+
+  .aidev-shell-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: var(--aidev-muted-foreground);
+    pointer-events: none;
+  }
+
+  .aidev-shell-search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 var(--aidev-space-4) 0 var(--aidev-space-10);
+    border: 1px solid var(--aidev-input);
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-muted);
+    color: var(--aidev-foreground);
+    font-size: 0.9375rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+
+  .aidev-shell-search-input::placeholder {
+    color: var(--aidev-muted-foreground);
+  }
+
+  .aidev-shell-search-input:hover {
+    border-color: var(--aidev-primary-300);
+  }
+
+  .aidev-shell-search-input:focus {
+    outline: none;
+    border-color: var(--aidev-ring);
+    background-color: var(--aidev-card);
+    box-shadow: 0 0 0 3px var(--aidev-primary-100);
+  }
+
+  .aidev-shell-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-1);
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    padding: var(--aidev-space-2) var(--aidev-space-3);
+    border-radius: var(--aidev-radius-md);
+    color: var(--aidev-neutral-600);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .aidev-shell-nav-link:hover {
+    color: var(--aidev-primary);
+    background-color: var(--aidev-primary-50);
+  }
+
+  .aidev-shell-nav-link:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--aidev-ring);
+  }
+
+  .aidev-shell-nav-link svg,
+  .aidev-shell-nav-link i {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-nav-link.is-active {
+    color: var(--aidev-primary);
+    background-color: var(--aidev-primary-50);
+  }
+
+  .aidev-shell-auth {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-3);
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-primary-100);
+    color: var(--aidev-primary-700);
+    border: 1px solid var(--aidev-border);
+  }
+
+  .aidev-shell-auth-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 var(--aidev-space-4);
+    border: 1px solid transparent;
+    border-radius: var(--aidev-radius-md);
+    background-color: var(--aidev-primary);
+    color: var(--aidev-primary-foreground);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .aidev-shell-auth-button:hover {
+    background-color: var(--aidev-primary-700);
+  }
+
+  .aidev-shell-auth-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--aidev-primary-200);
+  }
+
+  .aidev-shell-main {
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: var(--aidev-max-content);
+    margin: 0 auto;
+    padding: var(--aidev-space-6);
+  }
+
+  .aidev-shell-footer {
+    width: 100%;
+    border-top: 1px solid var(--aidev-border);
+    background-color: var(--aidev-card);
+  }
+
+  .aidev-shell-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--aidev-space-4);
+    max-width: var(--aidev-max-content);
+    margin: 0 auto;
+    padding: var(--aidev-space-6);
+  }
+
+  .aidev-shell-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--aidev-space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .aidev-shell-footer-links a {
+    color: var(--aidev-muted-foreground);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .aidev-shell-footer-links a:hover {
+    color: var(--aidev-primary);
+  }
+
+  .aidev-shell-slogan {
+    color: var(--aidev-muted-foreground);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1024px) {
+    .aidev-shell-header-inner {
+      padding: 0 var(--aidev-space-4);
+    }
+
+    .aidev-shell-nav-link span {
+      display: none;
+    }
+
+    .aidev-shell-nav-link {
+      padding: var(--aidev-space-2);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .aidev-shell-header-inner {
+      gap: var(--aidev-space-3);
+    }
+
+    .aidev-shell-search {
+      display: none;
+    }
+
+    .aidev-shell-footer-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: var(--aidev-space-5) var(--aidev-space-4);
+    }
+  }
+</style>
+
+<div class="aidev-shell">
+  <header class="aidev-shell-header" role="banner">
+    <div class="aidev-shell-header-inner">
+      <a class="aidev-shell-brand" href="/" aria-label="AI 开发者论坛首页">
+        <span class="aidev-shell-logo-icon" aria-hidden="true">
+          <i data-lucide="sparkles" aria-hidden="true"></i>
+        </span>
+        <span class="aidev-shell-logo-text">AI 开发者论坛</span>
+      </a>
+
+      <div class="aidev-shell-search" role="search">
+        <span class="aidev-shell-search-icon" aria-hidden="true">
+          <i data-lucide="search" width="18" height="18" aria-hidden="true"></i>
+        </span>
+        <input
+          class="aidev-shell-search-input"
+          type="search"
+          placeholder="搜索问题、话题、开发者..."
+          aria-label="全局搜索"
+          autocomplete="off"
+        />
+      </div>
+
+      <nav class="aidev-shell-nav" aria-label="主导航">
+        <a class="aidev-shell-nav-link" href="/" id="nav-home" data-nav-key="home">
+          <i data-lucide="home" width="18" height="18" aria-hidden="true"></i>
+          <span>首页</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/boards" id="nav-boards" data-nav-key="boards">
+          <i data-lucide="layout-grid" width="18" height="18" aria-hidden="true"></i>
+          <span>版块</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/ask" id="nav-ask" data-nav-key="ask">
+          <i data-lucide="help-circle" width="18" height="18" aria-hidden="true"></i>
+          <span>提问</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/notifications" id="nav-notifications" data-nav-key="notifications">
+          <i data-lucide="bell" width="18" height="18" aria-hidden="true"></i>
+          <span>通知</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/profile" id="nav-profile" data-nav-key="profile">
+          <i data-lucide="user" width="18" height="18" aria-hidden="true"></i>
+          <span>主页</span>
+        </a>
+        <a class="aidev-shell-nav-link is-active" href="/settings" id="nav-settings" data-nav-key="settings">
+          <i data-lucide="settings" width="18" height="18" aria-hidden="true"></i>
+          <span>设置</span>
+        </a>
+      </nav>
+
+      <div class="aidev-shell-auth">
+        <button class="aidev-shell-auth-button" type="button">登录 / 注册</button>
+        <span class="aidev-shell-avatar" aria-label="用户头像占位" role="img">
+          <i data-lucide="user" width="18" height="18" aria-hidden="true"></i>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="aidev-shell-main" id="main-content">
+    <div class="aidev-settings-layout">
+      <!-- 左侧设置分栏菜单 -->
+      <aside class="aidev-settings-sidebar" aria-label="设置分栏菜单">
+        <nav>
+          <ul class="aidev-sidebar-menu">
+            <li>
+              <a class="aidev-sidebar-link is-active" href="#account-info-panel" id="menu-account">
+                <i data-lucide="user" width="18" height="18" aria-hidden="true"></i>
+                <span>账号信息</span>
+              </a>
+            </li>
+            <li>
+              <a class="aidev-sidebar-link" href="#notification-preferences-panel" id="menu-notifications">
+                <i data-lucide="bell" width="18" height="18" aria-hidden="true"></i>
+                <span>通知偏好</span>
+              </a>
+            </li>
+            <li>
+              <a class="aidev-sidebar-link" href="#privacy-settings-panel" id="menu-privacy">
+                <i data-lucide="lock" width="18" height="18" aria-hidden="true"></i>
+                <span>隐私设置</span>
+              </a>
+            </li>
+            <li>
+              <a class="aidev-sidebar-link" href="#security-settings-panel" id="menu-security">
+                <i data-lucide="shield" width="18" height="18" aria-hidden="true"></i>
+                <span>安全</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- 右侧设置面板组 -->
+      <div class="aidev-settings-panels">
+        <!-- 账号信息 -->
+        <section class="aidev-settings-panel" id="account-info-panel" aria-labelledby="account-info-heading">
+          <div class="aidev-settings-panel-header">
+            <h2 class="text-title" id="account-info-heading">账号信息</h2>
+            <p class="aidev-field-hint">管理你的公开资料与联系方式</p>
+          </div>
+          <div class="aidev-settings-panel-body">
+            <div class="aidev-field-group">
+              <span class="aidev-field-label">头像</span>
+              <div class="aidev-avatar-upload">
+                <span class="aidev-avatar" id="account-avatar" role="img" aria-label="当前头像">
+                  <i data-lucide="user" width="32" height="32" aria-hidden="true"></i>
+                </span>
+                <button class="aidev-btn-primary" type="button">
+                  <i data-lucide="upload" width="16" height="16" aria-hidden="true"></i>
+                  更换头像
+                </button>
+              </div>
+            </div>
+
+            <div class="aidev-field-group">
+              <label class="aidev-field-label" for="account-username">用户名</label>
+              <input class="aidev-text-input" type="text" id="account-username" name="username" value="AIExplorer_42" autocomplete="username" />
+              <p class="aidev-field-hint">用户名是你在社区中的唯一标识，30 天内只能修改一次。</p>
+            </div>
+
+            <div class="aidev-field-group">
+              <label class="aidev-field-label" for="account-email">邮箱</label>
+              <input class="aidev-text-input" type="email" id="account-email" name="email" value="dev@ai-forum.example" autocomplete="email" />
+              <p class="aidev-field-hint">用于接收重要通知与找回密码。</p>
+            </div>
+
+            <div class="aidev-field-group">
+              <label class="aidev-field-label" for="account-bio">个人简介</label>
+              <textarea class="aidev-textarea" id="account-bio" name="bio" rows="4" placeholder="用一句话介绍你自己...">专注于大模型应用开发，热爱开源与知识分享。</textarea>
+              <p class="aidev-field-hint">最多 200 字，支持 Markdown 简单格式。</p>
+            </div>
+
+            <div class="aidev-field-group">
+              <label class="aidev-field-label" for="account-tech-stack">技术栈</label>
+              <input class="aidev-text-input" type="text" id="account-tech-stack" name="techStack" value="Python, PyTorch, LangChain, React, TypeScript" />
+              <div class="aidev-tag-list" aria-label="已选技术栈">
+                <span class="aidev-tag">Python</span>
+                <span class="aidev-tag">PyTorch</span>
+                <span class="aidev-tag">LangChain</span>
+                <span class="aidev-tag">React</span>
+                <span class="aidev-tag">TypeScript</span>
+              </div>
+              <p class="aidev-field-hint">用逗号分隔，帮助你被发现并精准推荐话题。</p>
+            </div>
+
+            <div class="aidev-field-group" style="display: flex; flex-direction: row; gap: var(--aidev-space-3); justify-content: flex-end;">
+              <button class="aidev-btn-primary" type="submit" id="account-save">保存修改</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 通知偏好 -->
+        <section class="aidev-settings-panel" id="notification-preferences-panel" aria-labelledby="notification-preferences-heading">
+          <div class="aidev-settings-panel-header">
+            <h2 class="text-title" id="notification-preferences-heading">通知偏好</h2>
+            <p class="aidev-field-hint">选择你希望接收的站内与邮件提醒</p>
+          </div>
+          <div class="aidev-settings-panel-body">
+            <div class="aidev-toggle-row">
+              <div>
+                <div class="aidev-toggle-label">收到回复</div>
+                <p class="aidev-field-hint">当有人回复你的问题或评论时通知你</p>
+              </div>
+              <label class="aidev-toggle-switch" for="toggle-reply" aria-label="收到回复通知">
+                <input type="checkbox" id="toggle-reply" checked />
+                <span class="aidev-toggle-slider" aria-hidden="true"></span>
+              </label>
+            </div>
+
+            <div class="aidev-toggle-row">
+              <div>
+                <div class="aidev-toggle-label">收到赞同</div>
+                <p class="aidev-field-hint">当有人为你的回答点赞时通知你</p>
+              </div>
+              <label class="aidev-toggle-switch" for="toggle-upvote" aria-label="收到赞同通知">
+                <input type="checkbox" id="toggle-upvote" checked />
+                <span class="aidev-toggle-slider" aria-hidden="true"></span>
+              </label>
+            </div>
+
+            <div class="aidev-toggle-row">
+              <div>
+                <div class="aidev-toggle-label">回答被采纳</div>
+                <p class="aidev-field-hint">当你的回答被提问者标记为最佳答案时通知你</p>
+              </div>
+              <label class="aidev-toggle-switch" for="toggle-accepted" aria-label="回答被采纳通知">
+                <input type="checkbox" id="toggle-accepted" checked />
+                <span class="aidev-toggle-slider" aria-hidden="true"></span>
+              </label>
+            </div>
+
+            <div class="aidev-toggle-row">
+              <div>
+                <div class="aidev-toggle-label">悬赏动态</div>
+                <p class="aidev-field-hint">关于你关注的悬赏问题、悬赏到期与收益结算</p>
+              </div>
+              <label class="aidev-toggle-switch" for="toggle-bounty" aria-label="悬赏动态通知">
+                <input type="checkbox" id="toggle-bounty" />
+                <span class="aidev-toggle-slider" aria-hidden="true"></span>
+              </label>
+            </div>
+
+            <div class="aidev-toggle-row">
+              <div>
+                <div class="aidev-toggle-label">系统公告</div>
+                <p class="aidev-field-hint">社区规则更新、维护公告与重要功能上线</p>
+              </div>
+              <label class="aidev-toggle-switch" for="toggle-system" aria-label="系统公告通知">
+                <input type="checkbox" id="toggle-system" checked />
+                <span class="aidev-toggle-slider" aria-hidden="true"></span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- 隐私设置 -->
+        <section class="aidev-settings-panel" id="privacy-settings-panel" aria-labelledby="privacy-settings-heading">
+          <div class="aidev-settings-panel-header">
+            <h2 class="text-title" id="privacy-settings-heading">隐私设置</h2>
+            <p class="aidev-field-hint">控制个人资料的可见范围与搜索收录</p>
+          </div>
+          <div class="aidev-settings-panel-body">
+            <div class="aidev-field-group">
+              <label class="aidev-field-label" for="privacy-visibility">资料可见范围</label>
+              <select class="aidev-text-input" id="privacy-visibility" name="profileVisibility">
+                <option value="public">公开 - 所有人可见</option>
+                <option value="members" selected>仅登录用户可见</option>
+                <option value="private">仅自己可见</option>
+              </select>
+              <p class="aidev-field-hint">决定未登录访客能否查看你的主页与回答。</p>
+            </div>
+
+            <div class="aidev-toggle-row">
+              <div>
+                <div class="aidev-toggle-label">允许搜索引擎索引</div>
+                <p class="aidev-field-hint">开启后，你的公开资料可能被搜索引擎收录</p>
+              </div>
+              <label class="aidev-toggle-switch" for="privacy-search-index" aria-label="允许搜索引擎索引">
+                <input type="checkbox" id="privacy-search-index" />
+                <span class="aidev-toggle-slider" aria-hidden="true"></span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- 安全 -->
+        <section class="aidev-settings-panel" id="security-settings-panel" aria-labelledby="security-settings-heading">
+          <div class="aidev-settings-panel-header">
+            <h2 class="text-title" id="security-settings-heading">安全</h2>
+            <p class="aidev-field-hint">更新密码并保护账号安全</p>
+          </div>
+          <div class="aidev-settings-panel-body">
+            <div class="aidev-field-group">
+              <label class="aidev-field-label" for="security-current-password">当前密码</label>
+              <input class="aidev-text-input" type="password" id="security-current-password" name="currentPassword" autocomplete="current-password" />
+            </div>
+
+            <div class="aidev-field-group">
+              <label class="aidev-field-label" for="security-new-password">新密码</label>
+              <input class="aidev-text-input" type="password" id="security-new-password" name="newPassword" autocomplete="new-password" />
+              <p class="aidev-field-hint">至少 8 位，包含大小写字母与数字。</p>
+            </div>
+
+            <div class="aidev-field-group">
+              <label class="aidev-field-label" for="security-confirm-password">确认新密码</label>
+              <input class="aidev-text-input" type="password" id="security-confirm-password" name="confirmPassword" autocomplete="new-password" />
+            </div>
+
+            <div class="aidev-toggle-row">
+              <div>
+                <div class="aidev-toggle-label">两步验证</div>
+                <p class="aidev-field-hint">通过 Authenticator 应用增加登录保护</p>
+              </div>
+              <label class="aidev-toggle-switch" for="security-2fa" aria-label="开启两步验证">
+                <input type="checkbox" id="security-2fa" />
+                <span class="aidev-toggle-slider" aria-hidden="true"></span>
+              </label>
+            </div>
+
+            <div class="aidev-field-group" style="display: flex; flex-direction: row; gap: var(--aidev-space-3); justify-content: flex-end;">
+              <button class="aidev-btn-primary" type="submit" id="security-save">更新密码</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="aidev-shell-footer" role="contentinfo">
+    <div class="aidev-shell-footer-inner">
+      <ul class="aidev-shell-footer-links">
+        <li><a href="/about">关于我们</a></li>
+        <li><a href="/guidelines">社区规范</a></li>
+        <li><a href="/help">帮助中心</a></li>
+        <li><a href="/privacy">隐私政策</a></li>
+        <li><a href="/terms">服务条款</a></li>
+      </ul>
+      <p class="aidev-shell-slogan">连接每一位 AI 开发者，共建智能未来。</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+  // 初始化 Lucide 图标
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+</script>
+</body>
+</html>

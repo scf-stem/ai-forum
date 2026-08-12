@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - AI开发者论坛</title>
+    <style id="theme-vars">
+/* AI辅助开发者论坛 · 品牌变量系统 */
+
+:root {
+  /* 品牌主色阶 (Indigo) - 唯一身份色 */
+  --aidev-primary-50: #eef2ff;
+  --aidev-primary-100: #e0e7ff;
+  --aidev-primary-200: #c7d2fe;
+  --aidev-primary-300: #a5b4fc;
+  --aidev-primary-400: #818cf8;
+  --aidev-primary-500: #6366f1;
+  --aidev-primary-600: #4f46e5;
+  --aidev-primary-700: #4338ca;
+  --aidev-primary-800: #3730a3;
+  --aidev-primary-900: #312e81;
+
+  /* 中性色阶 */
+  --aidev-neutral-0: #ffffff;
+  --aidev-neutral-50: #f8fafc;
+  --aidev-neutral-100: #f1f5f9;
+  --aidev-neutral-200: #e2e8f0;
+  --aidev-neutral-300: #cbd5e1;
+  --aidev-neutral-400: #94a3b8;
+  --aidev-neutral-500: #64748b;
+  --aidev-neutral-600: #475569;
+  --aidev-neutral-700: #334155;
+  --aidev-neutral-800: #1e293b;
+  --aidev-neutral-900: #0f172a;
+
+  /* 状态语义色 */
+  --aidev-state-success: #059669;
+  --aidev-state-success-bg: rgba(5, 150, 105, 0.08);
+  --aidev-state-warning: #d97706;
+  --aidev-state-warning-bg: rgba(217, 119, 6, 0.08);
+  --aidev-state-error: #dc2626;
+  --aidev-state-error-bg: rgba(220, 38, 38, 0.08);
+  --aidev-state-info: #2563eb;
+  --aidev-state-info-bg: rgba(37, 99, 235, 0.08);
+
+  /* 代码/深色表面 */
+  --aidev-code-bg: #1e1b2e;
+  --aidev-code-ink: #e2e0f0;
+
+  /* 语义别名 */
+  --aidev-background: var(--aidev-neutral-50);
+  --aidev-foreground: var(--aidev-neutral-900);
+  --aidev-card: var(--aidev-neutral-0);
+  --aidev-card-foreground: var(--aidev-neutral-900);
+  --aidev-popover: var(--aidev-neutral-0);
+  --aidev-popover-foreground: var(--aidev-neutral-900);
+  --aidev-primary: var(--aidev-primary-600);
+  --aidev-primary-foreground: var(--aidev-neutral-0);
+  --aidev-muted: var(--aidev-neutral-100);
+  --aidev-muted-foreground: var(--aidev-neutral-500);
+  --aidev-border: var(--aidev-neutral-200);
+  --aidev-input: var(--aidev-neutral-200);
+  --aidev-ring: var(--aidev-primary-600);
+
+  /* 圆角 */
+  --aidev-radius-sm: 4px;
+  --aidev-radius-md: 8px;
+  --aidev-radius-lg: 12px;
+  --aidev-radius-full: 9999px;
+
+  /* 阴影 - 静态表面 ≤ 0.05 alpha */
+  --aidev-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --aidev-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-float: 0 16px 48px rgba(15, 23, 42, 0.12);
+
+  /* 字体系统 */
+  --aidev-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  --aidev-font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* 间距 */
+  --aidev-space-1: 0.25rem;
+  --aidev-space-2: 0.5rem;
+  --aidev-space-3: 0.75rem;
+  --aidev-space-4: 1rem;
+  --aidev-space-5: 1.25rem;
+  --aidev-space-6: 1.5rem;
+  --aidev-space-8: 2rem;
+  --aidev-space-10: 2.5rem;
+  --aidev-space-12: 3rem;
+
+  /* 尺寸 */
+  --aidev-header-height: 64px;
+  --aidev-max-content: 1200px;
+  --aidev-sidebar-width: 240px;
+}
+
+html.dark {
+  --aidev-background: #0b0f19;
+  --aidev-foreground: #f1f5f9;
+  --aidev-card: #111827;
+  --aidev-card-foreground: #f1f5f9;
+  --aidev-popover: #111827;
+  --aidev-popover-foreground: #f1f5f9;
+  --aidev-muted: #1e293b;
+  --aidev-muted-foreground: #94a3b8;
+  --aidev-border: #1e293b;
+  --aidev-input: #334155;
+  --aidev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --aidev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --aidev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --aidev-code-bg: #1a1625;
+}
+
+/* 排版工具类 */
+.font-sans { font-family: var(--aidev-font-sans); }
+.font-mono { font-family: var(--aidev-font-mono); }
+
+.text-display {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-headline {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-title {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--aidev-background);
+    --color-foreground: var(--aidev-foreground);
+    --color-card: var(--aidev-card);
+    --color-card-foreground: var(--aidev-card-foreground);
+    --color-popover: var(--aidev-popover);
+    --color-popover-foreground: var(--aidev-popover-foreground);
+    --color-primary: var(--aidev-primary);
+    --color-primary-foreground: var(--aidev-primary-foreground);
+    --color-muted: var(--aidev-muted);
+    --color-muted-foreground: var(--aidev-muted-foreground);
+    --color-border: var(--aidev-border);
+    --color-input: var(--aidev-input);
+    --color-ring: var(--aidev-ring);
+    --radius-sm: var(--aidev-radius-sm);
+    --radius-md: var(--aidev-radius-md);
+    --radius-lg: var(--aidev-radius-lg);
+  }
+  @layer base {
+    body { background: var(--aidev-background); color: var(--aidev-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--aidev-background); }
+      .text-background { color: var(--aidev-background); }
+      .border-background { border-color: var(--aidev-background); }
+      .ring-background { --tw-ring-color: var(--aidev-background); }
+      .bg-foreground { background-color: var(--aidev-foreground); }
+      .text-foreground { color: var(--aidev-foreground); }
+      .border-foreground { border-color: var(--aidev-foreground); }
+      .ring-foreground { --tw-ring-color: var(--aidev-foreground); }
+      .bg-card { background-color: var(--aidev-card); }
+      .text-card { color: var(--aidev-card); }
+      .border-card { border-color: var(--aidev-card); }
+      .ring-card { --tw-ring-color: var(--aidev-card); }
+      .bg-card-foreground { background-color: var(--aidev-card-foreground); }
+      .text-card-foreground { color: var(--aidev-card-foreground); }
+      .border-card-foreground { border-color: var(--aidev-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--aidev-card-foreground); }
+      .bg-popover { background-color: var(--aidev-popover); }
+      .text-popover { color: var(--aidev-popover); }
+      .border-popover { border-color: var(--aidev-popover); }
+      .ring-popover { --tw-ring-color: var(--aidev-popover); }
+      .bg-popover-foreground { background-color: var(--aidev-popover-foreground); }
+      .text-popover-foreground { color: var(--aidev-popover-foreground); }
+      .border-popover-foreground { border-color: var(--aidev-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--aidev-popover-foreground); }
+      .bg-primary { background-color: var(--aidev-primary); }
+      .text-primary { color: var(--aidev-primary); }
+      .border-primary { border-color: var(--aidev-primary); }
+      .ring-primary { --tw-ring-color: var(--aidev-primary); }
+      .bg-primary-foreground { background-color: var(--aidev-primary-foreground); }
+      .text-primary-foreground { color: var(--aidev-primary-foreground); }
+      .border-primary-foreground { border-color: var(--aidev-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--aidev-primary-foreground); }
+      .bg-muted { background-color: var(--aidev-muted); }
+      .text-muted { color: var(--aidev-muted); }
+      .border-muted { border-color: var(--aidev-muted); }
+      .ring-muted { --tw-ring-color: var(--aidev-muted); }
+      .bg-muted-foreground { background-color: var(--aidev-muted-foreground); }
+      .text-muted-foreground { color: var(--aidev-muted-foreground); }
+      .border-muted-foreground { border-color: var(--aidev-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--aidev-muted-foreground); }
+      .bg-border { background-color: var(--aidev-border); }
+      .text-border { color: var(--aidev-border); }
+      .border-border { border-color: var(--aidev-border); }
+      .ring-border { --tw-ring-color: var(--aidev-border); }
+      .bg-input { background-color: var(--aidev-input); }
+      .text-input { color: var(--aidev-input); }
+      .border-input { border-color: var(--aidev-input); }
+      .ring-input { --tw-ring-color: var(--aidev-input); }
+      .bg-ring { background-color: var(--aidev-ring); }
+      .text-ring { color: var(--aidev-ring); }
+      .border-ring { border-color: var(--aidev-ring); }
+      .ring-ring { --tw-ring-color: var(--aidev-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+  <style id="critical-layout">
+    :root {
+      --page-gutter: var(--aidev-space-4);
+    }
+
+    @media (min-width: 768px) {
+      :root {
+        --page-gutter: var(--aidev-space-6);
+      }
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    .aidev-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .aidev-shell-main {
+      flex: 1 0 auto;
+      width: 100%;
+      max-width: var(--aidev-max-content);
+      margin: 0 auto;
+      padding: var(--aidev-space-6) var(--page-gutter);
+    }
+
+    .home-hero,
+    .home-boards,
+    .home-feed {
+      width: 100%;
+    }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: var(--aidev-space-5);
+    }
+
+    @media (min-width: 640px) {
+      .board-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .board-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .feed-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--aidev-space-6);
+    }
+
+    @media (min-width: 1024px) {
+      .feed-layout {
+        grid-template-columns: minmax(0, 2fr) minmax(280px, 360px);
+      }
+    }
+
+    .post-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-4);
+    }
+  </style>
+
+  <style id="aidev-shell-layout">
+    .aidev-shell {
+      background-color: var(--aidev-background);
+      color: var(--aidev-foreground);
+      font-family: var(--aidev-font-sans);
+    }
+
+    .aidev-shell-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+      height: var(--aidev-header-height);
+      background-color: var(--aidev-card);
+      border-bottom: 1px solid var(--aidev-border);
+      box-shadow: var(--aidev-shadow-sm);
+    }
+
+    .aidev-shell-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      max-width: var(--aidev-max-content);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 var(--aidev-space-6);
+    }
+
+    .aidev-shell-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      color: var(--aidev-foreground);
+      font-size: 1.125rem;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-brand:hover {
+      color: var(--aidev-primary);
+    }
+
+    .aidev-shell-logo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--aidev-radius-md);
+      background: linear-gradient(135deg, var(--aidev-primary-500), var(--aidev-primary-700));
+      color: var(--aidev-primary-foreground);
+    }
+
+    .aidev-shell-logo-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .aidev-shell-search {
+      position: relative;
+      flex: 1 1 auto;
+      max-width: 420px;
+      min-width: 160px;
+    }
+
+    .aidev-shell-search-icon {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: var(--aidev-muted-foreground);
+      pointer-events: none;
+    }
+
+    .aidev-shell-search-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .aidev-shell-search-input {
+      width: 100%;
+      height: 40px;
+      padding: 0 var(--aidev-space-4) 0 var(--aidev-space-10);
+      border: 1px solid var(--aidev-input);
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-muted);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    .aidev-shell-search-input::placeholder {
+      color: var(--aidev-muted-foreground);
+    }
+
+    .aidev-shell-search-input:hover {
+      border-color: var(--aidev-primary-300);
+    }
+
+    .aidev-shell-search-input:focus {
+      outline: none;
+      border-color: var(--aidev-ring);
+      background-color: var(--aidev-card);
+      box-shadow: 0 0 0 3px var(--aidev-primary-100);
+    }
+
+    .aidev-shell-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--aidev-space-2);
+      padding: var(--aidev-space-2) var(--aidev-space-3);
+      border-radius: var(--aidev-radius-md);
+      color: var(--aidev-neutral-600);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .aidev-shell-nav-link:hover {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .aidev-shell-nav-link:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-shell-nav-link svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-nav-link.is-active {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .aidev-shell-auth {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      flex-shrink: 0;
+    }
+
+    .aidev-shell-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-primary-100);
+      color: var(--aidev-primary-700);
+      border: 1px solid var(--aidev-border);
+    }
+
+    .aidev-shell-avatar svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .aidev-shell-auth-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 var(--aidev-space-4);
+      border: 1px solid transparent;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .aidev-shell-auth-button:hover {
+      background-color: var(--aidev-primary-700);
+    }
+
+    .aidev-shell-auth-button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--aidev-primary-200);
+    }
+
+    .aidev-shell-footer {
+      width: 100%;
+      border-top: 1px solid var(--aidev-border);
+      background-color: var(--aidev-card);
+    }
+
+    .aidev-shell-footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-4);
+      max-width: var(--aidev-max-content);
+      margin: 0 auto;
+      padding: var(--aidev-space-6);
+    }
+
+    .aidev-shell-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-4);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .aidev-shell-footer-links a {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .aidev-shell-footer-links a:hover {
+      color: var(--aidev-primary);
+    }
+
+    .aidev-shell-slogan {
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1024px) {
+      .aidev-shell-header-inner {
+        padding: 0 var(--aidev-space-4);
+      }
+
+      .aidev-shell-nav-link span {
+        display: none;
+      }
+
+      .aidev-shell-nav-link {
+        padding: var(--aidev-space-2);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .aidev-shell-header-inner {
+        gap: var(--aidev-space-3);
+      }
+
+      .aidev-shell-search {
+        display: none;
+      }
+
+      .aidev-shell-footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--aidev-space-5) var(--aidev-space-4);
+      }
+    }
+  </style>
+
+  <style id="aidev-page-styles">
+    .home-hero {
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      padding: clamp(var(--aidev-space-8), 5vw, var(--aidev-space-12)) clamp(var(--aidev-space-5), 4vw, var(--aidev-space-10));
+      margin-bottom: var(--aidev-space-8);
+    }
+
+    .hero-title {
+      font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--aidev-foreground);
+      margin: 0 0 var(--aidev-space-4);
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--aidev-muted-foreground);
+      max-width: 640px;
+      margin: 0 0 var(--aidev-space-6);
+    }
+
+    .hero-search-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      margin-bottom: var(--aidev-space-5);
+    }
+
+    .hero-search {
+      position: relative;
+      flex: 1 1 280px;
+      max-width: 520px;
+    }
+
+    .hero-search > i,
+    .hero-search > svg {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--aidev-muted-foreground);
+      pointer-events: none;
+    }
+
+    .hero-search input {
+      width: 100%;
+      height: 48px;
+      padding: 0 var(--aidev-space-4) 0 var(--aidev-space-10);
+      border: 1px solid var(--aidev-input);
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-muted);
+      color: var(--aidev-foreground);
+      font-size: 1rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    .hero-search input::placeholder {
+      color: var(--aidev-muted-foreground);
+    }
+
+    .hero-search input:hover {
+      border-color: var(--aidev-primary-300);
+    }
+
+    .hero-search input:focus {
+      outline: none;
+      border-color: var(--aidev-ring);
+      background-color: var(--aidev-card);
+      box-shadow: 0 0 0 3px var(--aidev-primary-100);
+    }
+
+    .hero-ask-button,
+    .hero-boards-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--aidev-space-2);
+      height: 48px;
+      padding: 0 var(--aidev-space-5);
+      border-radius: var(--aidev-radius-md);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .hero-ask-button {
+      border: 1px solid transparent;
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+    }
+
+    .hero-ask-button:hover {
+      background-color: var(--aidev-primary-700);
+      transform: translateY(-1px);
+    }
+
+    .hero-ask-button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--aidev-primary-200);
+    }
+
+    .hero-ask-button svg,
+    .hero-boards-button svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .hero-boards-button {
+      border: 1px solid var(--aidev-border);
+      background-color: var(--aidev-card);
+      color: var(--aidev-foreground);
+    }
+
+    .hero-boards-button:hover {
+      background-color: var(--aidev-muted);
+      border-color: var(--aidev-primary-300);
+    }
+
+    .hero-boards-button:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .hero-quick-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      font-size: 0.875rem;
+      color: var(--aidev-muted-foreground);
+    }
+
+    .hero-quick-tags a {
+      color: var(--aidev-primary-700);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .hero-quick-tags a:hover {
+      color: var(--aidev-primary);
+      text-decoration: underline;
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-3);
+      margin-bottom: var(--aidev-space-5);
+    }
+
+    .section-title {
+      font-size: 1.375rem;
+      line-height: 1.25;
+      font-weight: 700;
+      color: var(--aidev-foreground);
+      margin: 0;
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .home-boards {
+      margin-bottom: var(--aidev-space-8);
+    }
+
+    .board-card {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-3);
+      padding: var(--aidev-space-5);
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      text-decoration: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .board-card:hover {
+      border-color: var(--aidev-primary-300);
+      box-shadow: var(--aidev-shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .board-card:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .board-card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary);
+    }
+
+    .board-card-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .board-card-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--aidev-foreground);
+      margin: 0;
+    }
+
+    .board-card-desc {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--aidev-muted-foreground);
+      margin: 0;
+    }
+
+    .board-card-meta {
+      font-size: 0.8125rem;
+      color: var(--aidev-muted-foreground);
+      margin-top: auto;
+    }
+
+    .feed-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-1);
+      background-color: var(--aidev-muted);
+      border-radius: var(--aidev-radius-md);
+    }
+
+    .feed-tab {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 var(--aidev-space-3);
+      border: none;
+      border-radius: var(--aidev-radius-sm);
+      background-color: transparent;
+      color: var(--aidev-neutral-600);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .feed-tab:hover {
+      color: var(--aidev-primary);
+    }
+
+    .feed-tab.is-active {
+      background-color: var(--aidev-card);
+      color: var(--aidev-primary);
+      box-shadow: var(--aidev-shadow-sm);
+    }
+
+    .feed-tab:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .post-card {
+      display: block;
+      padding: var(--aidev-space-5);
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      text-decoration: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .post-card:hover {
+      border-color: var(--aidev-primary-300);
+      box-shadow: var(--aidev-shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .post-card:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .post-card-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      margin-bottom: var(--aidev-space-3);
+    }
+
+    .post-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 22px;
+      padding: 0 var(--aidev-space-2);
+      border-radius: var(--aidev-radius-sm);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary-700);
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .post-title {
+      font-size: 1.0625rem;
+      line-height: 1.35;
+      font-weight: 700;
+      color: var(--aidev-foreground);
+      margin: 0 0 var(--aidev-space-2);
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .post-excerpt {
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: var(--aidev-muted-foreground);
+      margin: 0 0 var(--aidev-space-4);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .post-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-3);
+      color: var(--aidev-muted-foreground);
+      font-size: 0.8125rem;
+    }
+
+    .post-author {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      font-weight: 500;
+      color: var(--aidev-neutral-700);
+    }
+
+    .post-author-avatar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-primary-100);
+      color: var(--aidev-primary-700);
+      font-size: 0.625rem;
+      font-weight: 700;
+    }
+
+    .post-stats {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-4);
+    }
+
+    .post-stat {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .post-stat svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .ai-answer-card {
+      position: sticky;
+      top: calc(var(--aidev-header-height) + var(--aidev-space-6));
+      padding: var(--aidev-space-5);
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      box-shadow: var(--aidev-shadow-sm);
+    }
+
+    .ai-card-head {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      margin-bottom: var(--aidev-space-3);
+    }
+
+    .ai-card-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary);
+    }
+
+    .ai-card-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .ai-card-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--aidev-foreground);
+      margin: 0;
+    }
+
+    .ai-card-desc {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--aidev-muted-foreground);
+      margin: 0 0 var(--aidev-space-4);
+    }
+
+    .ai-card-input {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      padding: var(--aidev-space-1);
+      background-color: var(--aidev-muted);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-md);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .ai-card-input:focus-within {
+      border-color: var(--aidev-ring);
+      box-shadow: 0 0 0 3px var(--aidev-primary-100);
+      background-color: var(--aidev-card);
+    }
+
+    .ai-card-input input {
+      flex: 1 1 auto;
+      min-width: 0;
+      height: 40px;
+      padding: 0 var(--aidev-space-3);
+      border: none;
+      background: transparent;
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+    }
+
+    .ai-card-input input:focus {
+      outline: none;
+    }
+
+    .ai-card-input input::placeholder {
+      color: var(--aidev-muted-foreground);
+    }
+
+    .ai-card-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      border: none;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+      cursor: pointer;
+      transition: background-color 0.15s ease;
+    }
+
+    .ai-card-submit:hover {
+      background-color: var(--aidev-primary-700);
+    }
+
+    .ai-card-submit:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .ai-card-submit svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .ai-card-tips {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      margin-top: var(--aidev-space-4);
+      font-size: 0.8125rem;
+      color: var(--aidev-muted-foreground);
+    }
+
+    .ai-card-tips a {
+      color: var(--aidev-primary-700);
+      text-decoration: none;
+    }
+
+    .ai-card-tips a:hover {
+      color: var(--aidev-primary);
+      text-decoration: underline;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-ask-button,
+      .hero-boards-button,
+      .board-card,
+      .post-card,
+      .feed-tab,
+      .aidev-shell-nav-link,
+      .aidev-shell-auth-button,
+      .ai-card-submit,
+      .ai-card-input {
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-search-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .hero-ask-button,
+      .hero-boards-button {
+        width: 100%;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+
+  <div class="aidev-shell">
+    <header class="aidev-shell-header" role="banner">
+      <div class="aidev-shell-header-inner">
+        <a class="aidev-shell-brand" href="/" aria-label="AI 开发者论坛首页">
+          <span class="aidev-shell-logo-icon" aria-hidden="true">
+            <i data-lucide="sparkles"></i>
+          </span>
+          <span class="aidev-shell-logo-text">AI 开发者论坛</span>
+        </a>
+
+        <div class="aidev-shell-search" role="search">
+          <span class="aidev-shell-search-icon" aria-hidden="true">
+            <i data-lucide="search"></i>
+          </span>
+          <input
+            class="aidev-shell-search-input"
+            type="search"
+            placeholder="搜索问题、话题、开发者..."
+            aria-label="全局搜索"
+            autocomplete="off"
+          />
+        </div>
+
+        <nav class="aidev-shell-nav" aria-label="主导航">
+          <a class="aidev-shell-nav-link is-active" href="/" data-nav-key="home">
+            <i data-lucide="home" aria-hidden="true"></i>
+            <span>首页</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/boards" data-nav-key="boards" data-dom-id="nav-boards">
+            <i data-lucide="layout-grid" aria-hidden="true"></i>
+            <span>版块</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/ask" data-nav-key="ask" data-dom-id="nav-ask">
+            <i data-lucide="help-circle" aria-hidden="true"></i>
+            <span>提问</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/notifications" data-nav-key="notifications" data-dom-id="nav-notifications">
+            <i data-lucide="bell" aria-hidden="true"></i>
+            <span>通知</span>
+          </a>
+          <a class="aidev-shell-nav-link" href="/settings" data-nav-key="settings" data-dom-id="nav-settings">
+            <i data-lucide="settings" aria-hidden="true"></i>
+            <span>设置</span>
+          </a>
+        </nav>
+
+        <div class="aidev-shell-auth">
+          <button class="aidev-shell-auth-button" type="button" data-dom-id="nav-auth">登录 / 注册</button>
+          <a class="aidev-shell-avatar" href="/profile" aria-label="个人中心" data-dom-id="nav-profile">
+            <i data-lucide="user" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="aidev-shell-main" id="main-content">
+      <section class="home-hero" aria-labelledby="hero-title">
+        <h1 class="hero-title" id="hero-title">AI 开发者社区</h1>
+        <p class="hero-subtitle">汇聚 LLM、RAG、Agent 与部署实践的开发者中枢，发现高质量讨论与可落地方案。</p>
+        <div class="hero-search-row">
+          <div class="hero-search" role="search">
+            <i data-lucide="search" aria-hidden="true"></i>
+            <input type="search" placeholder="搜索问题、模型、框架..." aria-label="搜索帖子" autocomplete="off" />
+          </div>
+          <button class="hero-ask-button" type="button" data-dom-id="cta-ask">
+            <i data-lucide="sparkles" aria-hidden="true"></i>
+            <span>AI 提问</span>
+          </button>
+          <a class="hero-boards-button" href="/boards" data-dom-id="cta-boards">
+            <span>浏览版块</span>
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
+          </a>
+        </div>
+        <div class="hero-quick-tags">
+          <span>热门：</span>
+          <a href="/tag/rag">RAG 检索优化</a>
+          <a href="/tag/finetune">Llama 3 微调</a>
+          <a href="/tag/prompt">Prompt 工程</a>
+        </div>
+      </section>
+
+      <section class="home-boards" aria-labelledby="boards-title">
+        <div class="section-header">
+          <h2 class="section-title" id="boards-title">探索版块</h2>
+        </div>
+        <div class="board-grid">
+          <a class="board-card" href="/boards/rag" data-dom-id="link-board">
+            <span class="board-card-icon" aria-hidden="true"><i data-lucide="database"></i></span>
+            <h3 class="board-card-title">RAG 检索增强</h3>
+            <p class="board-card-desc">向量检索、分块策略、Embedding 选型与召回优化实践。</p>
+            <p class="board-card-meta">3.2k 关注 · 128 篇精华</p>
+          </a>
+          <a class="board-card" href="/boards/agent" data-dom-id="link-board">
+            <span class="board-card-icon" aria-hidden="true"><i data-lucide="bot"></i></span>
+            <h3 class="board-card-title">Agent 智能体</h3>
+            <p class="board-card-desc">多 Agent 协作、工具调用、记忆设计与任务规划。</p>
+            <p class="board-card-meta">2.8k 关注 · 96 篇精华</p>
+          </a>
+          <a class="board-card" href="/boards/models" data-dom-id="link-board">
+            <span class="board-card-icon" aria-hidden="true"><i data-lucide="brain-circuit"></i></span>
+            <h3 class="board-card-title">模型与微调</h3>
+            <p class="board-card-desc">基座模型对比、LoRA/QLoRA、RLHF 与中文适配。</p>
+            <p class="board-card-meta">4.5k 关注 · 210 篇精华</p>
+          </a>
+          <a class="board-card" href="/boards/deployment" data-dom-id="link-board">
+            <span class="board-card-icon" aria-hidden="true"><i data-lucide="server"></i></span>
+            <h3 class="board-card-title">部署与工程</h3>
+            <p class="board-card-desc">vLLM、TGI、量化推理、高并发与成本优化方案。</p>
+            <p class="board-card-meta">1.9k 关注 · 84 篇精华</p>
+          </a>
+          <a class="board-card" href="/boards/beginner" data-dom-id="link-board">
+            <span class="board-card-icon" aria-hidden="true"><i data-lucide="book-open"></i></span>
+            <h3 class="board-card-title">入门与实践</h3>
+            <p class="board-card-desc">新手路线、API 接入、Prompt 技巧与项目上手。</p>
+            <p class="board-card-meta">5.1k 关注 · 176 篇精华</p>
+          </a>
+          <a class="board-card" href="/boards/tools" data-dom-id="link-board">
+            <span class="board-card-icon" aria-hidden="true"><i data-lucide="wrench"></i></span>
+            <h3 class="board-card-title">工具与框架</h3>
+            <p class="board-card-desc">LangChain、LlamaIndex、Dify、AutoGen 等工具链。</p>
+            <p class="board-card-meta">2.4k 关注 · 112 篇精华</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="home-feed" aria-labelledby="feed-title">
+        <div class="feed-layout">
+          <div class="feed-main">
+            <div class="section-header">
+              <h2 class="section-title" id="feed-title">个性化推荐</h2>
+              <div class="feed-tabs" role="tablist" aria-label="排序方式">
+                <button class="feed-tab is-active" type="button" role="tab" aria-selected="true">热门</button>
+                <button class="feed-tab" type="button" role="tab" aria-selected="false">最新</button>
+              </div>
+            </div>
+            <div class="post-list">
+              <a class="post-card" href="/post/rag-chunk-embedding" data-dom-id="link-post">
+                <div class="post-card-header">
+                  <span class="post-tag">RAG</span>
+                  <span class="post-tag" style="background-color: var(--aidev-muted); color: var(--aidev-neutral-600);">精选</span>
+                </div>
+                <h3 class="post-title">RAG 分块与 Embedding 优化</h3>
+                <p class="post-excerpt">从业务文档出发，对比递归分块、语义分块与固定长度分块在召回率上的差异，并给出 Embedding 模型选型建议。</p>
+                <div class="post-meta">
+                  <span class="post-author">
+                    <span class="post-author-avatar" aria-hidden="true">陈</span>
+                    <span>陈知行</span>
+                  </span>
+                  <span class="post-stats">
+                    <span class="post-stat"><i data-lucide="arrow-up" aria-hidden="true"></i> 248</span>
+                    <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i> 36</span>
+                    <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i> 4.2k</span>
+                  </span>
+                </div>
+              </a>
+
+              <a class="post-card" href="/post/agent-memory-design" data-dom-id="link-post">
+                <div class="post-card-header">
+                  <span class="post-tag">Agent</span>
+                </div>
+                <h3 class="post-title">Agent 多轮记忆设计</h3>
+                <p class="post-excerpt">结合滑动窗口、摘要压缩与向量长期记忆，探讨如何在多轮对话中保持上下文连贯与成本控制。</p>
+                <div class="post-meta">
+                  <span class="post-author">
+                    <span class="post-author-avatar" aria-hidden="true">林</span>
+                    <span>林小北</span>
+                  </span>
+                  <span class="post-stats">
+                    <span class="post-stat"><i data-lucide="arrow-up" aria-hidden="true"></i> 186</span>
+                    <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i> 24</span>
+                    <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i> 3.1k</span>
+                  </span>
+                </div>
+              </a>
+
+              <a class="post-card" href="/post/llama3-chinese-finetune" data-dom-id="link-post">
+                <div class="post-card-header">
+                  <span class="post-tag">模型</span>
+                </div>
+                <h3 class="post-title">Llama 3 中文微调经验</h3>
+                <p class="post-excerpt">分享使用 Alpaca-GPT4 与自有语料进行中文指令微调的完整流程，包括数据清洗、LoRA 参数与评估指标。</p>
+                <div class="post-meta">
+                  <span class="post-author">
+                    <span class="post-author-avatar" aria-hidden="true">王</span>
+                    <span>王远航</span>
+                  </span>
+                  <span class="post-stats">
+                    <span class="post-stat"><i data-lucide="arrow-up" aria-hidden="true"></i> 315</span>
+                    <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i> 52</span>
+                    <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i> 6.7k</span>
+                  </span>
+                </div>
+              </a>
+
+              <a class="post-card" href="/post/vllm-high-concurrency" data-dom-id="link-post">
+                <div class="post-card-header">
+                  <span class="post-tag">部署</span>
+                </div>
+                <h3 class="post-title">vLLM 高并发部署实践</h3>
+                <p class="post-excerpt">在生产环境使用 vLLM 部署 70B 模型时的性能调优、批处理策略与显存监控方案。</p>
+                <div class="post-meta">
+                  <span class="post-author">
+                    <span class="post-author-avatar" aria-hidden="true">赵</span>
+                    <span>赵一鸣</span>
+                  </span>
+                  <span class="post-stats">
+                    <span class="post-stat"><i data-lucide="arrow-up" aria-hidden="true"></i> 142</span>
+                    <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i> 18</span>
+                    <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i> 2.5k</span>
+                  </span>
+                </div>
+              </a>
+
+              <a class="post-card" href="/post/prompt-injection-defense" data-dom-id="link-post">
+                <div class="post-card-header">
+                  <span class="post-tag">安全</span>
+                </div>
+                <h3 class="post-title">Prompt 注入防护方案</h3>
+                <p class="post-excerpt">整理常见的直接注入、间接注入与越狱攻击模式，介绍输入过滤、输出检测与系统提示加固策略。</p>
+                <div class="post-meta">
+                  <span class="post-author">
+                    <span class="post-author-avatar" aria-hidden="true">周</span>
+                    <span>周安然</span>
+                  </span>
+                  <span class="post-stats">
+                    <span class="post-stat"><i data-lucide="arrow-up" aria-hidden="true"></i> 203</span>
+                    <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i> 31</span>
+                    <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i> 3.8k</span>
+                  </span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <aside class="feed-side" aria-label="AI 快捷问答">
+            <div class="ai-answer-card">
+              <div class="ai-card-head">
+                <span class="ai-card-icon" aria-hidden="true"><i data-lucide="bot"></i></span>
+                <h3 class="ai-card-title">AI 快速问答</h3>
+              </div>
+              <p class="ai-card-desc">输入技术问题，AI 将结合社区讨论给出答案与参考链接。</p>
+              <div class="ai-card-input">
+                <input type="text" placeholder="例如：如何评估 RAG 召回率？" aria-label="快速提问" />
+                <button class="ai-card-submit" type="button" aria-label="提交问题">
+                  <i data-lucide="arrow-up" aria-hidden="true"></i>
+                </button>
+              </div>
+              <div class="ai-card-tips">
+                <span>试试：</span>
+                <a href="/ask?topic=agent">Agent 设计模式</a>
+                <a href="/ask?topic=quantization">模型量化</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="aidev-shell-footer" role="contentinfo">
+      <div class="aidev-shell-footer-inner">
+        <ul class="aidev-shell-footer-links">
+          <li><a href="/about">关于我们</a></li>
+          <li><a href="/guidelines">社区规范</a></li>
+          <li><a href="/help">帮助中心</a></li>
+          <li><a href="/privacy">隐私政策</a></li>
+          <li><a href="/terms">服务条款</a></li>
+        </ul>
+        <p class="aidev-shell-slogan">连接每一位 AI 开发者，共建智能未来。</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>

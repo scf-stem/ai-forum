@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>版块详情 - AI开发者论坛</title>
+    <style id="theme-vars">
+/* AI辅助开发者论坛 · 品牌变量系统 */
+
+:root {
+  /* 品牌主色阶 (Indigo) - 唯一身份色 */
+  --aidev-primary-50: #eef2ff;
+  --aidev-primary-100: #e0e7ff;
+  --aidev-primary-200: #c7d2fe;
+  --aidev-primary-300: #a5b4fc;
+  --aidev-primary-400: #818cf8;
+  --aidev-primary-500: #6366f1;
+  --aidev-primary-600: #4f46e5;
+  --aidev-primary-700: #4338ca;
+  --aidev-primary-800: #3730a3;
+  --aidev-primary-900: #312e81;
+
+  /* 中性色阶 */
+  --aidev-neutral-0: #ffffff;
+  --aidev-neutral-50: #f8fafc;
+  --aidev-neutral-100: #f1f5f9;
+  --aidev-neutral-200: #e2e8f0;
+  --aidev-neutral-300: #cbd5e1;
+  --aidev-neutral-400: #94a3b8;
+  --aidev-neutral-500: #64748b;
+  --aidev-neutral-600: #475569;
+  --aidev-neutral-700: #334155;
+  --aidev-neutral-800: #1e293b;
+  --aidev-neutral-900: #0f172a;
+
+  /* 状态语义色 */
+  --aidev-state-success: #059669;
+  --aidev-state-success-bg: rgba(5, 150, 105, 0.08);
+  --aidev-state-warning: #d97706;
+  --aidev-state-warning-bg: rgba(217, 119, 6, 0.08);
+  --aidev-state-error: #dc2626;
+  --aidev-state-error-bg: rgba(220, 38, 38, 0.08);
+  --aidev-state-info: #2563eb;
+  --aidev-state-info-bg: rgba(37, 99, 235, 0.08);
+
+  /* 代码/深色表面 */
+  --aidev-code-bg: #1e1b2e;
+  --aidev-code-ink: #e2e0f0;
+
+  /* 语义别名 */
+  --aidev-background: var(--aidev-neutral-50);
+  --aidev-foreground: var(--aidev-neutral-900);
+  --aidev-card: var(--aidev-neutral-0);
+  --aidev-card-foreground: var(--aidev-neutral-900);
+  --aidev-popover: var(--aidev-neutral-0);
+  --aidev-popover-foreground: var(--aidev-neutral-900);
+  --aidev-primary: var(--aidev-primary-600);
+  --aidev-primary-foreground: var(--aidev-neutral-0);
+  --aidev-muted: var(--aidev-neutral-100);
+  --aidev-muted-foreground: var(--aidev-neutral-500);
+  --aidev-border: var(--aidev-neutral-200);
+  --aidev-input: var(--aidev-neutral-200);
+  --aidev-ring: var(--aidev-primary-600);
+
+  /* 圆角 */
+  --aidev-radius-sm: 4px;
+  --aidev-radius-md: 8px;
+  --aidev-radius-lg: 12px;
+  --aidev-radius-full: 9999px;
+
+  /* 阴影 - 静态表面 ≤ 0.05 alpha */
+  --aidev-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --aidev-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-float: 0 16px 48px rgba(15, 23, 42, 0.12);
+
+  /* 字体系统 */
+  --aidev-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  --aidev-font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* 间距 */
+  --aidev-space-1: 0.25rem;
+  --aidev-space-2: 0.5rem;
+  --aidev-space-3: 0.75rem;
+  --aidev-space-4: 1rem;
+  --aidev-space-5: 1.25rem;
+  --aidev-space-6: 1.5rem;
+  --aidev-space-8: 2rem;
+  --aidev-space-10: 2.5rem;
+  --aidev-space-12: 3rem;
+
+  /* 尺寸 */
+  --aidev-header-height: 64px;
+  --aidev-max-content: 1200px;
+  --aidev-sidebar-width: 240px;
+}
+
+html.dark {
+  --aidev-background: #0b0f19;
+  --aidev-foreground: #f1f5f9;
+  --aidev-card: #111827;
+  --aidev-card-foreground: #f1f5f9;
+  --aidev-popover: #111827;
+  --aidev-popover-foreground: #f1f5f9;
+  --aidev-muted: #1e293b;
+  --aidev-muted-foreground: #94a3b8;
+  --aidev-border: #1e293b;
+  --aidev-input: #334155;
+  --aidev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --aidev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --aidev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --aidev-code-bg: #1a1625;
+}
+
+/* 排版工具类 */
+.font-sans { font-family: var(--aidev-font-sans); }
+.font-mono { font-family: var(--aidev-font-mono); }
+
+.text-display {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-headline {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-title {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--aidev-background);
+    --color-foreground: var(--aidev-foreground);
+    --color-card: var(--aidev-card);
+    --color-card-foreground: var(--aidev-card-foreground);
+    --color-popover: var(--aidev-popover);
+    --color-popover-foreground: var(--aidev-popover-foreground);
+    --color-primary: var(--aidev-primary);
+    --color-primary-foreground: var(--aidev-primary-foreground);
+    --color-muted: var(--aidev-muted);
+    --color-muted-foreground: var(--aidev-muted-foreground);
+    --color-border: var(--aidev-border);
+    --color-input: var(--aidev-input);
+    --color-ring: var(--aidev-ring);
+    --radius-sm: var(--aidev-radius-sm);
+    --radius-md: var(--aidev-radius-md);
+    --radius-lg: var(--aidev-radius-lg);
+  }
+  @layer base {
+    body { background: var(--aidev-background); color: var(--aidev-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--aidev-background); }
+      .text-background { color: var(--aidev-background); }
+      .border-background { border-color: var(--aidev-background); }
+      .ring-background { --tw-ring-color: var(--aidev-background); }
+      .bg-foreground { background-color: var(--aidev-foreground); }
+      .text-foreground { color: var(--aidev-foreground); }
+      .border-foreground { border-color: var(--aidev-foreground); }
+      .ring-foreground { --tw-ring-color: var(--aidev-foreground); }
+      .bg-card { background-color: var(--aidev-card); }
+      .text-card { color: var(--aidev-card); }
+      .border-card { border-color: var(--aidev-card); }
+      .ring-card { --tw-ring-color: var(--aidev-card); }
+      .bg-card-foreground { background-color: var(--aidev-card-foreground); }
+      .text-card-foreground { color: var(--aidev-card-foreground); }
+      .border-card-foreground { border-color: var(--aidev-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--aidev-card-foreground); }
+      .bg-popover { background-color: var(--aidev-popover); }
+      .text-popover { color: var(--aidev-popover); }
+      .border-popover { border-color: var(--aidev-popover); }
+      .ring-popover { --tw-ring-color: var(--aidev-popover); }
+      .bg-popover-foreground { background-color: var(--aidev-popover-foreground); }
+      .text-popover-foreground { color: var(--aidev-popover-foreground); }
+      .border-popover-foreground { border-color: var(--aidev-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--aidev-popover-foreground); }
+      .bg-primary { background-color: var(--aidev-primary); }
+      .text-primary { color: var(--aidev-primary); }
+      .border-primary { border-color: var(--aidev-primary); }
+      .ring-primary { --tw-ring-color: var(--aidev-primary); }
+      .bg-primary-foreground { background-color: var(--aidev-primary-foreground); }
+      .text-primary-foreground { color: var(--aidev-primary-foreground); }
+      .border-primary-foreground { border-color: var(--aidev-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--aidev-primary-foreground); }
+      .bg-muted { background-color: var(--aidev-muted); }
+      .text-muted { color: var(--aidev-muted); }
+      .border-muted { border-color: var(--aidev-muted); }
+      .ring-muted { --tw-ring-color: var(--aidev-muted); }
+      .bg-muted-foreground { background-color: var(--aidev-muted-foreground); }
+      .text-muted-foreground { color: var(--aidev-muted-foreground); }
+      .border-muted-foreground { border-color: var(--aidev-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--aidev-muted-foreground); }
+      .bg-border { background-color: var(--aidev-border); }
+      .text-border { color: var(--aidev-border); }
+      .border-border { border-color: var(--aidev-border); }
+      .ring-border { --tw-ring-color: var(--aidev-border); }
+      .bg-input { background-color: var(--aidev-input); }
+      .text-input { color: var(--aidev-input); }
+      .border-input { border-color: var(--aidev-input); }
+      .ring-input { --tw-ring-color: var(--aidev-input); }
+      .bg-ring { background-color: var(--aidev-ring); }
+      .text-ring { color: var(--aidev-ring); }
+      .border-ring { border-color: var(--aidev-ring); }
+      .ring-ring { --tw-ring-color: var(--aidev-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+<style id="aidev-shell-layout">
+  .aidev-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--aidev-background);
+    color: var(--aidev-foreground);
+    font-family: var(--aidev-font-sans);
+  }
+
+  .aidev-shell-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    height: var(--aidev-header-height);
+    background-color: var(--aidev-card);
+    border-bottom: 1px solid var(--aidev-border);
+    box-shadow: var(--aidev-shadow-sm);
+  }
+
+  .aidev-shell-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--aidev-space-4);
+    max-width: var(--aidev-max-content);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--aidev-space-6);
+  }
+
+  .aidev-shell-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    color: var(--aidev-foreground);
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-brand:hover {
+    color: var(--aidev-primary);
+  }
+
+  .aidev-shell-logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--aidev-radius-md);
+    background: linear-gradient(135deg, var(--aidev-primary-500), var(--aidev-primary-700));
+    color: var(--aidev-primary-foreground);
+  }
+
+  .aidev-shell-logo-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .aidev-shell-search {
+    position: relative;
+    flex: 1 1 auto;
+    max-width: 420px;
+    min-width: 160px;
+  }
+
+  .aidev-shell-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: var(--aidev-muted-foreground);
+    pointer-events: none;
+  }
+
+  .aidev-shell-search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 var(--aidev-space-4) 0 var(--aidev-space-10);
+    border: 1px solid var(--aidev-input);
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-muted);
+    color: var(--aidev-foreground);
+    font-size: 0.9375rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+
+  .aidev-shell-search-input::placeholder {
+    color: var(--aidev-muted-foreground);
+  }
+
+  .aidev-shell-search-input:hover {
+    border-color: var(--aidev-primary-300);
+  }
+
+  .aidev-shell-search-input:focus {
+    outline: none;
+    border-color: var(--aidev-ring);
+    background-color: var(--aidev-card);
+    box-shadow: 0 0 0 3px var(--aidev-primary-100);
+  }
+
+  .aidev-shell-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-1);
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    padding: var(--aidev-space-2) var(--aidev-space-3);
+    border-radius: var(--aidev-radius-md);
+    color: var(--aidev-neutral-600);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .aidev-shell-nav-link:hover {
+    color: var(--aidev-primary);
+    background-color: var(--aidev-primary-50);
+  }
+
+  .aidev-shell-nav-link:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--aidev-ring);
+  }
+
+  .aidev-shell-nav-link svg,
+  .aidev-shell-nav-link i[data-lucide] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-nav-link.is-active {
+    color: var(--aidev-primary);
+    background-color: var(--aidev-primary-50);
+  }
+
+  .aidev-shell-auth {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-3);
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-primary-100);
+    color: var(--aidev-primary-700);
+    border: 1px solid var(--aidev-border);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .aidev-shell-avatar:hover {
+    background-color: var(--aidev-primary-200);
+  }
+
+  .aidev-shell-auth-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 var(--aidev-space-4);
+    border: 1px solid transparent;
+    border-radius: var(--aidev-radius-md);
+    background-color: var(--aidev-primary);
+    color: var(--aidev-primary-foreground);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .aidev-shell-auth-button:hover {
+    background-color: var(--aidev-primary-700);
+  }
+
+  .aidev-shell-auth-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--aidev-primary-200);
+  }
+
+  .aidev-shell-main {
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: var(--aidev-max-content);
+    margin: 0 auto;
+    padding: var(--aidev-space-6);
+  }
+
+  .aidev-shell-footer {
+    width: 100%;
+    border-top: 1px solid var(--aidev-border);
+    background-color: var(--aidev-card);
+  }
+
+  .aidev-shell-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--aidev-space-4);
+    max-width: var(--aidev-max-content);
+    margin: 0 auto;
+    padding: var(--aidev-space-6);
+  }
+
+  .aidev-shell-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--aidev-space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .aidev-shell-footer-links a {
+    color: var(--aidev-muted-foreground);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .aidev-shell-footer-links a:hover {
+    color: var(--aidev-primary);
+  }
+
+  .aidev-shell-slogan {
+    color: var(--aidev-muted-foreground);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1024px) {
+    .aidev-shell-header-inner {
+      padding: 0 var(--aidev-space-4);
+    }
+
+    .aidev-shell-nav-link span {
+      display: none;
+    }
+
+    .aidev-shell-nav-link {
+      padding: var(--aidev-space-2);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .aidev-shell-header-inner {
+      gap: var(--aidev-space-3);
+    }
+
+    .aidev-shell-search {
+      display: none;
+    }
+
+    .aidev-shell-footer-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: var(--aidev-space-5) var(--aidev-space-4);
+    }
+  }
+</style>
+
+<style id="board-page-layout">
+  .board-header {
+    position: sticky;
+    top: var(--aidev-header-height);
+    z-index: 90;
+    background-color: var(--aidev-card);
+    border: 1px solid var(--aidev-border);
+    border-radius: var(--aidev-radius-lg);
+    box-shadow: var(--aidev-shadow-sm);
+    margin-bottom: var(--aidev-space-6);
+  }
+
+  .board-header-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--aidev-space-5);
+    padding: var(--aidev-space-6);
+  }
+
+  .board-header-main {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .board-header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--aidev-space-3);
+    margin-bottom: var(--aidev-space-3);
+  }
+
+  .board-name {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--aidev-foreground);
+    margin: 0;
+  }
+
+  .board-description {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--aidev-muted-foreground);
+    margin: 0;
+    max-width: 640px;
+  }
+
+  .board-stats {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-4);
+    margin-top: var(--aidev-space-4);
+    font-size: 0.875rem;
+    color: var(--aidev-muted-foreground);
+  }
+
+  .board-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-1);
+  }
+
+  .board-stat strong {
+    color: var(--aidev-foreground);
+    font-weight: 600;
+  }
+
+  .board-header-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--aidev-space-3);
+    flex-shrink: 0;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--aidev-space-2);
+    height: 40px;
+    padding: 0 var(--aidev-space-4);
+    border: 1px solid transparent;
+    border-radius: var(--aidev-radius-md);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--aidev-primary-200);
+  }
+
+  .btn-primary {
+    background-color: var(--aidev-primary);
+    color: var(--aidev-primary-foreground);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--aidev-primary-700);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    background-color: var(--aidev-card);
+    color: var(--aidev-foreground);
+    border-color: var(--aidev-border);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--aidev-muted);
+    border-color: var(--aidev-primary-300);
+  }
+
+  .btn-follow.is-following {
+    background-color: var(--aidev-primary-50);
+    color: var(--aidev-primary);
+    border-color: var(--aidev-primary-200);
+  }
+
+  .tier-tabs {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    margin-bottom: var(--aidev-space-5);
+    padding-bottom: var(--aidev-space-4);
+    border-bottom: 1px solid var(--aidev-border);
+  }
+
+  .tier-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    height: 40px;
+    padding: 0 var(--aidev-space-5);
+    border: 1px solid transparent;
+    border-radius: var(--aidev-radius-md);
+    background-color: transparent;
+    color: var(--aidev-muted-foreground);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .tier-tab:hover {
+    background-color: var(--aidev-muted);
+    color: var(--aidev-foreground);
+  }
+
+  .tier-tab:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--aidev-ring);
+  }
+
+  .tier-tab.is-active {
+    background-color: var(--aidev-primary-50);
+    color: var(--aidev-primary);
+    border-color: var(--aidev-primary-200);
+    font-weight: 600;
+  }
+
+  .sort-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--aidev-space-4);
+    margin-bottom: var(--aidev-space-5);
+  }
+
+  .sort-group {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-1);
+  }
+
+  .sort-option {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    height: 36px;
+    padding: 0 var(--aidev-space-3);
+    border-radius: var(--aidev-radius-md);
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: var(--aidev-muted-foreground);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .sort-option:hover {
+    background-color: var(--aidev-muted);
+    color: var(--aidev-foreground);
+  }
+
+  .sort-option:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--aidev-ring);
+  }
+
+  .sort-option.is-active {
+    background-color: var(--aidev-card);
+    color: var(--aidev-foreground);
+    border-color: var(--aidev-border);
+    box-shadow: var(--aidev-shadow-sm);
+  }
+
+  .filter-hint {
+    font-size: 0.875rem;
+    color: var(--aidev-muted-foreground);
+  }
+
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--aidev-space-4);
+  }
+
+  .post-item {
+    display: block;
+    background-color: var(--aidev-card);
+    border: 1px solid var(--aidev-border);
+    border-radius: var(--aidev-radius-lg);
+    padding: var(--aidev-space-5);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+
+  .post-item:hover {
+    border-color: var(--aidev-primary-300);
+    box-shadow: var(--aidev-shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .post-item:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--aidev-primary-200);
+  }
+
+  .post-title {
+    font-size: 1.0625rem;
+    line-height: 1.4;
+    font-weight: 600;
+    color: var(--aidev-foreground);
+    margin: 0 0 var(--aidev-space-2) 0;
+  }
+
+  .post-excerpt {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--aidev-muted-foreground);
+    margin: 0 0 var(--aidev-space-3) 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--aidev-space-3);
+    font-size: 0.8125rem;
+    color: var(--aidev-muted-foreground);
+  }
+
+  .post-author {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    color: var(--aidev-foreground);
+    font-weight: 500;
+  }
+
+  .post-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-primary-100);
+    color: var(--aidev-primary-700);
+    font-size: 0.625rem;
+    font-weight: 700;
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    margin-left: auto;
+  }
+
+  .post-tag {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 var(--aidev-space-2);
+    border-radius: var(--aidev-radius-md);
+    background-color: var(--aidev-muted);
+    color: var(--aidev-muted-foreground);
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  .post-stats {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-3);
+  }
+
+  .post-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-1);
+  }
+
+  .floating-ask-button {
+    position: fixed;
+    right: var(--aidev-space-6);
+    bottom: var(--aidev-space-6);
+    z-index: 110;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    height: 52px;
+    padding: 0 var(--aidev-space-5);
+    border: none;
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-primary);
+    color: var(--aidev-primary-foreground);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--aidev-shadow-float);
+    transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .floating-ask-button:hover {
+    background-color: var(--aidev-primary-700);
+    transform: translateY(-2px);
+  }
+
+  .floating-ask-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--aidev-primary-200);
+  }
+
+  .floating-ask-button i[data-lucide] {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .board-header-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: var(--aidev-space-5);
+    }
+
+    .board-header-actions {
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+    }
+
+    .board-header-actions .btn {
+      flex: 1 1 auto;
+    }
+
+    .board-name {
+      font-size: 1.5rem;
+    }
+
+    .sort-bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .post-item {
+      padding: var(--aidev-space-4);
+    }
+
+    .post-tags {
+      width: 100%;
+      margin-left: 0;
+      margin-top: var(--aidev-space-2);
+    }
+
+    .floating-ask-button {
+      right: var(--aidev-space-4);
+      bottom: var(--aidev-space-4);
+      height: 48px;
+      padding: 0 var(--aidev-space-4);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+<div class="aidev-shell">
+  <header class="aidev-shell-header" role="banner">
+    <div class="aidev-shell-header-inner">
+      <a class="aidev-shell-brand" href="/" aria-label="AI 开发者论坛首页" data-dom-id="back-home">
+        <span class="aidev-shell-logo-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+        </span>
+        <span class="aidev-shell-logo-text">AI 开发者论坛</span>
+      </a>
+
+      <div class="aidev-shell-search" role="search">
+        <span class="aidev-shell-search-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+        </span>
+        <input
+          class="aidev-shell-search-input"
+          type="search"
+          placeholder="搜索问题、话题、开发者..."
+          aria-label="全局搜索"
+          autocomplete="off"
+        />
+      </div>
+
+      <nav class="aidev-shell-nav" aria-label="主导航">
+        <a class="aidev-shell-nav-link" href="/" data-nav-key="home" data-dom-id="nav-home">
+          <i data-lucide="home" aria-hidden="true"></i>
+          <span>首页</span>
+        </a>
+        <a class="aidev-shell-nav-link is-active" href="/boards" data-nav-key="boards" data-dom-id="nav-boards">
+          <i data-lucide="layout-grid" aria-hidden="true"></i>
+          <span>版块</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/ask" data-nav-key="ask" data-dom-id="nav-ask">
+          <i data-lucide="help-circle" aria-hidden="true"></i>
+          <span>提问</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/notifications" data-nav-key="notifications" data-dom-id="nav-notifications">
+          <i data-lucide="bell" aria-hidden="true"></i>
+          <span>通知</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/settings" data-nav-key="settings" data-dom-id="nav-settings">
+          <i data-lucide="settings" aria-hidden="true"></i>
+          <span>设置</span>
+        </a>
+      </nav>
+
+      <div class="aidev-shell-auth">
+        <button class="aidev-shell-auth-button" type="button">登录 / 注册</button>
+        <a class="aidev-shell-avatar" href="/profile" aria-label="个人中心" data-dom-id="nav-profile">
+          <i data-lucide="user" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="aidev-shell-main" id="main-content">
+    <section class="board-header" aria-labelledby="board-name">
+      <div class="board-header-inner">
+        <div class="board-header-main">
+          <div class="board-header-meta">
+            <h1 class="board-name" id="board-name">RAG 系统</h1>
+            <span class="post-tag" style="background-color: var(--aidev-primary-50); color: var(--aidev-primary-700);">技术版块</span>
+          </div>
+          <p class="board-description">讨论检索增强生成、向量数据库、Embedding 模型与文档切分策略的版块。从入门概念到生产落地，分享你的实战经验与踩坑记录。</p>
+          <div class="board-stats">
+            <span class="board-stat"><strong>1,248</strong> 帖子</span>
+            <span class="board-stat"><i data-lucide="users" aria-hidden="true"></i><strong>3.6k</strong> 关注者</span>
+            <span class="board-stat"><i data-lucide="message-circle" aria-hidden="true"></i>今日新增 <strong>12</strong></span>
+          </div>
+        </div>
+        <div class="board-header-actions">
+          <button class="btn btn-follow btn-secondary" type="button" data-dom-id="btn-follow" aria-pressed="false">
+            <i data-lucide="plus" aria-hidden="true"></i>
+            <span>关注版块</span>
+          </button>
+          <button class="btn btn-primary" type="button" data-dom-id="cta-ask" aria-label="在 RAG 系统版块提问">
+            <i data-lucide="pen-line" aria-hidden="true"></i>
+            <span>发布帖子</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="tier-tabs" role="tablist" aria-label="帖子分区">
+      <button class="tier-tab is-active" type="button" role="tab" aria-selected="true" data-dom-id="tab-beginner">
+        <i data-lucide="sprout" aria-hidden="true"></i>
+        <span>入门区</span>
+      </button>
+      <button class="tier-tab" type="button" role="tab" aria-selected="false" data-dom-id="tab-advanced">
+        <i data-lucide="zap" aria-hidden="true"></i>
+        <span>深度区</span>
+      </button>
+    </div>
+
+    <div class="sort-bar" role="toolbar" aria-label="帖子排序">
+      <div class="sort-group" role="group" aria-label="排序方式">
+        <button class="sort-option is-active" type="button" data-dom-id="sort-hot" aria-pressed="true">
+          <i data-lucide="flame" aria-hidden="true"></i>
+          <span>最热</span>
+        </button>
+        <button class="sort-option" type="button" data-dom-id="sort-new" aria-pressed="false">
+          <i data-lucide="clock" aria-hidden="true"></i>
+          <span>最新</span>
+        </button>
+        <button class="sort-option" type="button" data-dom-id="sort-unanswered" aria-pressed="false">
+          <i data-lucide="circle-help" aria-hidden="true"></i>
+          <span>未回答</span>
+        </button>
+      </div>
+      <span class="filter-hint">共 8 个帖子</span>
+    </div>
+
+    <ul class="post-list" role="list" aria-label="帖子列表">
+      <li>
+        <a class="post-item" href="/post/1" data-dom-id="link-post">
+          <h2 class="post-title">新手如何快速理解 RAG 的基本流程？</h2>
+          <p class="post-excerpt">刚接触 RAG，想搞清楚文档加载、切分、向量化、检索、生成这几个环节的关系。有没有适合初学者的流程图或最小可运行示例？</p>
+          <div class="post-meta">
+            <span class="post-author"><span class="post-avatar" aria-hidden="true">李</span>李明轩</span>
+            <span>2 小时前</span>
+            <span class="post-stats">
+              <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i>18</span>
+              <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i>342</span>
+              <span class="post-stat"><i data-lucide="thumbs-up" aria-hidden="true"></i>24</span>
+            </span>
+            <span class="post-tags">
+              <span class="post-tag">入门</span>
+              <span class="post-tag">RAG 流程</span>
+            </span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a class="post-item" href="/post/2" data-dom-id="link-post">
+          <h2 class="post-title">向量数据库选型：Milvus、Pinecone、Weaviate 还是 pgvector？</h2>
+          <p class="post-excerpt">团队正在做技术选型，数据量在千万级，主要做中文文档检索。关心部署成本、查询延迟和 Python 生态集成度，求真实对比。</p>
+          <div class="post-meta">
+            <span class="post-author"><span class="post-avatar" aria-hidden="true">王</span>王浩然</span>
+            <span>5 小时前</span>
+            <span class="post-stats">
+              <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i>32</span>
+              <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i>896</span>
+              <span class="post-stat"><i data-lucide="thumbs-up" aria-hidden="true"></i>67</span>
+            </span>
+            <span class="post-tags">
+              <span class="post-tag">向量数据库</span>
+              <span class="post-tag">选型</span>
+            </span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a class="post-item" href="/post/3" data-dom-id="link-post">
+          <h2 class="post-title">中文 Embedding 模型对比：BGE、M3E、text2vec 实测</h2>
+          <p class="post-excerpt">在内部 FAQ 数据集上测试了 bge-large-zh、m3e-base 和 text2vec-large-chinese，整理了召回率、速度和显存占用对比表。</p>
+          <div class="post-meta">
+            <span class="post-author"><span class="post-avatar" aria-hidden="true">陈</span>陈思远</span>
+            <span>昨天</span>
+            <span class="post-stats">
+              <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i>45</span>
+              <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i>1.2k</span>
+              <span class="post-stat"><i data-lucide="thumbs-up" aria-hidden="true"></i>89</span>
+            </span>
+            <span class="post-tags">
+              <span class="post-tag">Embedding</span>
+              <span class="post-tag">评测</span>
+            </span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a class="post-item" href="/post/4" data-dom-id="link-post">
+          <h2 class="post-title">文档切分策略对检索效果的影响</h2>
+          <p class="post-excerpt">对比了固定长度、按段落、按标题层级和语义切分四种策略，发现召回率和答案相关性差异很大。分享我的切分参数和评估脚本。</p>
+          <div class="post-meta">
+            <span class="post-author"><span class="post-avatar" aria-hidden="true">张</span>张思琪</span>
+            <span>2 天前</span>
+            <span class="post-stats">
+              <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i>27</span>
+              <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i>654</span>
+              <span class="post-stat"><i data-lucide="thumbs-up" aria-hidden="true"></i>53</span>
+            </span>
+            <span class="post-tags">
+              <span class="post-tag">文档切分</span>
+              <span class="post-tag">检索优化</span>
+            </span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a class="post-item" href="/post/5" data-dom-id="link-post">
+          <h2 class="post-title">如何解决向量检索中的语义漂移问题？</h2>
+          <p class="post-excerpt">用户查询和文档块的语义空间不一致，导致检索结果经常出现“看起来相关、实际不相关”的情况。尝试了 query 改写和 HyDE，效果有提升。</p>
+          <div class="post-meta">
+            <span class="post-author"><span class="post-avatar" aria-hidden="true">刘</span>刘子墨</span>
+            <span>3 天前</span>
+            <span class="post-stats">
+              <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i>21</span>
+              <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i>512</span>
+              <span class="post-stat"><i data-lucide="thumbs-up" aria-hidden="true"></i>41</span>
+            </span>
+            <span class="post-tags">
+              <span class="post-tag">语义漂移</span>
+              <span class="post-tag">HyDE</span>
+            </span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a class="post-item" href="/post/6" data-dom-id="link-post">
+          <h2 class="post-title">RAG 系统中的重排序（Rerank）实践</h2>
+          <p class="post-excerpt">在向量召回 Top-20 后用 bge-reranker 做精排，最终取 Top-5 送入 LLM。记录延迟、显存和准确率变化，以及何时该上 Rerank。</p>
+          <div class="post-meta">
+            <span class="post-author"><span class="post-avatar" aria-hidden="true">赵</span>赵天宇</span>
+            <span>4 天前</span>
+            <span class="post-stats">
+              <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i>36</span>
+              <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i>783</span>
+              <span class="post-stat"><i data-lucide="thumbs-up" aria-hidden="true"></i>72</span>
+            </span>
+            <span class="post-tags">
+              <span class="post-tag">Rerank</span>
+              <span class="post-tag">生产实践</span>
+            </span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a class="post-item" href="/post/7" data-dom-id="link-post">
+          <h2 class="post-title">多路召回在 RAG 中的落地经验</h2>
+          <p class="post-excerpt">结合向量检索、关键词检索和知识图谱召回三条路径，设计了一个可配置的融合排序框架。分享架构图和消融实验结果。</p>
+          <div class="post-meta">
+            <span class="post-author"><span class="post-avatar" aria-hidden="true">周</span>周雨桐</span>
+            <span>5 天前</span>
+            <span class="post-stats">
+              <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i>29</span>
+              <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i>621</span>
+              <span class="post-stat"><i data-lucide="thumbs-up" aria-hidden="true"></i>58</span>
+            </span>
+            <span class="post-tags">
+              <span class="post-tag">多路召回</span>
+              <span class="post-tag">架构</span>
+            </span>
+          </div>
+        </a>
+      </li>
+      <li>
+        <a class="post-item" href="/post/8" data-dom-id="link-post">
+          <h2 class="post-title">自建知识库时如何评估检索准确率？</h2>
+          <p class="post-excerpt">没有标准答案时，怎么判断检索结果好不好？整理了我们用的 Hit Rate、MRR、NDCG 指标，以及人工评估的抽样方法。</p>
+          <div class="post-meta">
+            <span class="post-author"><span class="post-avatar" aria-hidden="true">吴</span>吴佳怡</span>
+            <span>1 周前</span>
+            <span class="post-stats">
+              <span class="post-stat"><i data-lucide="message-square" aria-hidden="true"></i>15</span>
+              <span class="post-stat"><i data-lucide="eye" aria-hidden="true"></i>408</span>
+              <span class="post-stat"><i data-lucide="thumbs-up" aria-hidden="true"></i>33</span>
+            </span>
+            <span class="post-tags">
+              <span class="post-tag">评估指标</span>
+              <span class="post-tag">知识库</span>
+            </span>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </main>
+
+  <footer class="aidev-shell-footer" role="contentinfo">
+    <div class="aidev-shell-footer-inner">
+      <ul class="aidev-shell-footer-links">
+        <li><a href="/about">关于我们</a></li>
+        <li><a href="/guidelines">社区规范</a></li>
+        <li><a href="/help">帮助中心</a></li>
+        <li><a href="/privacy">隐私政策</a></li>
+        <li><a href="/terms">服务条款</a></li>
+      </ul>
+      <p class="aidev-shell-slogan">连接每一位 AI 开发者，共建智能未来。</p>
+    </div>
+  </footer>
+</div>
+
+<button class="floating-ask-button" type="button" data-dom-id="cta-ask" aria-label="发布新问题">
+  <i data-lucide="plus" aria-hidden="true"></i>
+  <span>提问</span>
+</button>
+
+<script>
+  (function () {
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+
+    // 关注按钮状态切换（仅视觉反馈）
+    var followBtn = document.querySelector('[data-dom-id="btn-follow"]');
+    if (followBtn) {
+      followBtn.addEventListener('click', function () {
+        var isFollowing = followBtn.getAttribute('aria-pressed') === 'true';
+        followBtn.setAttribute('aria-pressed', String(!isFollowing));
+        followBtn.classList.toggle('is-following', !isFollowing);
+        var label = followBtn.querySelector('span');
+        if (label) {
+          label.textContent = isFollowing ? '关注版块' : '已关注';
+        }
+        var icon = followBtn.querySelector('i[data-lucide]');
+        if (icon) {
+          icon.setAttribute('data-lucide', isFollowing ? 'plus' : 'check');
+          if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+          }
+        }
+      });
+    }
+
+    // 排序选项切换
+    var sortOptions = document.querySelectorAll('[data-dom-id^="sort-"]');
+    sortOptions.forEach(function (option) {
+      option.addEventListener('click', function () {
+        sortOptions.forEach(function (btn) {
+          btn.classList.remove('is-active');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+        option.classList.add('is-active');
+        option.setAttribute('aria-pressed', 'true');
+      });
+    });
+
+    // 分区标签切换
+    var tierTabs = document.querySelectorAll('[data-dom-id^="tab-"]');
+    tierTabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        tierTabs.forEach(function (btn) {
+          btn.classList.remove('is-active');
+          btn.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-active');
+        tab.setAttribute('aria-selected', 'true');
+      });
+    });
+  })();
+</script>
+</body>
+</html>

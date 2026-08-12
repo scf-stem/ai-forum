@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录/注册 - AI开发者论坛</title>
+    <style id="theme-vars">
+/* AI辅助开发者论坛 · 品牌变量系统 */
+
+:root {
+  /* 品牌主色阶 (Indigo) - 唯一身份色 */
+  --aidev-primary-50: #eef2ff;
+  --aidev-primary-100: #e0e7ff;
+  --aidev-primary-200: #c7d2fe;
+  --aidev-primary-300: #a5b4fc;
+  --aidev-primary-400: #818cf8;
+  --aidev-primary-500: #6366f1;
+  --aidev-primary-600: #4f46e5;
+  --aidev-primary-700: #4338ca;
+  --aidev-primary-800: #3730a3;
+  --aidev-primary-900: #312e81;
+
+  /* 中性色阶 */
+  --aidev-neutral-0: #ffffff;
+  --aidev-neutral-50: #f8fafc;
+  --aidev-neutral-100: #f1f5f9;
+  --aidev-neutral-200: #e2e8f0;
+  --aidev-neutral-300: #cbd5e1;
+  --aidev-neutral-400: #94a3b8;
+  --aidev-neutral-500: #64748b;
+  --aidev-neutral-600: #475569;
+  --aidev-neutral-700: #334155;
+  --aidev-neutral-800: #1e293b;
+  --aidev-neutral-900: #0f172a;
+
+  /* 状态语义色 */
+  --aidev-state-success: #059669;
+  --aidev-state-success-bg: rgba(5, 150, 105, 0.08);
+  --aidev-state-warning: #d97706;
+  --aidev-state-warning-bg: rgba(217, 119, 6, 0.08);
+  --aidev-state-error: #dc2626;
+  --aidev-state-error-bg: rgba(220, 38, 38, 0.08);
+  --aidev-state-info: #2563eb;
+  --aidev-state-info-bg: rgba(37, 99, 235, 0.08);
+
+  /* 代码/深色表面 */
+  --aidev-code-bg: #1e1b2e;
+  --aidev-code-ink: #e2e0f0;
+
+  /* 语义别名 */
+  --aidev-background: var(--aidev-neutral-50);
+  --aidev-foreground: var(--aidev-neutral-900);
+  --aidev-card: var(--aidev-neutral-0);
+  --aidev-card-foreground: var(--aidev-neutral-900);
+  --aidev-popover: var(--aidev-neutral-0);
+  --aidev-popover-foreground: var(--aidev-neutral-900);
+  --aidev-primary: var(--aidev-primary-600);
+  --aidev-primary-foreground: var(--aidev-neutral-0);
+  --aidev-muted: var(--aidev-neutral-100);
+  --aidev-muted-foreground: var(--aidev-neutral-500);
+  --aidev-border: var(--aidev-neutral-200);
+  --aidev-input: var(--aidev-neutral-200);
+  --aidev-ring: var(--aidev-primary-600);
+
+  /* 圆角 */
+  --aidev-radius-sm: 4px;
+  --aidev-radius-md: 8px;
+  --aidev-radius-lg: 12px;
+  --aidev-radius-full: 9999px;
+
+  /* 阴影 - 静态表面 ≤ 0.05 alpha */
+  --aidev-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --aidev-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-float: 0 16px 48px rgba(15, 23, 42, 0.12);
+
+  /* 字体系统 */
+  --aidev-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  --aidev-font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* 间距 */
+  --aidev-space-1: 0.25rem;
+  --aidev-space-2: 0.5rem;
+  --aidev-space-3: 0.75rem;
+  --aidev-space-4: 1rem;
+  --aidev-space-5: 1.25rem;
+  --aidev-space-6: 1.5rem;
+  --aidev-space-8: 2rem;
+  --aidev-space-10: 2.5rem;
+  --aidev-space-12: 3rem;
+
+  /* 尺寸 */
+  --aidev-header-height: 64px;
+  --aidev-max-content: 1200px;
+  --aidev-sidebar-width: 240px;
+}
+
+html.dark {
+  --aidev-background: #0b0f19;
+  --aidev-foreground: #f1f5f9;
+  --aidev-card: #111827;
+  --aidev-card-foreground: #f1f5f9;
+  --aidev-popover: #111827;
+  --aidev-popover-foreground: #f1f5f9;
+  --aidev-muted: #1e293b;
+  --aidev-muted-foreground: #94a3b8;
+  --aidev-border: #1e293b;
+  --aidev-input: #334155;
+  --aidev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --aidev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --aidev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --aidev-code-bg: #1a1625;
+}
+
+/* 排版工具类 */
+.font-sans { font-family: var(--aidev-font-sans); }
+.font-mono { font-family: var(--aidev-font-mono); }
+
+.text-display {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-headline {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-title {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--aidev-background);
+    --color-foreground: var(--aidev-foreground);
+    --color-card: var(--aidev-card);
+    --color-card-foreground: var(--aidev-card-foreground);
+    --color-popover: var(--aidev-popover);
+    --color-popover-foreground: var(--aidev-popover-foreground);
+    --color-primary: var(--aidev-primary);
+    --color-primary-foreground: var(--aidev-primary-foreground);
+    --color-muted: var(--aidev-muted);
+    --color-muted-foreground: var(--aidev-muted-foreground);
+    --color-border: var(--aidev-border);
+    --color-input: var(--aidev-input);
+    --color-ring: var(--aidev-ring);
+    --radius-sm: var(--aidev-radius-sm);
+    --radius-md: var(--aidev-radius-md);
+    --radius-lg: var(--aidev-radius-lg);
+  }
+  @layer base {
+    body { background: var(--aidev-background); color: var(--aidev-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--aidev-background); }
+      .text-background { color: var(--aidev-background); }
+      .border-background { border-color: var(--aidev-background); }
+      .ring-background { --tw-ring-color: var(--aidev-background); }
+      .bg-foreground { background-color: var(--aidev-foreground); }
+      .text-foreground { color: var(--aidev-foreground); }
+      .border-foreground { border-color: var(--aidev-foreground); }
+      .ring-foreground { --tw-ring-color: var(--aidev-foreground); }
+      .bg-card { background-color: var(--aidev-card); }
+      .text-card { color: var(--aidev-card); }
+      .border-card { border-color: var(--aidev-card); }
+      .ring-card { --tw-ring-color: var(--aidev-card); }
+      .bg-card-foreground { background-color: var(--aidev-card-foreground); }
+      .text-card-foreground { color: var(--aidev-card-foreground); }
+      .border-card-foreground { border-color: var(--aidev-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--aidev-card-foreground); }
+      .bg-popover { background-color: var(--aidev-popover); }
+      .text-popover { color: var(--aidev-popover); }
+      .border-popover { border-color: var(--aidev-popover); }
+      .ring-popover { --tw-ring-color: var(--aidev-popover); }
+      .bg-popover-foreground { background-color: var(--aidev-popover-foreground); }
+      .text-popover-foreground { color: var(--aidev-popover-foreground); }
+      .border-popover-foreground { border-color: var(--aidev-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--aidev-popover-foreground); }
+      .bg-primary { background-color: var(--aidev-primary); }
+      .text-primary { color: var(--aidev-primary); }
+      .border-primary { border-color: var(--aidev-primary); }
+      .ring-primary { --tw-ring-color: var(--aidev-primary); }
+      .bg-primary-foreground { background-color: var(--aidev-primary-foreground); }
+      .text-primary-foreground { color: var(--aidev-primary-foreground); }
+      .border-primary-foreground { border-color: var(--aidev-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--aidev-primary-foreground); }
+      .bg-muted { background-color: var(--aidev-muted); }
+      .text-muted { color: var(--aidev-muted); }
+      .border-muted { border-color: var(--aidev-muted); }
+      .ring-muted { --tw-ring-color: var(--aidev-muted); }
+      .bg-muted-foreground { background-color: var(--aidev-muted-foreground); }
+      .text-muted-foreground { color: var(--aidev-muted-foreground); }
+      .border-muted-foreground { border-color: var(--aidev-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--aidev-muted-foreground); }
+      .bg-border { background-color: var(--aidev-border); }
+      .text-border { color: var(--aidev-border); }
+      .border-border { border-color: var(--aidev-border); }
+      .ring-border { --tw-ring-color: var(--aidev-border); }
+      .bg-input { background-color: var(--aidev-input); }
+      .text-input { color: var(--aidev-input); }
+      .border-input { border-color: var(--aidev-input); }
+      .ring-input { --tw-ring-color: var(--aidev-input); }
+      .bg-ring { background-color: var(--aidev-ring); }
+      .text-ring { color: var(--aidev-ring); }
+      .border-ring { border-color: var(--aidev-ring); }
+      .ring-ring { --tw-ring-color: var(--aidev-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+  <style>
+    .aidev-skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      z-index: 200;
+      padding: var(--aidev-space-2) var(--aidev-space-4);
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+      text-decoration: none;
+      transition: top 0.15s ease;
+    }
+
+    .aidev-skip-link:focus {
+      top: 0;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .aidev-shell {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: var(--aidev-background);
+      color: var(--aidev-foreground);
+      font-family: var(--aidev-font-sans);
+    }
+
+    .aidev-shell-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+      height: var(--aidev-header-height);
+      background-color: var(--aidev-card);
+      border-bottom: 1px solid var(--aidev-border);
+      box-shadow: var(--aidev-shadow-sm);
+    }
+
+    .aidev-shell-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: var(--aidev-max-content);
+      height: 100%;
+      margin: 0 auto;
+      padding: 0 var(--aidev-space-6);
+    }
+
+    .aidev-shell-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      color: var(--aidev-foreground);
+      font-size: 1.125rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .aidev-shell-brand:hover {
+      color: var(--aidev-primary);
+    }
+
+    .aidev-shell-brand:focus-visible {
+      outline: none;
+      border-radius: var(--aidev-radius-md);
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-shell-logo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--aidev-radius-md);
+      background: linear-gradient(135deg, var(--aidev-primary-500), var(--aidev-primary-700));
+      color: var(--aidev-primary-foreground);
+    }
+
+    .aidev-shell-logo-icon svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .aidev-shell-main {
+      flex: 1 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: var(--aidev-max-content);
+      margin: 0 auto;
+      padding: var(--aidev-space-8) var(--aidev-space-4);
+    }
+
+    .aidev-auth-card {
+      width: 100%;
+      max-width: 420px;
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      box-shadow: var(--aidev-shadow-lg);
+      overflow: hidden;
+    }
+
+    .aidev-auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--aidev-border);
+    }
+
+    .aidev-auth-tab {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--aidev-space-2);
+      padding: var(--aidev-space-4) var(--aidev-space-3);
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      background-color: transparent;
+      color: var(--aidev-muted-foreground);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .aidev-auth-tab:hover {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .aidev-auth-tab:focus-visible {
+      outline: none;
+      background-color: var(--aidev-primary-50);
+      box-shadow: inset 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-auth-tab.is-active {
+      color: var(--aidev-primary);
+      border-bottom-color: var(--aidev-primary);
+    }
+
+    .aidev-auth-panels {
+      padding: var(--aidev-space-8) var(--aidev-space-6);
+    }
+
+    .aidev-auth-panel {
+      display: none;
+    }
+
+    .aidev-auth-panel:target,
+    .aidev-auth-panel.is-active {
+      display: block;
+    }
+
+    .aidev-auth-title {
+      margin: 0 0 var(--aidev-space-2);
+      font-size: 1.375rem;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--aidev-foreground);
+      text-wrap: balance;
+      word-break: keep-all;
+    }
+
+    .aidev-auth-subtitle {
+      margin: 0 0 var(--aidev-space-6);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--aidev-muted-foreground);
+    }
+
+    .aidev-auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-5);
+    }
+
+    .aidev-auth-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-2);
+    }
+
+    .aidev-auth-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--aidev-foreground);
+    }
+
+    .aidev-auth-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .aidev-auth-input-icon {
+      position: absolute;
+      left: 12px;
+      color: var(--aidev-muted-foreground);
+      pointer-events: none;
+    }
+
+    .aidev-auth-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 var(--aidev-space-4) 0 var(--aidev-space-10);
+      border: 1px solid var(--aidev-input);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-card);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    .aidev-auth-input:hover {
+      border-color: var(--aidev-primary-300);
+    }
+
+    .aidev-auth-input:focus {
+      outline: none;
+      border-color: var(--aidev-ring);
+      box-shadow: 0 0 0 3px var(--aidev-primary-100);
+    }
+
+    .aidev-auth-input.is-error {
+      border-color: var(--aidev-state-error);
+      background-color: var(--aidev-state-error-bg);
+    }
+
+    .aidev-auth-input.is-error:focus {
+      box-shadow: 0 0 0 3px var(--aidev-state-error-bg);
+    }
+
+    .aidev-auth-error {
+      display: none;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      font-size: 0.8125rem;
+      color: var(--aidev-state-error);
+    }
+
+    .aidev-auth-field.is-invalid .aidev-auth-error {
+      display: flex;
+    }
+
+    .aidev-auth-options {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--aidev-space-3);
+      flex-wrap: wrap;
+    }
+
+    .aidev-auth-checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      font-size: 0.875rem;
+      color: var(--aidev-muted-foreground);
+      cursor: pointer;
+    }
+
+    .aidev-auth-checkbox input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--aidev-primary);
+      cursor: pointer;
+    }
+
+    .aidev-auth-link {
+      font-size: 0.875rem;
+      color: var(--aidev-primary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .aidev-auth-link:hover {
+      color: var(--aidev-primary-700);
+      text-decoration: underline;
+    }
+
+    .aidev-auth-link:focus-visible {
+      outline: none;
+      border-radius: var(--aidev-radius-sm);
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-auth-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--aidev-space-2);
+      width: 100%;
+      height: 48px;
+      padding: 0 var(--aidev-space-5);
+      border: 1px solid transparent;
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .aidev-auth-submit:hover {
+      background-color: var(--aidev-primary-700);
+    }
+
+    .aidev-auth-submit:active {
+      transform: translateY(0);
+    }
+
+    .aidev-auth-submit:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--aidev-primary-200);
+    }
+
+    .aidev-auth-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .aidev-auth-divider {
+      display: flex;
+      align-items: center;
+      gap: var(--aidev-space-3);
+      margin: 0 var(--aidev-space-6);
+      color: var(--aidev-muted-foreground);
+      font-size: 0.8125rem;
+    }
+
+    .aidev-auth-divider::before,
+    .aidev-auth-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: var(--aidev-border);
+    }
+
+    .aidev-auth-oauth {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--aidev-space-3);
+      padding: var(--aidev-space-5) var(--aidev-space-6) var(--aidev-space-8);
+    }
+
+    .aidev-auth-oauth-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--aidev-space-2);
+      height: 44px;
+      padding: 0 var(--aidev-space-4);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-card);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .aidev-auth-oauth-btn:hover {
+      background-color: var(--aidev-muted);
+      border-color: var(--aidev-primary-300);
+    }
+
+    .aidev-auth-oauth-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-auth-oauth-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .aidev-auth-oauth-github {
+      background-color: var(--aidev-neutral-900);
+      color: var(--aidev-neutral-0);
+      border-color: var(--aidev-neutral-900);
+    }
+
+    .aidev-auth-oauth-github:hover {
+      background-color: var(--aidev-neutral-800);
+      border-color: var(--aidev-neutral-800);
+    }
+
+    .aidev-auth-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--aidev-space-2);
+    }
+
+    .aidev-auth-stack-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--aidev-foreground);
+    }
+
+    .aidev-auth-stack-hint {
+      font-size: 0.8125rem;
+      color: var(--aidev-muted-foreground);
+    }
+
+    .aidev-auth-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--aidev-space-2);
+    }
+
+    .aidev-auth-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      height: 32px;
+      padding: 0 var(--aidev-space-3);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-full);
+      background-color: var(--aidev-muted);
+      color: var(--aidev-muted-foreground);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    }
+
+    .aidev-auth-tag:hover {
+      border-color: var(--aidev-primary-300);
+      color: var(--aidev-primary);
+    }
+
+    .aidev-auth-tag:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-auth-tag.is-selected {
+      background-color: var(--aidev-primary-50);
+      border-color: var(--aidev-primary);
+      color: var(--aidev-primary);
+    }
+
+    .aidev-auth-tag.is-selected svg {
+      display: inline-block;
+    }
+
+    .aidev-auth-tag svg {
+      display: none;
+      width: 14px;
+      height: 14px;
+    }
+
+    .aidev-auth-return {
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      padding: 0 var(--aidev-space-6) var(--aidev-space-8);
+      font-size: 0.875rem;
+      color: var(--aidev-muted-foreground);
+    }
+
+    .aidev-auth-return a {
+      color: var(--aidev-primary);
+      text-decoration: none;
+      transition: color 0.15s ease;
+    }
+
+    .aidev-auth-return a:hover {
+      color: var(--aidev-primary-700);
+      text-decoration: underline;
+    }
+
+    .aidev-shell-footer {
+      width: 100%;
+      border-top: 1px solid var(--aidev-border);
+      background-color: var(--aidev-card);
+    }
+
+    .aidev-shell-footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: var(--aidev-space-4);
+      max-width: var(--aidev-max-content);
+      margin: 0 auto;
+      padding: var(--aidev-space-5) var(--aidev-space-4);
+    }
+
+    .aidev-shell-footer-copy {
+      font-size: 0.8125rem;
+      color: var(--aidev-muted-foreground);
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .aidev-shell-header-inner {
+        padding: 0 var(--aidev-space-4);
+      }
+
+      .aidev-shell-main {
+        padding: var(--aidev-space-4);
+      }
+
+      .aidev-auth-panels {
+        padding: var(--aidev-space-6) var(--aidev-space-4);
+      }
+
+      .aidev-auth-oauth {
+        grid-template-columns: 1fr;
+        padding: var(--aidev-space-5) var(--aidev-space-4) var(--aidev-space-6);
+      }
+
+      .aidev-auth-return {
+        padding: 0 var(--aidev-space-4) var(--aidev-space-6);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aidev-skip-link,
+      .aidev-shell-brand,
+      .aidev-auth-tab,
+      .aidev-auth-input,
+      .aidev-auth-link,
+      .aidev-auth-submit,
+      .aidev-auth-oauth-btn,
+      .aidev-auth-tag,
+      .aidev-auth-return a {
+        transition-duration: 0.01ms;
+      }
+
+      .aidev-auth-submit:active,
+      .aidev-auth-oauth-btn:active {
+        transform: none;
+      }
+    }
+  </style>
+
+  <a href="#main-content" class="aidev-skip-link">跳转到主要内容</a>
+
+  <div class="aidev-shell">
+    <header class="aidev-shell-header" role="banner">
+      <div class="aidev-shell-header-inner">
+        <a class="aidev-shell-brand" href="./index.html" aria-label="AI 开发者论坛首页" data-dom-id="nav-home">
+          <span class="aidev-shell-logo-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
+          </span>
+          <span>AI 开发者论坛</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="aidev-shell-main" id="main-content">
+      <section class="aidev-auth-card" aria-labelledby="auth-heading">
+        <h1 id="auth-heading" class="sr-only">登录或注册</h1>
+
+        <div class="aidev-auth-tabs" role="tablist" aria-label="登录注册切换">
+          <a
+            href="#login"
+            class="aidev-auth-tab is-active"
+            role="tab"
+            id="tab-login"
+            aria-controls="login"
+            aria-selected="true"
+            data-dom-id="link-login-tab"
+          >
+            <i data-lucide="log-in" aria-hidden="true"></i>
+            登录
+          </a>
+          <a
+            href="#register"
+            class="aidev-auth-tab"
+            role="tab"
+            id="tab-register"
+            aria-controls="register"
+            aria-selected="false"
+            data-dom-id="link-register-tab"
+          >
+            <i data-lucide="user-plus" aria-hidden="true"></i>
+            注册
+          </a>
+        </div>
+
+        <div class="aidev-auth-panels">
+          <section id="login" class="aidev-auth-panel is-active" role="tabpanel" aria-labelledby="tab-login">
+            <h2 class="aidev-auth-title">欢迎回来</h2>
+            <p class="aidev-auth-subtitle">继续你的 AI 开发者社区之旅</p>
+
+            <form class="aidev-auth-form" id="login-form" novalidate>
+              <div class="aidev-auth-field">
+                <label class="aidev-auth-label" for="login-account">用户名或邮箱</label>
+                <div class="aidev-auth-input-wrap">
+                  <span class="aidev-auth-input-icon" aria-hidden="true">
+                    <i data-lucide="user" width="18" height="18"></i>
+                  </span>
+                  <input
+                    class="aidev-auth-input"
+                    id="login-account"
+                    name="account"
+                    type="text"
+                    placeholder="dev@example.com"
+                    autocomplete="username"
+                    required
+                  />
+                </div>
+                <span class="aidev-auth-error" aria-live="polite">
+                  <i data-lucide="alert-circle" width="14" height="14"></i>
+                  请输入用户名或邮箱
+                </span>
+              </div>
+
+              <div class="aidev-auth-field">
+                <label class="aidev-auth-label" for="login-password">密码</label>
+                <div class="aidev-auth-input-wrap">
+                  <span class="aidev-auth-input-icon" aria-hidden="true">
+                    <i data-lucide="lock" width="18" height="18"></i>
+                  </span>
+                  <input
+                    class="aidev-auth-input"
+                    id="login-password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    autocomplete="current-password"
+                    minlength="8"
+                    required
+                  />
+                </div>
+                <span class="aidev-auth-error" aria-live="polite">
+                  <i data-lucide="alert-circle" width="14" height="14"></i>
+                  密码至少需要 8 位字符
+                </span>
+              </div>
+
+              <div class="aidev-auth-options">
+                <label class="aidev-auth-checkbox">
+                  <input type="checkbox" name="remember" />
+                  记住我
+                </label>
+                <a class="aidev-auth-link" href="./forgot-password.html">忘记密码？</a>
+              </div>
+
+              <button class="aidev-auth-submit" type="submit" data-dom-id="cta-home">
+                <i data-lucide="arrow-right" width="18" height="18"></i>
+                登录
+              </button>
+            </form>
+          </section>
+
+          <section id="register" class="aidev-auth-panel" role="tabpanel" aria-labelledby="tab-register" hidden>
+            <h2 class="aidev-auth-title">加入社区</h2>
+            <p class="aidev-auth-subtitle">创建账号，与数万 AI 开发者交流</p>
+
+            <form class="aidev-auth-form" id="register-form" novalidate>
+              <div class="aidev-auth-field">
+                <label class="aidev-auth-label" for="register-username">用户名</label>
+                <div class="aidev-auth-input-wrap">
+                  <span class="aidev-auth-input-icon" aria-hidden="true">
+                    <i data-lucide="user" width="18" height="18"></i>
+                  </span>
+                  <input
+                    class="aidev-auth-input"
+                    id="register-username"
+                    name="username"
+                    type="text"
+                    placeholder="ai_coder"
+                    autocomplete="username"
+                    minlength="3"
+                    maxlength="20"
+                    required
+                  />
+                </div>
+                <span class="aidev-auth-error" aria-live="polite">
+                  <i data-lucide="alert-circle" width="14" height="14"></i>
+                  用户名为 3-20 位字符
+                </span>
+              </div>
+
+              <div class="aidev-auth-field">
+                <label class="aidev-auth-label" for="register-email">邮箱</label>
+                <div class="aidev-auth-input-wrap">
+                  <span class="aidev-auth-input-icon" aria-hidden="true">
+                    <i data-lucide="mail" width="18" height="18"></i>
+                  </span>
+                  <input
+                    class="aidev-auth-input"
+                    id="register-email"
+                    name="email"
+                    type="email"
+                    placeholder="dev@example.com"
+                    autocomplete="email"
+                    required
+                  />
+                </div>
+                <span class="aidev-auth-error" aria-live="polite">
+                  <i data-lucide="alert-circle" width="14" height="14"></i>
+                  请输入有效的邮箱地址
+                </span>
+              </div>
+
+              <div class="aidev-auth-field">
+                <label class="aidev-auth-label" for="register-password">密码</label>
+                <div class="aidev-auth-input-wrap">
+                  <span class="aidev-auth-input-icon" aria-hidden="true">
+                    <i data-lucide="lock" width="18" height="18"></i>
+                  </span>
+                  <input
+                    class="aidev-auth-input"
+                    id="register-password"
+                    name="password"
+                    type="password"
+                    placeholder="••••••••"
+                    autocomplete="new-password"
+                    minlength="8"
+                    required
+                  />
+                </div>
+                <span class="aidev-auth-error" aria-live="polite">
+                  <i data-lucide="alert-circle" width="14" height="14"></i>
+                  密码至少需要 8 位字符
+                </span>
+              </div>
+
+              <div class="aidev-auth-stack">
+                <span class="aidev-auth-stack-label">常用技术栈</span>
+                <span class="aidev-auth-stack-hint">选择你感兴趣的领域，便于获取精准推荐</span>
+                <div class="aidev-auth-tags" role="group" aria-label="技术栈选择">
+                  <button type="button" class="aidev-auth-tag" data-value="python" aria-pressed="false">
+                    <i data-lucide="check" width="14" height="14"></i>
+                    Python
+                  </button>
+                  <button type="button" class="aidev-auth-tag" data-value="javascript" aria-pressed="false">
+                    <i data-lucide="check" width="14" height="14"></i>
+                    JavaScript
+                  </button>
+                  <button type="button" class="aidev-auth-tag" data-value="typescript" aria-pressed="false">
+                    <i data-lucide="check" width="14" height="14"></i>
+                    TypeScript
+                  </button>
+                  <button type="button" class="aidev-auth-tag" data-value="go" aria-pressed="false">
+                    <i data-lucide="check" width="14" height="14"></i>
+                    Go
+                  </button>
+                  <button type="button" class="aidev-auth-tag" data-value="rust" aria-pressed="false">
+                    <i data-lucide="check" width="14" height="14"></i>
+                    Rust
+                  </button>
+                  <button type="button" class="aidev-auth-tag" data-value="cpp" aria-pressed="false">
+                    <i data-lucide="check" width="14" height="14"></i>
+                    C++
+                  </button>
+                  <button type="button" class="aidev-auth-tag" data-value="java" aria-pressed="false">
+                    <i data-lucide="check" width="14" height="14"></i>
+                    Java
+                  </button>
+                  <button type="button" class="aidev-auth-tag" data-value="other" aria-pressed="false">
+                    <i data-lucide="check" width="14" height="14"></i>
+                    其他
+                  </button>
+                </div>
+              </div>
+
+              <button class="aidev-auth-submit" type="submit" data-dom-id="cta-home">
+                <i data-lucide="user-plus" width="18" height="18"></i>
+                注册
+              </button>
+            </form>
+          </section>
+        </div>
+
+        <div class="aidev-auth-divider">
+          <span>或通过以下方式继续</span>
+        </div>
+
+        <div class="aidev-auth-oauth">
+          <button type="button" class="aidev-auth-oauth-btn aidev-auth-oauth-github" aria-label="使用 GitHub 账号登录">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.419-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+            GitHub
+          </button>
+          <button type="button" class="aidev-auth-oauth-btn aidev-auth-oauth-google" aria-label="使用 Google 账号登录">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Google
+          </button>
+        </div>
+
+        <p class="aidev-auth-return">
+          <a href="./index.html">返回首页</a>
+        </p>
+      </section>
+    </main>
+
+    <footer class="aidev-shell-footer" role="contentinfo">
+      <div class="aidev-shell-footer-inner">
+        <p class="aidev-shell-footer-copy">AI 开发者论坛 · 连接每一位 AI 开发者，共建智能未来。</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      // 标签切换逻辑：同步 aria 状态与面板显隐
+      var tabs = document.querySelectorAll('.aidev-auth-tab');
+      var panels = document.querySelectorAll('.aidev-auth-panel');
+
+      function switchTab(targetId) {
+          tabs.forEach(function (tab) {
+            var isTarget = tab.getAttribute('href') === targetId;
+            tab.classList.toggle('is-active', isTarget);
+            tab.setAttribute('aria-selected', String(isTarget));
+          });
+
+          panels.forEach(function (panel) {
+            var isTarget = panel.id === targetId.slice(1);
+            panel.classList.toggle('is-active', isTarget);
+            panel.hidden = !isTarget;
+            // 无动画时保持 focus 可见性
+            if (isTarget) {
+              panel.removeAttribute('inert');
+            } else {
+              panel.setAttribute('inert', '');
+            }
+          });
+        }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function (event) {
+          event.preventDefault();
+          switchTab(tab.getAttribute('href'));
+          history.replaceState(null, '', tab.getAttribute('href'));
+        });
+      });
+
+      // 根据 URL hash 初始化
+      if (location.hash === '#register') {
+        switchTab('#register');
+      }
+
+      // 技术栈标签选择
+      var tags = document.querySelectorAll('.aidev-auth-tag');
+      tags.forEach(function (tag) {
+        tag.addEventListener('click', function () {
+          tag.classList.toggle('is-selected');
+          tag.setAttribute('aria-pressed', String(tag.classList.contains('is-selected')));
+        });
+      });
+
+      // 表单验证与提交
+      function validateField(field) {
+        var input = field.querySelector('input, select, textarea');
+        if (!input) return true;
+        var valid = input.checkValidity();
+        field.classList.toggle('is-invalid', !valid);
+        return valid;
+      }
+
+      function attachValidation(formId) {
+        var form = document.getElementById(formId);
+        if (!form) return;
+
+        var fields = form.querySelectorAll('.aidev-auth-field');
+        fields.forEach(function (field) {
+          var input = field.querySelector('input');
+          if (!input) return;
+          input.addEventListener('blur', function () {
+            validateField(field);
+          });
+          input.addEventListener('input', function () {
+            if (field.classList.contains('is-invalid')) {
+              validateField(field);
+            }
+          });
+        });
+
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+          var allValid = true;
+          fields.forEach(function (field) {
+            if (!validateField(field)) allValid = false;
+          });
+
+          if (allValid) {
+            // 成功后跳转首页（cta-home 对应 page-index）
+            window.location.href = './index.html';
+          }
+        });
+      }
+
+      attachValidation('login-form');
+      attachValidation('register-form');
+
+      // 初始化 Lucide 图标
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1708 @@
+{
+  "schemaVersion": "2026.07.22.0",
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.07.22.00.00.00",
+    "version_source": "skill-release-manifest.json",
+    "release": "prompt-base-cloud-ssot-migration",
+    "read_status": "ok"
+  },
+  "project": {
+    "operation": "create",
+    "resolvedLane": "complex_html_page",
+    "intentProfile": {
+      "caseFamily": "ui_page_creation",
+      "sourceType": "prd",
+      "complexity": "complex"
+    },
+    "selectedIntentWorkflowRead": true,
+    "contextRequirementsLoaded": [
+      {
+        "path": "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "delivery-quality/page-rendering-quality-gate.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "delivery-quality/design-artifact-validation.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "delivery-quality/delivery-evidence-contract.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "visual-experience/visual-experience-guidelines.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "visual-experience/visual-checkpoint-protocol.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      }
+    ],
+    "contextReadScope": "complex_html_page",
+    "projectName": "AI辅助开发者论坛原型",
+    "deviceType": "desktop",
+    "designRead": "AI开发者论坛 / AI开发者+零基础用户 / 专业科技感 / 中高信息密度 / 避免彩虹渐变与emoji图标",
+    "designDials": {
+      "layoutVariance": 3,
+      "motionIntensity": 2,
+      "visualDensity": 4
+    },
+    "styleDefinitionBrief": "面向AI开发者的专业技术社区，采用Indigo主色的科技感清晰风格，强调信息密度与可信度。",
+    "cssPreflightEvidence": {
+      "command": "node {SKILL_DIR}/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs colors_and_type.css .preflight/preflight.html --title=Preflight --lang=zh-CN --prefix=aidev",
+      "outputPath": ".preflight/preflight.html",
+      "exitCode": 0,
+      "success": true,
+      "checkedAt": "2026-08-11T00:00:00.000Z"
+    },
+    "mobileNavigation": {
+      "applies": false
+    },
+    "sharedProjectShellContract": {
+      "navigationShell": "desktop-top-nav",
+      "headerHeightPx": 64,
+      "maxContentWidth": "1200px",
+      "typeScale": "aidev sans-serif / display-h1-h2-h3-body-caption",
+      "radiusScale": "4/8/12/9999",
+      "surfaceDepthModel": "border-led static cards; shadow only for float layers",
+      "ctaStyle": "primary indigo fill; secondary ghost; text link",
+      "alignmentRhythm": "12-column grid, 24px gap, 32px side inset",
+      "continuityAnchors": [
+        "Global top navigation with logo, search, nav links, auth avatar across all pages",
+        "Indigo primary + neutral surfaces; restrained radius and shadow discipline",
+        "Consistent footer with site links and slogan"
+      ]
+    },
+    "generationTree": {
+      "nodeId": "gen-project-shell",
+      "kind": "project-shell",
+      "pageIds": [],
+      "output": "partials/project-shell.html",
+      "sharedRegions": [
+        "global-header",
+        "global-footer",
+        "background-surface",
+        "type-scale",
+        "nav-chrome"
+      ],
+      "privateRegions": [],
+      "mutableSlots": [
+        "activeNavItem",
+        "pageTitle",
+        "mainContent"
+      ],
+      "status": "generated",
+      "children": [
+        {
+          "nodeId": "gen-page-index",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-index"
+          ],
+          "output": "pages/index.html",
+          "sharedRegions": [
+            "global-header",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "hero",
+            "recommended-feed",
+            "board-nav",
+            "ai-quick-entry"
+          ],
+          "mutableSlots": [
+            "activeNavItem=home",
+            "pageTitle=首页",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        },
+        {
+          "nodeId": "gen-page-board",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-board"
+          ],
+          "output": "pages/board.html",
+          "sharedRegions": [
+            "global-header",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "board-header",
+            "tier-tabs",
+            "post-list",
+            "filters"
+          ],
+          "mutableSlots": [
+            "activeNavItem=boards",
+            "pageTitle=版块详情",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        },
+        {
+          "nodeId": "gen-page-post",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-post"
+          ],
+          "output": "pages/post.html",
+          "sharedRegions": [
+            "global-header",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "post-body",
+            "ai-answer",
+            "community-replies",
+            "interaction-bar",
+            "author-card"
+          ],
+          "mutableSlots": [
+            "activeNavItem=none",
+            "pageTitle=帖子详情",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        },
+        {
+          "nodeId": "gen-page-ask",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-ask"
+          ],
+          "output": "pages/ask.html",
+          "sharedRegions": [
+            "global-header",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "editor-form",
+            "ai-writing-toolbar",
+            "publish-controls"
+          ],
+          "mutableSlots": [
+            "activeNavItem=ask",
+            "pageTitle=发帖/提问",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        },
+        {
+          "nodeId": "gen-page-profile",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-profile"
+          ],
+          "output": "pages/profile.html",
+          "sharedRegions": [
+            "global-header",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "profile-header",
+            "reputation",
+            "badges",
+            "history-tabs"
+          ],
+          "mutableSlots": [
+            "activeNavItem=profile",
+            "pageTitle=个人主页",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        },
+        {
+          "nodeId": "gen-page-auth",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-auth"
+          ],
+          "output": "pages/auth.html",
+          "sharedRegions": [
+            "global-header-minimal",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "auth-card",
+            "login-form",
+            "register-form",
+            "oauth-entry"
+          ],
+          "mutableSlots": [
+            "activeNavItem=none",
+            "pageTitle=登录/注册",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        },
+        {
+          "nodeId": "gen-page-notifications",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-notifications"
+          ],
+          "output": "pages/notifications.html",
+          "sharedRegions": [
+            "global-header",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "notification-list",
+            "filter-tabs"
+          ],
+          "mutableSlots": [
+            "activeNavItem=notifications",
+            "pageTitle=通知",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        },
+        {
+          "nodeId": "gen-page-search",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-search"
+          ],
+          "output": "pages/search.html",
+          "sharedRegions": [
+            "global-header",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "search-input",
+            "result-tabs",
+            "result-lists"
+          ],
+          "mutableSlots": [
+            "activeNavItem=none",
+            "pageTitle=搜索结果",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        },
+        {
+          "nodeId": "gen-page-settings",
+          "kind": "page-leaf",
+          "pageIds": [
+            "page-settings"
+          ],
+          "output": "pages/settings.html",
+          "sharedRegions": [
+            "global-header",
+            "global-footer"
+          ],
+          "privateRegions": [
+            "settings-menu",
+            "account-form",
+            "notification-preferences",
+            "privacy-settings"
+          ],
+          "mutableSlots": [
+            "activeNavItem=settings",
+            "pageTitle=设置",
+            "mainContent"
+          ],
+          "status": "planned",
+          "children": []
+        }
+      ]
+    },
+    "validationRunDiscipline": {
+      "maxFullValidationRuns": 2,
+      "softWarningsTriggerRepair": false,
+      "blockingRepairMode": "targeted-once",
+      "forbiddenRepairTriggers": [
+        "soft-warning-only",
+        "provenance-warning-only",
+        "style-warning-only"
+      ]
+    },
+    "lowValueCallWatchdog": {
+      "applies": true,
+      "noProgressNextAction": "readiness_summary"
+    },
+    "dispatchPreflightManifest": [
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-index",
+        "htmlSrc": "pages/index.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/index.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/index.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-index' --html-src='pages/index.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/index.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/index.html' --title='首页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      },
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-board",
+        "htmlSrc": "pages/board.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/board.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/board.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-board' --html-src='pages/board.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/board.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/board.html' --title='版块详情页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      },
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-post",
+        "htmlSrc": "pages/post.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/post.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/post.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-post' --html-src='pages/post.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/post.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/post.html' --title='帖子详情页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      },
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-ask",
+        "htmlSrc": "pages/ask.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/ask.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/ask.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-ask' --html-src='pages/ask.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/ask.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/ask.html' --title='发帖/提问页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      },
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-profile",
+        "htmlSrc": "pages/profile.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/profile.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/profile.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-profile' --html-src='pages/profile.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/profile.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/profile.html' --title='个人主页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      },
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-auth",
+        "htmlSrc": "pages/auth.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/auth.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/auth.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-auth' --html-src='pages/auth.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/auth.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/auth.html' --title='登录/注册页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      },
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-notifications",
+        "htmlSrc": "pages/notifications.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/notifications.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/notifications.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-notifications' --html-src='pages/notifications.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/notifications.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/notifications.html' --title='通知页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      },
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-search",
+        "htmlSrc": "pages/search.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/search.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/search.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-search' --html-src='pages/search.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/search.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/search.html' --title='搜索结果页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      },
+      {
+        "recorded_at": "2026-08-11T08:02:47.357Z",
+        "generatedBy": "build-page-dispatch-manifest.mjs",
+        "packetType": "ComplexPagePacket",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md"
+        },
+        "taskLinePresent": true,
+        "outputPathPresent": true,
+        "sharedTemplate": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "nodeId": "page-settings",
+        "htmlSrc": "pages/settings.html",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/settings.html",
+          "assets/"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json",
+          "restore-contract-report.json",
+          "page-generation-summary.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/settings.html",
+            "assets/"
+          ]
+        },
+        "skillRuntime": {
+          "skillDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design",
+          "deterministicToolDir": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling",
+          "toolPaths": {
+            "applyHtmlHeadContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs",
+            "recordDispatchCompletion": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs",
+            "buildPageDispatchManifest": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/build-page-dispatch-manifest.mjs",
+            "validateDesignWorkspace": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-design-workspace.mjs",
+            "validateFinishReadiness": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-finish-readiness.mjs",
+            "validateRestoreContract": "/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/validate-restore-contract.mjs"
+          },
+          "requiredForPageSubAgent": [
+            "applyHtmlHeadContract",
+            "recordDispatchCompletion"
+          ],
+          "pathInjection": "absolute",
+          "pathContract": "Do not use {SKILL_DIR} placeholders inside Page Sub-Agent packets; use toolPaths.* absolute paths.",
+          "commandTemplates": {
+            "recordDispatchCompletion": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/record-dispatch-completion.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype' --node-id='page-settings' --html-src='pages/settings.html' --status=completed --changed-files=<comma-separated-project-relative-files> --trace-digest=<main-agent-runtime-trace-digest> --tool-ledger-json=<tool-ledger-json-or-file>"
+          }
+        },
+        "cssFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css",
+        "htmlFilePath": "/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/settings.html",
+        "brandPrefix": "aidev",
+        "aestheticsMode": "free-explore",
+        "toolDisciplineBlockPresent": true,
+        "fillHtmlHeadCommand": "node '/Users/peng/.trae-cn/builtin/design/default/skills/solo-design/shared-runtime/deterministic-tooling/apply-html-head-contract.mjs' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/colors_and_type.css' '/Users/peng/Documents/trae_projects/tianpeng-demo/ai-developer-forum-prototype/pages/settings.html' --title='设置页' --lang='zh-CN' --prefix='aidev'",
+        "headFillMode": "skeleton-first",
+        "viewportMode": null,
+        "completionSchemaExpected": "full",
+        "restoreFields": null,
+        "restoreContractStatus": null,
+        "restoreCompactPacket": null,
+        "deterministicCommands": null,
+        "sourceAuthorityLock": null,
+        "preDispatchFileHashes": {
+          "ai-developer-forum-prototype.design": "c93e3bfea7a5cd12fb00f89ed50581d4cfc45f7b3382c1575f83d091a3a4f64e"
+        },
+        "contextPreflight": {
+          "workflowPath": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md",
+          "requiredContextFiles": [
+            "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+            "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+            "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+            "delivery-quality/page-rendering-quality-gate.md",
+            "delivery-quality/design-artifact-validation.md",
+            "delivery-quality/delivery-evidence-contract.md",
+            "visual-experience/visual-experience-guidelines.md",
+            "visual-experience/visual-checkpoint-protocol.md"
+          ],
+          "optionalContextFiles": [],
+          "passed": true
+        },
+        "pageSliceOnly": true,
+        "requiredFieldsPresent": true,
+        "missingFields": [],
+        "fillHtmlHeadCommandValid": true,
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false,
+          "missingFields": []
+        },
+        "persistedToSummary": true,
+        "taskQueryAudited": false,
+        "proofSource": "summary-only",
+        "largeWorkflowFilesInTaskQuery": null
+      }
+    ],
+    "validationHistory": [],
+    "validationRepairLedger": [],
+    "validationSnapshot": {},
+    "artifactReadinessEvidence": {},
+    "wiringRegistrationEvidence": {},
+    "readScopeLedger": [
+      {
+        "actor": "page-sub-agent",
+        "lane": "complex_html_page",
+        "path": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "reason": "page runtime guide",
+        "scopeClass": "page-runtime",
+        "declaredBeforeRead": true,
+        "recordedAt": "2026-08-11T08:02:47.357Z",
+        "nodeId": "page-index",
+        "htmlSrc": "pages/index.html"
+      },
+      {
+        "actor": "page-sub-agent",
+        "lane": "complex_html_page",
+        "path": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md",
+        "reason": "dispatch contract",
+        "scopeClass": "dispatch-contract",
+        "declaredBeforeRead": true,
+        "recordedAt": "2026-08-11T08:02:47.357Z",
+        "nodeId": "page-index",
+        "htmlSrc": "pages/index.html"
+      }
+    ]
+  },
+  "designSource": {
+    "operatingMode": "free-explore",
+    "cssFilePath": "colors_and_type.css",
+    "brandPrefix": "aidev",
+    "styleOrigin": "prd-derived",
+    "iconAssets": {
+      "plan": "lucide",
+      "fallback": "inline-svg"
+    }
+  },
+  "pages": [
+    {
+      "nodeId": "page-index",
+      "title": "首页",
+      "htmlSrc": "pages/index.html",
+      "pageIndex": 1,
+      "pageType": "information-dense",
+      "visualNorthStar": "个性化Feed中枢，清晰展示推荐帖子、版块入口与AI快捷问答，建立社区首页第一印象",
+      "compositionPattern": "Large / medium / small stacked: hero search + board grid + feed list",
+      "continuityAnchors": [
+        "Global top navigation",
+        "Indigo primary CTA",
+        "Card-based feed items"
+      ],
+      "componentPlan": [
+        "top-nav",
+        "search-hero",
+        "board-grid",
+        "feed-card",
+        "ai-quick-entry"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-boards",
+        "nav-ask",
+        "nav-profile",
+        "nav-search",
+        "nav-auth",
+        "cta-ask",
+        "link-board",
+        "link-post"
+      ],
+      "qualityRisks": [
+        "feed density",
+        "CJK title wrapping"
+      ],
+      "requirements": [
+        "推荐Feed",
+        "版块导航",
+        "AI问答快捷入口",
+        "热门/最新切换"
+      ]
+    },
+    {
+      "nodeId": "page-board",
+      "title": "版块详情页",
+      "htmlSrc": "pages/board.html",
+      "pageIndex": 2,
+      "pageType": "information-dense",
+      "visualNorthStar": "单个版块的帖子列表，区分入门/深度分区，突出关注与发帖入口",
+      "compositionPattern": "Sticky header card + tab switcher + post list with filters",
+      "continuityAnchors": [
+        "Global top navigation",
+        "Indigo primary CTA",
+        "Card-based post rows"
+      ],
+      "componentPlan": [
+        "board-header",
+        "tier-tabs",
+        "sort-filter",
+        "post-list-item",
+        "fab-ask"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-home",
+        "nav-ask",
+        "nav-profile",
+        "cta-ask",
+        "link-post"
+      ],
+      "qualityRisks": [
+        "tab state clarity",
+        "filter crowding"
+      ],
+      "requirements": [
+        "版块信息",
+        "入门/深度切换",
+        "帖子列表",
+        "排序筛选",
+        "发帖入口"
+      ]
+    },
+    {
+      "nodeId": "page-post",
+      "title": "帖子详情页",
+      "htmlSrc": "pages/post.html",
+      "pageIndex": 3,
+      "pageType": "information-dense",
+      "visualNorthStar": "帖子正文 + AI结构化答案（带来源与置信度）+ 社区补充区，强调答案可追溯",
+      "compositionPattern": "Single-column reading flow with highlighted AI answer card and reply threads",
+      "continuityAnchors": [
+        "Global top navigation",
+        "Indigo primary for AI answer",
+        "Card-based replies"
+      ],
+      "componentPlan": [
+        "post-header",
+        "ai-answer-card",
+        "source-list",
+        "reply-thread",
+        "interaction-bar",
+        "author-card"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-home",
+        "nav-board",
+        "nav-profile",
+        "cta-ask",
+        "link-profile",
+        "back-board"
+      ],
+      "qualityRisks": [
+        "long content readability",
+        "AI answer hierarchy"
+      ],
+      "requirements": [
+        "帖子正文",
+        "AI问答区",
+        "社区补充区",
+        "互动栏",
+        "作者信息卡"
+      ]
+    },
+    {
+      "nodeId": "page-ask",
+      "title": "发帖/提问页",
+      "htmlSrc": "pages/ask.html",
+      "pageIndex": 4,
+      "pageType": "task-driven",
+      "visualNorthStar": "简洁的提问/发帖编辑器，内嵌AI辅助写作工具栏，降低创作门槛",
+      "compositionPattern": "Centered form card with toolbar and primary publish action",
+      "continuityAnchors": [
+        "Global top navigation",
+        "Indigo primary CTA",
+        "Form input styling"
+      ],
+      "componentPlan": [
+        "title-input",
+        "board-select",
+        "rich-editor",
+        "ai-toolbar",
+        "publish-controls"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-home",
+        "nav-board",
+        "nav-profile"
+      ],
+      "qualityRisks": [
+        "form density",
+        "toolbar clarity"
+      ],
+      "requirements": [
+        "标题与版块选择",
+        "富文本编辑器",
+        "AI辅助写作工具栏",
+        "发布控制"
+      ]
+    },
+    {
+      "nodeId": "page-profile",
+      "title": "个人主页",
+      "htmlSrc": "pages/profile.html",
+      "pageIndex": 5,
+      "pageType": "information-dense",
+      "visualNorthStar": "用户资料、声望徽章与内容历史，展示社区身份与贡献",
+      "compositionPattern": "Profile hero + stats row + tabbed history lists",
+      "continuityAnchors": [
+        "Global top navigation",
+        "Indigo primary accent",
+        "Card-based lists"
+      ],
+      "componentPlan": [
+        "profile-card",
+        "reputation-stats",
+        "badge-wall",
+        "history-tabs"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-home",
+        "nav-settings",
+        "link-post"
+      ],
+      "qualityRisks": [
+        "stats alignment",
+        "tab content balance"
+      ],
+      "requirements": [
+        "用户资料",
+        "声望与积分",
+        "徽章与等级",
+        "发帖/回答历史",
+        "打赏记录"
+      ]
+    },
+    {
+      "nodeId": "page-auth",
+      "title": "登录/注册页",
+      "htmlSrc": "pages/auth.html",
+      "pageIndex": 6,
+      "pageType": "task-driven",
+      "visualNorthStar": "聚焦的登录/注册卡片，支持第三方授权，降低注册门槛",
+      "compositionPattern": "Centered auth card with tabbed login/register forms",
+      "continuityAnchors": [
+        "Minimal header",
+        "Indigo primary CTA",
+        "Footer continuity"
+      ],
+      "componentPlan": [
+        "auth-tabs",
+        "login-form",
+        "register-form",
+        "oauth-buttons"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-home"
+      ],
+      "qualityRisks": [
+        "form focus clarity",
+        "tab state"
+      ],
+      "requirements": [
+        "登录表单",
+        "注册表单",
+        "第三方登录入口"
+      ]
+    },
+    {
+      "nodeId": "page-notifications",
+      "title": "通知页",
+      "htmlSrc": "pages/notifications.html",
+      "pageIndex": 7,
+      "pageType": "information-dense",
+      "visualNorthStar": "按类型分组的互动通知列表，快速定位回复、点赞、采纳、打赏等消息",
+      "compositionPattern": "Filter tabs + grouped notification list",
+      "continuityAnchors": [
+        "Global top navigation",
+        "Indigo unread dot",
+        "List row styling"
+      ],
+      "componentPlan": [
+        "notification-tabs",
+        "notification-row",
+        "unread-indicator"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-home",
+        "nav-profile",
+        "link-post",
+        "link-profile"
+      ],
+      "qualityRisks": [
+        "grouping clarity",
+        "scannability"
+      ],
+      "requirements": [
+        "互动通知",
+        "打赏通知",
+        "声望变动",
+        "系统消息"
+      ]
+    },
+    {
+      "nodeId": "page-search",
+      "title": "搜索结果页",
+      "htmlSrc": "pages/search.html",
+      "pageIndex": 8,
+      "pageType": "information-dense",
+      "visualNorthStar": "全站搜索结果，支持帖子/用户/版块分类，高亮命中沉淀答案",
+      "compositionPattern": "Search input + category tabs + mixed result list",
+      "continuityAnchors": [
+        "Global top navigation",
+        "Indigo active tab",
+        "Result row cards"
+      ],
+      "componentPlan": [
+        "search-input",
+        "result-tabs",
+        "post-result",
+        "user-result",
+        "board-result"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-home",
+        "nav-board",
+        "link-post",
+        "link-profile"
+      ],
+      "qualityRisks": [
+        "mixed result types",
+        "highlight readability"
+      ],
+      "requirements": [
+        "搜索框",
+        "结果列表",
+        "分类筛选"
+      ]
+    },
+    {
+      "nodeId": "page-settings",
+      "title": "设置页",
+      "htmlSrc": "pages/settings.html",
+      "pageIndex": 9,
+      "pageType": "task-driven",
+      "visualNorthStar": "账号信息、通知偏好与隐私设置的分栏设置页",
+      "compositionPattern": "Sidebar menu + settings panels",
+      "continuityAnchors": [
+        "Global top navigation",
+        "Indigo primary toggle",
+        "Form styling"
+      ],
+      "componentPlan": [
+        "settings-menu",
+        "account-form",
+        "notification-preferences",
+        "privacy-settings"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "domIdsRequired": [
+        "nav-home",
+        "nav-profile"
+      ],
+      "qualityRisks": [
+        "panel spacing",
+        "toggle clarity"
+      ],
+      "requirements": [
+        "账号信息",
+        "通知偏好",
+        "隐私设置"
+      ]
+    }
+  ]
+}

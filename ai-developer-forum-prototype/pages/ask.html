@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提问 - AI开发者论坛</title>
+    <style id="theme-vars">
+/* AI辅助开发者论坛 · 品牌变量系统 */
+
+:root {
+  /* 品牌主色阶 (Indigo) - 唯一身份色 */
+  --aidev-primary-50: #eef2ff;
+  --aidev-primary-100: #e0e7ff;
+  --aidev-primary-200: #c7d2fe;
+  --aidev-primary-300: #a5b4fc;
+  --aidev-primary-400: #818cf8;
+  --aidev-primary-500: #6366f1;
+  --aidev-primary-600: #4f46e5;
+  --aidev-primary-700: #4338ca;
+  --aidev-primary-800: #3730a3;
+  --aidev-primary-900: #312e81;
+
+  /* 中性色阶 */
+  --aidev-neutral-0: #ffffff;
+  --aidev-neutral-50: #f8fafc;
+  --aidev-neutral-100: #f1f5f9;
+  --aidev-neutral-200: #e2e8f0;
+  --aidev-neutral-300: #cbd5e1;
+  --aidev-neutral-400: #94a3b8;
+  --aidev-neutral-500: #64748b;
+  --aidev-neutral-600: #475569;
+  --aidev-neutral-700: #334155;
+  --aidev-neutral-800: #1e293b;
+  --aidev-neutral-900: #0f172a;
+
+  /* 状态语义色 */
+  --aidev-state-success: #059669;
+  --aidev-state-success-bg: rgba(5, 150, 105, 0.08);
+  --aidev-state-warning: #d97706;
+  --aidev-state-warning-bg: rgba(217, 119, 6, 0.08);
+  --aidev-state-error: #dc2626;
+  --aidev-state-error-bg: rgba(220, 38, 38, 0.08);
+  --aidev-state-info: #2563eb;
+  --aidev-state-info-bg: rgba(37, 99, 235, 0.08);
+
+  /* 代码/深色表面 */
+  --aidev-code-bg: #1e1b2e;
+  --aidev-code-ink: #e2e0f0;
+
+  /* 语义别名 */
+  --aidev-background: var(--aidev-neutral-50);
+  --aidev-foreground: var(--aidev-neutral-900);
+  --aidev-card: var(--aidev-neutral-0);
+  --aidev-card-foreground: var(--aidev-neutral-900);
+  --aidev-popover: var(--aidev-neutral-0);
+  --aidev-popover-foreground: var(--aidev-neutral-900);
+  --aidev-primary: var(--aidev-primary-600);
+  --aidev-primary-foreground: var(--aidev-neutral-0);
+  --aidev-muted: var(--aidev-neutral-100);
+  --aidev-muted-foreground: var(--aidev-neutral-500);
+  --aidev-border: var(--aidev-neutral-200);
+  --aidev-input: var(--aidev-neutral-200);
+  --aidev-ring: var(--aidev-primary-600);
+
+  /* 圆角 */
+  --aidev-radius-sm: 4px;
+  --aidev-radius-md: 8px;
+  --aidev-radius-lg: 12px;
+  --aidev-radius-full: 9999px;
+
+  /* 阴影 - 静态表面 ≤ 0.05 alpha */
+  --aidev-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --aidev-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.05);
+  --aidev-shadow-float: 0 16px 48px rgba(15, 23, 42, 0.12);
+
+  /* 字体系统 */
+  --aidev-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  --aidev-font-mono: "SF Mono", "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+
+  /* 间距 */
+  --aidev-space-1: 0.25rem;
+  --aidev-space-2: 0.5rem;
+  --aidev-space-3: 0.75rem;
+  --aidev-space-4: 1rem;
+  --aidev-space-5: 1.25rem;
+  --aidev-space-6: 1.5rem;
+  --aidev-space-8: 2rem;
+  --aidev-space-10: 2.5rem;
+  --aidev-space-12: 3rem;
+
+  /* 尺寸 */
+  --aidev-header-height: 64px;
+  --aidev-max-content: 1200px;
+  --aidev-sidebar-width: 240px;
+}
+
+html.dark {
+  --aidev-background: #0b0f19;
+  --aidev-foreground: #f1f5f9;
+  --aidev-card: #111827;
+  --aidev-card-foreground: #f1f5f9;
+  --aidev-popover: #111827;
+  --aidev-popover-foreground: #f1f5f9;
+  --aidev-muted: #1e293b;
+  --aidev-muted-foreground: #94a3b8;
+  --aidev-border: #1e293b;
+  --aidev-input: #334155;
+  --aidev-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --aidev-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --aidev-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.3);
+  --aidev-code-bg: #1a1625;
+}
+
+/* 排版工具类 */
+.font-sans { font-family: var(--aidev-font-sans); }
+.font-mono { font-family: var(--aidev-font-mono); }
+
+.text-display {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-headline {
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.text-title {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.text-caption {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--aidev-background);
+    --color-foreground: var(--aidev-foreground);
+    --color-card: var(--aidev-card);
+    --color-card-foreground: var(--aidev-card-foreground);
+    --color-popover: var(--aidev-popover);
+    --color-popover-foreground: var(--aidev-popover-foreground);
+    --color-primary: var(--aidev-primary);
+    --color-primary-foreground: var(--aidev-primary-foreground);
+    --color-muted: var(--aidev-muted);
+    --color-muted-foreground: var(--aidev-muted-foreground);
+    --color-border: var(--aidev-border);
+    --color-input: var(--aidev-input);
+    --color-ring: var(--aidev-ring);
+    --radius-sm: var(--aidev-radius-sm);
+    --radius-md: var(--aidev-radius-md);
+    --radius-lg: var(--aidev-radius-lg);
+  }
+  @layer base {
+    body { background: var(--aidev-background); color: var(--aidev-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--aidev-background); }
+      .text-background { color: var(--aidev-background); }
+      .border-background { border-color: var(--aidev-background); }
+      .ring-background { --tw-ring-color: var(--aidev-background); }
+      .bg-foreground { background-color: var(--aidev-foreground); }
+      .text-foreground { color: var(--aidev-foreground); }
+      .border-foreground { border-color: var(--aidev-foreground); }
+      .ring-foreground { --tw-ring-color: var(--aidev-foreground); }
+      .bg-card { background-color: var(--aidev-card); }
+      .text-card { color: var(--aidev-card); }
+      .border-card { border-color: var(--aidev-card); }
+      .ring-card { --tw-ring-color: var(--aidev-card); }
+      .bg-card-foreground { background-color: var(--aidev-card-foreground); }
+      .text-card-foreground { color: var(--aidev-card-foreground); }
+      .border-card-foreground { border-color: var(--aidev-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--aidev-card-foreground); }
+      .bg-popover { background-color: var(--aidev-popover); }
+      .text-popover { color: var(--aidev-popover); }
+      .border-popover { border-color: var(--aidev-popover); }
+      .ring-popover { --tw-ring-color: var(--aidev-popover); }
+      .bg-popover-foreground { background-color: var(--aidev-popover-foreground); }
+      .text-popover-foreground { color: var(--aidev-popover-foreground); }
+      .border-popover-foreground { border-color: var(--aidev-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--aidev-popover-foreground); }
+      .bg-primary { background-color: var(--aidev-primary); }
+      .text-primary { color: var(--aidev-primary); }
+      .border-primary { border-color: var(--aidev-primary); }
+      .ring-primary { --tw-ring-color: var(--aidev-primary); }
+      .bg-primary-foreground { background-color: var(--aidev-primary-foreground); }
+      .text-primary-foreground { color: var(--aidev-primary-foreground); }
+      .border-primary-foreground { border-color: var(--aidev-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--aidev-primary-foreground); }
+      .bg-muted { background-color: var(--aidev-muted); }
+      .text-muted { color: var(--aidev-muted); }
+      .border-muted { border-color: var(--aidev-muted); }
+      .ring-muted { --tw-ring-color: var(--aidev-muted); }
+      .bg-muted-foreground { background-color: var(--aidev-muted-foreground); }
+      .text-muted-foreground { color: var(--aidev-muted-foreground); }
+      .border-muted-foreground { border-color: var(--aidev-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--aidev-muted-foreground); }
+      .bg-border { background-color: var(--aidev-border); }
+      .text-border { color: var(--aidev-border); }
+      .border-border { border-color: var(--aidev-border); }
+      .ring-border { --tw-ring-color: var(--aidev-border); }
+      .bg-input { background-color: var(--aidev-input); }
+      .text-input { color: var(--aidev-input); }
+      .border-input { border-color: var(--aidev-input); }
+      .ring-input { --tw-ring-color: var(--aidev-input); }
+      .bg-ring { background-color: var(--aidev-ring); }
+      .text-ring { color: var(--aidev-ring); }
+      .border-ring { border-color: var(--aidev-ring); }
+      .ring-ring { --tw-ring-color: var(--aidev-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+<!-- AI 开发者论坛 · 共享项目外壳片段 -->
+<style id="aidev-shell-layout">
+  .aidev-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--aidev-background);
+    color: var(--aidev-foreground);
+    font-family: var(--aidev-font-sans);
+  }
+
+  .aidev-shell-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    height: var(--aidev-header-height);
+    background-color: var(--aidev-card);
+    border-bottom: 1px solid var(--aidev-border);
+    box-shadow: var(--aidev-shadow-sm);
+  }
+
+  .aidev-shell-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--aidev-space-4);
+    max-width: var(--aidev-max-content);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 var(--aidev-space-6);
+  }
+
+  .aidev-shell-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    color: var(--aidev-foreground);
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-brand:hover {
+    color: var(--aidev-primary);
+  }
+
+  .aidev-shell-logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--aidev-radius-md);
+    background: linear-gradient(135deg, var(--aidev-primary-500), var(--aidev-primary-700));
+    color: var(--aidev-primary-foreground);
+  }
+
+  .aidev-shell-logo-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .aidev-shell-search {
+    position: relative;
+    flex: 1 1 auto;
+    max-width: 420px;
+    min-width: 160px;
+  }
+
+  .aidev-shell-search-icon {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: var(--aidev-muted-foreground);
+    pointer-events: none;
+  }
+
+  .aidev-shell-search-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 var(--aidev-space-4) 0 var(--aidev-space-10);
+    border: 1px solid var(--aidev-input);
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-muted);
+    color: var(--aidev-foreground);
+    font-size: 0.9375rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+
+  .aidev-shell-search-input::placeholder {
+    color: var(--aidev-muted-foreground);
+  }
+
+  .aidev-shell-search-input:hover {
+    border-color: var(--aidev-primary-300);
+  }
+
+  .aidev-shell-search-input:focus {
+    outline: none;
+    border-color: var(--aidev-ring);
+    background-color: var(--aidev-card);
+    box-shadow: 0 0 0 3px var(--aidev-primary-100);
+  }
+
+  .aidev-shell-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-1);
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--aidev-space-2);
+    padding: var(--aidev-space-2) var(--aidev-space-3);
+    border-radius: var(--aidev-radius-md);
+    color: var(--aidev-neutral-600);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .aidev-shell-nav-link:hover {
+    color: var(--aidev-primary);
+    background-color: var(--aidev-primary-50);
+  }
+
+  .aidev-shell-nav-link:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--aidev-ring);
+  }
+
+  .aidev-shell-nav-link svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-nav-link.is-active {
+    color: var(--aidev-primary);
+    background-color: var(--aidev-primary-50);
+  }
+
+  .aidev-shell-auth {
+    display: flex;
+    align-items: center;
+    gap: var(--aidev-space-3);
+    flex-shrink: 0;
+  }
+
+  .aidev-shell-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--aidev-radius-full);
+    background-color: var(--aidev-primary-100);
+    color: var(--aidev-primary-700);
+    border: 1px solid var(--aidev-border);
+  }
+
+  .aidev-shell-auth-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 var(--aidev-space-4);
+    border: 1px solid transparent;
+    border-radius: var(--aidev-radius-md);
+    background-color: var(--aidev-primary);
+    color: var(--aidev-primary-foreground);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .aidev-shell-auth-button:hover {
+    background-color: var(--aidev-primary-700);
+  }
+
+  .aidev-shell-auth-button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--aidev-primary-200);
+  }
+
+  .aidev-shell-main {
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: var(--aidev-max-content);
+    margin: 0 auto;
+    padding: var(--aidev-space-6);
+  }
+
+  .aidev-shell-footer {
+    width: 100%;
+    border-top: 1px solid var(--aidev-border);
+    background-color: var(--aidev-card);
+  }
+
+  .aidev-shell-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--aidev-space-4);
+    max-width: var(--aidev-max-content);
+    margin: 0 auto;
+    padding: var(--aidev-space-6);
+  }
+
+  .aidev-shell-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--aidev-space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .aidev-shell-footer-links a {
+    color: var(--aidev-muted-foreground);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .aidev-shell-footer-links a:hover {
+    color: var(--aidev-primary);
+  }
+
+  .aidev-shell-slogan {
+    color: var(--aidev-muted-foreground);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 1024px) {
+    .aidev-shell-header-inner {
+      padding: 0 var(--aidev-space-4);
+    }
+
+    .aidev-shell-nav-link span {
+      display: none;
+    }
+
+    .aidev-shell-nav-link {
+      padding: var(--aidev-space-2);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .aidev-shell-header-inner {
+      gap: var(--aidev-space-3);
+    }
+
+    .aidev-shell-search {
+      display: none;
+    }
+
+    .aidev-shell-footer-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: var(--aidev-space-5) var(--aidev-space-4);
+    }
+  }
+</style>
+
+<div class="aidev-shell">
+  <header class="aidev-shell-header" role="banner">
+    <div class="aidev-shell-header-inner">
+      <a class="aidev-shell-brand" href="/" aria-label="AI 开发者论坛首页" data-dom-id="nav-brand" data-target="page-index">
+        <span class="aidev-shell-logo-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+          </svg>
+        </span>
+        <span class="aidev-shell-logo-text">AI 开发者论坛</span>
+      </a>
+
+      <div class="aidev-shell-search" role="search">
+        <span class="aidev-shell-search-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+        </span>
+        <input
+          class="aidev-shell-search-input"
+          type="search"
+          placeholder="搜索问题、话题、开发者..."
+          aria-label="全局搜索"
+          autocomplete="off"
+        />
+      </div>
+
+      <nav class="aidev-shell-nav" aria-label="主导航">
+        <a class="aidev-shell-nav-link" href="/" data-nav-key="home" data-dom-id="nav-home" data-target="page-index">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>首页</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/boards" data-nav-key="boards" data-dom-id="nav-boards" data-target="page-board">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="7" height="7" x="3" y="3" rx="1"/>
+            <rect width="7" height="7" x="14" y="3" rx="1"/>
+            <rect width="7" height="7" x="14" y="14" rx="1"/>
+            <rect width="7" height="7" x="3" y="14" rx="1"/>
+          </svg>
+          <span>版块</span>
+        </a>
+        <a class="aidev-shell-nav-link is-active" href="/ask" data-nav-key="ask" data-dom-id="nav-ask" data-target="page-ask">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <path d="M12 17h.01"/>
+          </svg>
+          <span>提问</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/notifications" data-nav-key="notifications" data-dom-id="nav-notifications" data-target="page-notifications">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+          </svg>
+          <span>通知</span>
+        </a>
+        <a class="aidev-shell-nav-link" href="/settings" data-nav-key="settings" data-dom-id="nav-settings" data-target="page-settings">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span>设置</span>
+        </a>
+      </nav>
+
+      <div class="aidev-shell-auth">
+        <button class="aidev-shell-auth-button" type="button" data-dom-id="nav-profile" data-target="page-profile">登录 / 注册</button>
+        <span class="aidev-shell-avatar" aria-label="用户头像占位" role="img">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <main class="aidev-shell-main" id="main-content">
+    <div class="aidev-ask-layout">
+      <article class="aidev-ask-card" aria-labelledby="ask-heading">
+        <h1 class="aidev-ask-heading" id="ask-heading">发布新问题</h1>
+
+        <form action="#" method="post" novalidate>
+          <div class="aidev-ask-field">
+            <label class="aidev-ask-label aidev-ask-label-required" for="ask-title">问题标题</label>
+            <input
+              class="aidev-ask-input"
+              id="ask-title"
+              name="title"
+              type="text"
+              placeholder="一句话描述你的问题，例如：如何在 LoRA 微调中缓解灾难性遗忘？"
+              required
+              maxlength="120"
+              data-dom-id="ask-title"
+            />
+          </div>
+
+          <div class="aidev-ask-field">
+            <label class="aidev-ask-label aidev-ask-label-required" for="ask-board">选择版块</label>
+            <select class="aidev-ask-select" id="ask-board" name="board" required data-dom-id="ask-board">
+              <option value="" disabled selected>请选择适合的讨论版块</option>
+              <option value="llm-apps">大模型应用开发</option>
+              <option value="ml-engineering">机器学习工程</option>
+              <option value="ai-infra">AI 基础设施</option>
+              <option value="prompt-engineering">提示词工程</option>
+              <option value="algorithms">算法与论文</option>
+              <option value="career">职业与发展</option>
+              <option value="open-source">开源项目</option>
+            </select>
+          </div>
+
+          <div class="aidev-ask-field">
+            <label class="aidev-ask-label aidev-ask-label-required" for="ask-editor">问题详情</label>
+            <div class="aidev-ask-toolbar" role="toolbar" aria-label="AI 辅助写作工具栏">
+              <span class="aidev-ask-ai-hint" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4"/>
+                  <path d="m5 5 2.8 2.8"/>
+                  <path d="m19 5-2.8 2.8"/>
+                  <path d="M12 18a6 6 0 0 0 6-6c0-1-.5-2.8-2.5-4.5-.5-.4-1.5-1-1.5-1.5 0-.5.5-1 1.5-1.5 2-.5 3.5-2.5 3.5-4.5"/>
+                  <path d="M12 18a6 6 0 0 1-6-6c0-1 .5-2.8 2.5-4.5.5-.4 1.5-1 1.5-1.5 0-.5-.5-1-1.5-1.5-2-.5-3.5-2.5-3.5-4.5"/>
+                </svg>
+                AI 辅助
+              </span>
+              <button class="aidev-ask-tool-btn" type="button" data-dom-id="ai-polish">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                </svg>
+                润色
+              </button>
+              <button class="aidev-ask-tool-btn" type="button" data-dom-id="ai-format">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polyline points="16 18 22 12 16 6"/>
+                  <polyline points="8 6 2 12 8 18"/>
+                </svg>
+                代码格式
+              </button>
+              <button class="aidev-ask-tool-btn" type="button" data-dom-id="ai-summary">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/>
+                </svg>
+                摘要
+              </button>
+              <button class="aidev-ask-tool-btn" type="button" data-dom-id="ai-tags">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 2H2v10l9 9 10-10-9-9Z"/>
+                  <circle cx="7" cy="7" r="1"/>
+                </svg>
+                标签建议
+              </button>
+            </div>
+            <div class="aidev-ask-editor-wrapper">
+              <textarea
+                class="aidev-ask-textarea aidev-ask-editor"
+                id="ask-editor"
+                name="content"
+                placeholder="详细描述你的问题背景、已尝试的方案和期望结果。支持 Markdown 与代码块。"
+                required
+                minlength="20"
+                data-dom-id="ask-editor"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="aidev-ask-field">
+            <label class="aidev-ask-label" for="ask-tags">标签</label>
+            <input
+              class="aidev-ask-input"
+              id="ask-tags"
+              name="tags"
+              type="text"
+              placeholder="添加标签，用逗号或回车分隔，例如：PyTorch, LoRA, 微调"
+              data-dom-id="ask-tags"
+            />
+            <p class="aidev-ask-tag-hint">建议 1–5 个标签，帮助更多开发者发现你的问题。</p>
+          </div>
+
+          <div class="aidev-ask-actions">
+            <a class="aidev-ask-btn aidev-ask-btn-secondary" href="/boards" data-dom-id="back-board" data-target="page-board">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m12 19-7-7 7-7"/>
+                <path d="M19 12H5"/>
+              </svg>
+              取消
+            </a>
+            <button class="aidev-ask-btn aidev-ask-btn-primary" type="submit" data-dom-id="cta-publish" data-target="page-post">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 19V5"/>
+                <path d="m5 12 7-7 7 7"/>
+              </svg>
+              发布问题
+            </button>
+          </div>
+        </form>
+      </article>
+    </div>
+  </main>
+
+  <footer class="aidev-shell-footer" role="contentinfo">
+    <div class="aidev-shell-footer-inner">
+      <ul class="aidev-shell-footer-links">
+        <li><a href="/about">关于我们</a></li>
+        <li><a href="/guidelines">社区规范</a></li>
+        <li><a href="/help">帮助中心</a></li>
+        <li><a href="/privacy">隐私政策</a></li>
+        <li><a href="/terms">服务条款</a></li>
+      </ul>
+      <p class="aidev-shell-slogan">连接每一位 AI 开发者，共建智能未来。</p>
+    </div>
+  </footer>
+</div>
+
+<script>lucide.createIcons();</script>
+
+    <style>
+    /* 页面级临界布局样式，确保在 Tailwind 编译前保持可用 */
+    .aidev-ask-layout {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: var(--aidev-space-6) 0 var(--aidev-space-12);
+    }
+
+    .aidev-ask-card {
+      background-color: var(--aidev-card);
+      border: 1px solid var(--aidev-border);
+      border-radius: var(--aidev-radius-lg);
+      box-shadow: var(--aidev-shadow-md);
+      padding: var(--aidev-space-8);
+    }
+
+    .aidev-ask-heading {
+      font-size: 1.5rem;
+      line-height: 1.3;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--aidev-foreground);
+      margin: 0 0 var(--aidev-space-6);
+    }
+
+    .aidev-ask-field {
+      margin-bottom: var(--aidev-space-6);
+    }
+
+    .aidev-ask-label {
+      display: block;
+      margin-bottom: var(--aidev-space-2);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--aidev-foreground);
+    }
+
+    .aidev-ask-label-required::after {
+      content: " *";
+      color: var(--aidev-state-error);
+    }
+
+    .aidev-ask-input,
+    .aidev-ask-select,
+    .aidev-ask-textarea {
+      width: 100%;
+      padding: var(--aidev-space-3) var(--aidev-space-4);
+      border: 1px solid var(--aidev-input);
+      border-radius: var(--aidev-radius-md);
+      background-color: var(--aidev-card);
+      color: var(--aidev-foreground);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    .aidev-ask-input::placeholder,
+    .aidev-ask-textarea::placeholder {
+      color: var(--aidev-muted-foreground);
+    }
+
+    .aidev-ask-input:hover,
+    .aidev-ask-select:hover,
+    .aidev-ask-textarea:hover {
+      border-color: var(--aidev-primary-300);
+    }
+
+    .aidev-ask-input:focus,
+    .aidev-ask-select:focus,
+    .aidev-ask-textarea:focus {
+      outline: none;
+      border-color: var(--aidev-ring);
+      background-color: var(--aidev-card);
+      box-shadow: 0 0 0 3px var(--aidev-primary-100);
+    }
+
+    .aidev-ask-textarea {
+      min-height: 220px;
+      resize: vertical;
+      font-family: var(--aidev-font-sans);
+    }
+
+    .aidev-ask-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: var(--aidev-space-10);
+    }
+
+    .aidev-ask-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--aidev-space-2);
+      padding: var(--aidev-space-3) var(--aidev-space-4);
+      background-color: var(--aidev-muted);
+      border: 1px solid var(--aidev-border);
+      border-bottom: none;
+      border-radius: var(--aidev-radius-md) var(--aidev-radius-md) 0 0;
+    }
+
+    .aidev-ask-ai-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-1) var(--aidev-space-2);
+      border-radius: var(--aidev-radius-sm);
+      background-color: var(--aidev-primary-50);
+      color: var(--aidev-primary-700);
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: auto;
+    }
+
+    .aidev-ask-ai-hint svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .aidev-ask-tool-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--aidev-space-1);
+      padding: var(--aidev-space-1) var(--aidev-space-3);
+      border: 1px solid transparent;
+      border-radius: var(--aidev-radius-sm);
+      background-color: transparent;
+      color: var(--aidev-neutral-600);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .aidev-ask-tool-btn:hover {
+      color: var(--aidev-primary);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .aidev-ask-tool-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-ask-tool-btn svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .aidev-ask-editor-wrapper {
+      border: 1px solid var(--aidev-input);
+      border-radius: 0 0 var(--aidev-radius-md) var(--aidev-radius-md);
+      overflow: hidden;
+    }
+
+    .aidev-ask-textarea.aidev-ask-editor {
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      min-height: 220px;
+    }
+
+    .aidev-ask-textarea.aidev-ask-editor:focus {
+      box-shadow: none;
+    }
+
+    .aidev-ask-tag-hint {
+      margin-top: var(--aidev-space-2);
+      font-size: 0.8125rem;
+      color: var(--aidev-muted-foreground);
+    }
+
+    .aidev-ask-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: var(--aidev-space-3);
+      margin-top: var(--aidev-space-8);
+      padding-top: var(--aidev-space-6);
+      border-top: 1px solid var(--aidev-border);
+    }
+
+    .aidev-ask-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--aidev-space-2);
+      height: 44px;
+      padding: 0 var(--aidev-space-6);
+      border: 1px solid transparent;
+      border-radius: var(--aidev-radius-md);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    }
+
+    .aidev-ask-btn-primary {
+      background-color: var(--aidev-primary);
+      color: var(--aidev-primary-foreground);
+    }
+
+    .aidev-ask-btn-primary:hover {
+      background-color: var(--aidev-primary-700);
+      transform: translateY(-1px);
+    }
+
+    .aidev-ask-btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .aidev-ask-btn-primary:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--aidev-primary-200);
+    }
+
+    .aidev-ask-btn-secondary {
+      background-color: transparent;
+      color: var(--aidev-neutral-600);
+      border-color: var(--aidev-border);
+    }
+
+    .aidev-ask-btn-secondary:hover {
+      color: var(--aidev-primary);
+      border-color: var(--aidev-primary-300);
+      background-color: var(--aidev-primary-50);
+    }
+
+    .aidev-ask-btn-secondary:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--aidev-ring);
+    }
+
+    .aidev-ask-btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 640px) {
+      .aidev-ask-card {
+        padding: var(--aidev-space-5) var(--aidev-space-4);
+      }
+
+      .aidev-ask-actions {
+        justify-content: stretch;
+      }
+
+      .aidev-ask-btn {
+        flex: 1 1 auto;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aidev-ask-input,
+      .aidev-ask-select,
+      .aidev-ask-textarea,
+      .aidev-ask-tool-btn,
+      .aidev-ask-btn {
+        transition-duration: 0.01ms;
+      }
+
+      .aidev-ask-btn-primary:hover,
+      .aidev-ask-btn-primary:active {
+        transform: none;
+      }
+    }
+  </style>
+</body>
+</html>

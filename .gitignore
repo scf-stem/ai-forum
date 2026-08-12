@@ -1,2 +1,10 @@
 .DS_Store
 .trae/
+.trae-html-share-packages/
+
+# Forum project
+forum-frontend/node_modules/
+forum-frontend/.next/
+forum-backend/.venv/
+forum-backend/__pycache__/
+.env
