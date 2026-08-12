@@ -15,7 +15,8 @@ const path = require('path');
 const zlib = require('zlib');
 
 const PORT = 8765;
-const ROOT = __dirname;
+// 静态资源根目录指向 personal-portfolio/site/public（portfolio 的 Vite 静态资源目录）
+const ROOT = path.resolve(__dirname, '../../site/public');
 const INDEX_FILE = path.join(ROOT, 'weather-app.html');
 
 const QW_CONFIG = {

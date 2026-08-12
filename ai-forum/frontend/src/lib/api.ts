@@ -7,6 +7,8 @@
  * 401 时不自动跳转登录，由调用方决定如何处理。
  */
 
+import { convertToCamelCase } from "./utils";
+
 /** Token 在 cookie 中的键名 */
 const TOKEN_COOKIE_KEY = "forum_token";
 
@@ -76,35 +78,6 @@ function buildHeaders(customHeaders?: HeadersInit): HeadersInit {
     headers["Authorization"] = `Bearer ${token}`;
   }
   return headers;
-}
-
-/**
- * 将 snake_case 字符串转换为 camelCase。
- * 例如：tech_stack → techStack, vote_count → voteCount, my_vote → myVote
- */
-function snakeToCamel(key: string): string {
-  return key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
-}
-
-/**
- * 递归地将对象的所有键从 snake_case 转换为 camelCase。
- * 处理嵌套对象和数组。仅用于响应体转换，请求体保持 snake_case 不变。
- */
-function convertToCamelCase<T>(data: unknown): T {
-  if (data === null || data === undefined) {
-    return data as T;
-  }
-  if (Array.isArray(data)) {
-    return data.map(convertToCamelCase) as T;
-  }
-  if (typeof data === "object" && data !== null) {
-    const converted: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
-      converted[snakeToCamel(key)] = convertToCamelCase(value);
-    }
-    return converted as T;
-  }
-  return data as T;
 }
 
 /** 解析响应：非 2xx 抛出带状态码的异常；成功时将 snake_case 键转为 camelCase */

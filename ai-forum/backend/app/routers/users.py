@@ -12,8 +12,10 @@ from app.models.board import Board
 from app.models.post import Post
 from app.models.reply import Reply
 from app.models.user import User
+from app.routers.boards import _build_post_list_item
 from app.schemas.auth import UserPublic
-from app.schemas.user import UserProfile, UserReplyItem, UserUpdate, UserPostItem
+from app.schemas.post import PostListItem
+from app.schemas.user import UserProfile, UserReplyItem, UserUpdate
 
 router = APIRouter()
 
@@ -67,7 +69,7 @@ async def get_user_posts(
     page_size: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """返回用户帖子列表（游客可访问）。"""
+    """返回用户帖子列表（游客可访问），含作者与版块信息以兼容前端 PostCard。"""
     user = await _get_user_by_username(username, db)
 
     # 基础查询：用户已发布且未删除的帖子
@@ -83,9 +85,9 @@ async def get_user_posts(
     count_q = select(func.count()).select_from(Post).where(*base_filter)
     total = (await db.execute(count_q)).scalar_one()
 
-    # 查询帖子列表（联表获取版块名）
+    # 联表查询帖子+版块，复用 boards 路由的构造方法以返回完整 PostListItem
     list_q = (
-        select(Post, Board.name.label("board_name"))
+        select(Post, Board)
         .join(Board, Post.board_id == Board.id)
         .where(*base_filter)
         .order_by(Post.created_at.desc())
@@ -94,18 +96,9 @@ async def get_user_posts(
     )
     rows = (await db.execute(list_q)).all()
 
-    items = [
-        UserPostItem(
-            id=str(post.id),
-            title=post.title,
-            type=post.type,
-            tags=post.tags or [],
-            vote_count=post.vote_count,
-            reply_count=post.reply_count,
-            created_at=post.created_at,
-            board_name=board_name,
-        )
-        for post, board_name in rows
+    # 复用 _build_post_list_item 构造完整列表项（含 author 与 board）
+    items: list[PostListItem] = [
+        _build_post_list_item(post, user, board) for post, board in rows
     ]
 
     return {

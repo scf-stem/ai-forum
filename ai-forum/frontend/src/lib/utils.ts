@@ -7,6 +7,35 @@ export function cn(...classes: (string | false | null | undefined)[]): string {
   return classes.filter(Boolean).join(" ");
 }
 
+/**
+ * 将 snake_case 字符串转换为 camelCase。
+ * 例如：tech_stack → techStack, vote_count → voteCount, my_vote → myVote
+ */
+export function snakeToCamel(key: string): string {
+  return key.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
+/**
+ * 递归地将对象的所有键从 snake_case 转换为 camelCase。
+ * 处理嵌套对象和数组。用于前后端数据契约转换（后端 snake_case → 前端 camelCase）。
+ */
+export function convertToCamelCase<T>(data: unknown): T {
+  if (data === null || data === undefined) {
+    return data as T;
+  }
+  if (Array.isArray(data)) {
+    return data.map(convertToCamelCase) as T;
+  }
+  if (typeof data === "object" && data !== null) {
+    const converted: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(data as Record<string, unknown>)) {
+      converted[snakeToCamel(key)] = convertToCamelCase(value);
+    }
+    return converted as T;
+  }
+  return data as T;
+}
+
 /** 日期格式化：zh-CN 本地化 */
 const dateFormatter = new Intl.DateTimeFormat("zh-CN", {
   year: "numeric",

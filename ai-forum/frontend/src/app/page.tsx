@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PostFeed } from "@/components/PostFeed";
+import { convertToCamelCase } from "@/lib/utils";
 import type { PaginatedResponse, PostListItem } from "@/lib/types";
 
 // 首页始终动态渲染，确保帖子列表实时更新
@@ -22,7 +23,9 @@ export default async function Home() {
       { cache: "no-store" }
     );
     if (res.ok) {
-      const data: PaginatedResponse<PostListItem> = await res.json();
+      // 后端返回 snake_case，SSR 需转换为前端 camelCase 契约
+      const rawData = await res.json();
+      const data = convertToCamelCase<PaginatedResponse<PostListItem>>(rawData);
       initialPosts = data.items;
       initialTotal = data.total;
     } else {
