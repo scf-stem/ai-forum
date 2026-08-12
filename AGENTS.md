@@ -52,25 +52,38 @@
 
 ## 项目结构概览
 
+本仓库采用 Monorepo 结构，包含两个完全独立的子项目：
+
 ```
 .
-├── AGENTS.md                      # 本文件
-├── README.md                      # 项目说明（如存在）
-├── .gitignore
-├── docker-compose.yml             # 一键启动前后端 + 数据库
-├── server.js                      # 静态资源服务
-├── forum-home.html                # 论坛首页静态原型
-├── information-architecture.md    # 信息架构文档
-├── ai-developer-forum-prd/        # PRD 文档（HTML + 图表）
-├── ai-developer-forum-prototype/  # 高保真原型（多页面）
-├── ai-forum-requirement-summary/  # 需求汇总文档
-├── forum-backend/                 # FastAPI 后端
-├── forum-database/                # 数据库初始化脚本
-├── forum-frontend/                # Next.js 前端
-├── portfolio/                     # 个人作品集（Vite + React）
-├── snake-game.html                # 贪吃蛇游戏
-├── weather-app.html               # 天气应用
-└── accounting-tool.html           # 记账工具
+├── AGENTS.md                      # 本文件（仓库级 Agent 规则）
+├── README.md                      # 仓库总览（含子项目导航）
+├── .gitignore                     # 仓库级忽略规则
+│
+├── ai-forum/                      # ===== AI 辅助开发者论坛 =====
+│   ├── docker-compose.yml         #   论坛 PostgreSQL + Redis 编排
+│   ├── docs/
+│   │   ├── prd/                   #   原 ai-developer-forum-prd/（PRD 文档）
+│   │   ├── requirements/          #   原 ai-forum-requirement-summary/
+│   │   └── information-architecture.md
+│   ├── prototype/                 #   原 ai-developer-forum-prototype/（高保真原型）
+│   ├── backend/                   #   原 forum-backend/（FastAPI）
+│   ├── database/                  #   原 forum-database/（初始化脚本）
+│   ├── frontend/                  #   原 forum-frontend/（Next.js）
+│   └── static/
+│       └── forum-home.html        #   论坛首页静态原型
+│
+└── personal-portfolio/            # ===== 个人作品集 =====
+    ├── site/                      #   原 portfolio/（Vite + React 主应用）
+    │   ├── public/
+    │   │   ├── weather-app.html   #     天气应用（Vite 静态资源）
+    │   │   ├── snake-game.html    #     贪吃蛇游戏
+    │   │   ├── accounting-tool.html #   记账工具
+    │   │   └── xiaoxin.jpeg       #     头像图片
+    │   └── src/
+    └── tools/
+        └── weather-proxy/
+            └── server.js          #   和风天气 API 代理服务器
 ```
 
 ## 触发自动推送的场景
