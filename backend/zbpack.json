@@ -1,0 +1,6 @@
+{
+  "python": {
+    "entry": "app/main.py"
+  },
+  "start_command": "alembic upgrade head && _startup"
+}
