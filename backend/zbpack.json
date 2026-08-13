@@ -1,6 +1,9 @@
 {
   "python": {
-    "entry": "app/main.py"
+    "package_manager": "pip",
+    "entry": "app/main.py",
+    "framework": "fastapi"
   },
-  "start_command": "alembic upgrade head && _startup"
+  "build_command": "alembic upgrade head",
+  "start_command": "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
 }

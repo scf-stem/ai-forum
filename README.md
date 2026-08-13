@@ -16,6 +16,7 @@
 - [后端 API 概览](#后端-api-概览)
 - [前端页面概览](#前端页面概览)
 - [开发路线图](#开发路线图)
+- [Zeabur 部署说明](#zeabur-部署说明)
 - [文档与原型](#文档与原型)
 - [协作规范](#协作规范)
 
@@ -216,6 +217,88 @@ python seed_boards.py
 | **Phase 4** 冷启动运营与验证 | 种子内容与数据验证 | 种子用户、指标埋点、AI 准确率评估 |
 
 > 当前进度：**Phase 0**（基础骨架已完成，前后端可运行）
+
+---
+
+## Zeabur 部署说明
+
+本项目为 Monorepo 结构（`frontend/` + `backend/`），**根目录没有应用配置文件**，直接从 GitHub 根目录部署会被 Zeabur 错误识别为 **static**。正确的做法是为每个子模块分别创建服务，并指定 **Root Directory（根目录）** 为对应子目录。
+
+### 推荐部署方式（最直观，识别率 100%）
+
+在 Zeabur 项目中 **创建两个独立服务**，同一个仓库部署两次：
+
+| 服务名 | Root Directory | Provider（应被识别为） | 必需环境变量 |
+|---|---|---|---|
+| `frontend` | `frontend` | **Node.js (Next.js)** | `BACKEND_URL`：后端 API 公网地址，如 `https://ai-forum-api.zeabur.app` |
+| `backend` | `backend` | **Python (FastAPI)** | `DATABASE_URL`、`REDIS_URL`、`JWT_SECRET`、`CORS_ORIGINS=["<前端公网地址>"]` |
+
+**操作步骤（每创建一个服务执行一次）：**
+1. 在 Zeabur 项目中点 **新建服务 → GitHub → 选择仓库**
+2. 在「构建计划预览」弹窗中点击 **「配置」** 按钮
+3. 将 **Root Directory（根目录）** 改为：
+   - 前端服务：`frontend`
+   - 后端服务：`backend`
+4. 确认 Provider 显示正确后点击「部署」
+5. 在服务的 **「变量」** 选项卡中填入上表的环境变量，保存后自动重新部署
+
+### 环境变量参考
+
+后端（`backend` 服务）必需变量，完整示例见 [backend/.env.example](./backend/.env.example)：
+
+```
+# PostgreSQL（异步驱动，Zeabur 托管或自建）
+DATABASE_URL=postgresql+asyncpg://user:pass@host:port/dbname
+
+# Redis（Refresh Token / 会话存储）
+REDIS_URL=redis://:password@host:port/0
+
+# JWT 鉴权（生产环境务必改为随机强口令）
+JWT_SECRET=请替换为至少 32 位随机字符串
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=15
+REFRESH_TOKEN_EXPIRE_DAYS=7
+
+# 允许前端跨域访问（前端公网地址，多个用逗号分隔）
+CORS_ORIGINS=["https://ai-forum.zeabur.app"]
+```
+
+前端（`frontend` 服务）必需变量：
+
+```
+# 后端服务的公网地址（带协议，不带结尾斜杠）
+BACKEND_URL=https://ai-forum-api.zeabur.app
+```
+
+### zbpack.json 配置说明（已随仓库提供）
+
+为避免自动识别偏差，两个子目录均已带 `zbpack.json` 显式声明类型与命令：
+
+- [frontend/zbpack.json](./frontend/zbpack.json)：`framework: next.js`、`package_manager: npm`、`npm install && npm run build` → `npm start`
+- [backend/zbpack.json](./backend/zbpack.json)：`framework: fastapi`、`package_manager: pip`、`entry: app/main.py`；部署时自动执行 `alembic upgrade head` 迁移数据库，再用 uvicorn 监听 `$PORT`
+
+### 可选：单仓库多次部署的服务级配置
+
+若你希望所有配置都放在仓库根目录（而不是通过 Root Directory UI），可在 **根目录** 新增以下两个文件（优先级更高）：
+
+```json
+// zbpack.frontend.json — 服务名必须在 Zeabur 中命名为 frontend
+{
+  "app_dir": "frontend",
+  "build_command": "npm install && npm run build",
+  "start_command": "npm start"
+}
+```
+
+```json
+// zbpack.backend.json — 服务名必须在 Zeabur 中命名为 backend
+{
+  "app_dir": "backend",
+  "python": { "package_manager": "pip", "entry": "app/main.py" },
+  "build_command": "alembic upgrade head",
+  "start_command": "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
+}
+```
 
 ---
 
