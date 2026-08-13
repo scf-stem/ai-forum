@@ -42,6 +42,7 @@ from app.models.post import Post  # noqa: E402, F401
 from app.models.reply import Reply  # noqa: E402, F401
 from app.models.vote import Vote  # noqa: E402, F401
 from app.models.report import Report  # noqa: E402, F401
+from app.models.ai_answer import AIAnswer  # noqa: E402, F401
 
 __all__ = [
     "Base",
@@ -51,4 +52,5 @@ __all__ = [
     "Reply",
     "Vote",
     "Report",
+    "AIAnswer",
 ]

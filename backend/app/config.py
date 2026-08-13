@@ -40,6 +40,19 @@ class Settings(BaseSettings):
     # 跨域允许来源
     CORS_ORIGINS: List[str] = ["http://localhost:3000"]
 
+    # DeepSeek API 配置
+    DEEPSEEK_API_KEY: str = ""
+    DEEPSEEK_BASE_URL: str = "https://api.deepseek.com"
+    DEEPSEEK_MODEL: str = "deepseek-v4-flash"
+
+    # Web Search API 配置（可选，不配置则跳过联网检索）
+    WEB_SEARCH_API_URL: str = ""
+    WEB_SEARCH_API_KEY: str = ""
+
+    # AI 答案生成参数
+    AI_ANSWER_MAX_TOKENS: int = 2048
+    AI_ANSWER_TEMPERATURE: float = 0.3
+
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def _parse_cors_origins(cls, value):
