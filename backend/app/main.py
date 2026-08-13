@@ -23,7 +23,7 @@ app.add_middleware(
 )
 
 # 挂载业务路由
-from app.routers import auth, users, boards, posts, replies, votes, reports  # noqa: E402
+from app.routers import auth, users, boards, posts, replies, votes, reports, ai, ws  # noqa: E402
 
 app.include_router(auth.router, prefix="/api/auth", tags=["认证"])
 app.include_router(users.router, prefix="/api/users", tags=["用户"])
@@ -33,6 +33,10 @@ app.include_router(posts.router, prefix="/api/posts", tags=["帖子"])
 app.include_router(replies.router, prefix="/api", tags=["回复"])
 app.include_router(votes.router, prefix="/api", tags=["投票"])
 app.include_router(reports.router, prefix="/api", tags=["举报"])
+# AI 答案 REST 端点（/api/posts/{id}/ai-answer/regenerate）
+app.include_router(ai.router, prefix="/api", tags=["AI 答案"])
+# WebSocket 流式推送端点（/api/ws/ai-answer/{post_id}）
+app.include_router(ws.router, prefix="/api", tags=["WebSocket"])
 
 
 @app.get("/api/health")

@@ -2,19 +2,23 @@
 
 提供全站热帖列表、帖子详情、创建、更新与软删除接口。
 """
+import logging
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.config import settings
 from app.database import get_db
 from app.middleware.auth import get_current_user, get_current_user_optional
+from app.models.ai_answer import AIAnswer
 from app.models.board import Board
 from app.models.post import Post
 from app.models.user import User
 from app.models.vote import Vote
 from app.routers.boards import _build_post_list_item
+from app.schemas.ai_answer import AIAnswerDetail
 from app.schemas.post import (
     AuthorBrief,
     PostCreate,
@@ -22,8 +26,10 @@ from app.schemas.post import (
     PostListItem,
     PostUpdate,
 )
+from app.services.ai_orchestrator import schedule_ai_answer_generation
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 async def _get_post_or_404(post_id: str, db: AsyncSession) -> Post:
@@ -35,6 +41,25 @@ async def _get_post_or_404(post_id: str, db: AsyncSession) -> Post:
     if post is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="帖子不存在")
     return post
+
+
+async def _build_ai_answer_detail(
+    ai_answer_id: str | None, db: AsyncSession
+) -> AIAnswerDetail | None:
+    """查询 AI 答案记录并构建详情，不存在或校验失败时返回 None。"""
+    if ai_answer_id is None:
+        return None
+    try:
+        result = await db.execute(
+            select(AIAnswer).where(AIAnswer.id == ai_answer_id)
+        )
+        ai_answer = result.scalar_one_or_none()
+        if ai_answer is None:
+            return None
+        return AIAnswerDetail.model_validate(ai_answer)
+    except Exception:
+        logger.exception("构建 AIAnswerDetail 失败 ai_answer_id=%s", ai_answer_id)
+        return None
 
 
 @router.get("", response_model=None)
@@ -129,6 +154,7 @@ async def get_post_detail(
         ),
         board={"id": str(board.id), "name": board.name, "tier": board.tier},
         my_vote=my_vote,
+        ai_answer=await _build_ai_answer_detail(post.ai_answer_id, db),
     )
 
 
@@ -159,6 +185,24 @@ async def create_post(
     board.post_count = (board.post_count or 0) + 1
     await db.commit()
     await db.refresh(post)
+
+    # 提问帖：创建 AI 答案记录并异步触发生成
+    if post.type == "question":
+        ai_answer = AIAnswer(
+            post_id=post.id,
+            status="generating",
+            content="",
+            sources=[],
+            confidence="medium",
+            retrieval_path="hybrid",
+            model_name=settings.DEEPSEEK_MODEL,
+        )
+        db.add(ai_answer)
+        await db.flush()  # 获取 server_default 生成的 id
+        post.ai_answer_id = ai_answer.id
+        await db.commit()
+        # 后台生成 AI 答案，不阻塞帖子发布响应
+        schedule_ai_answer_generation(str(post.id), str(ai_answer.id))
 
     return PostDetail(
         id=str(post.id),
