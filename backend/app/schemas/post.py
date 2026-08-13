@@ -8,6 +8,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.schemas.ai_answer import AIAnswerDetail
+
 
 class AuthorBrief(BaseModel):
     """作者简要信息，用于帖子/回复列表中的嵌套展示。"""
@@ -88,6 +90,8 @@ class PostDetail(BaseModel):
     board: BoardBrief
     # 当前用户对该帖子的投票方向，未登录或未投票时为 None
     my_vote: str | None = None
+    # AI 答案详情，未生成或未发布时为 None
+    ai_answer: AIAnswerDetail | None = None
 
 
 class PostListResponse(BaseModel):
