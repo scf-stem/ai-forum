@@ -79,7 +79,68 @@ export interface PostDetail extends PostListItem {
   status: PostStatus;
   /** 当前用户对该帖子的投票方向（未登录或未投时为 null） */
   myVote: VoteDirection | null;
+  /** 关联的 AI 答案（仅提问帖可能有，无答案时为 null） */
+  aiAnswer: AIAnswer | null;
 }
+
+/** AI 答案来源标注类型 */
+export type AnswerSourceType = "forum" | "docs" | "blog" | "issue";
+
+/** AI 答案来源标注 */
+export interface AnswerSource {
+  type: AnswerSourceType;
+  title: string;
+  snippet: string;
+  url: string;
+  /** 当来源为站内帖子时，记录对应帖子 ID */
+  postId?: string | null;
+}
+
+/** AI 答案置信度 */
+export type AIConfidence = "high" | "medium" | "low";
+
+/** AI 答案检索路径 */
+export type AIRetrievalPath = "forum" | "web" | "hybrid";
+
+/** AI 答案状态 */
+export type AIAnswerStatus =
+  | "generating"
+  | "published"
+  | "verified"
+  | "corrected"
+  | "folded";
+
+/** AI 答案 */
+export interface AIAnswer {
+  id: string;
+  content: string;
+  sources: AnswerSource[];
+  confidence: AIConfidence;
+  retrievalPath: AIRetrievalPath;
+  status: AIAnswerStatus;
+  modelName: string;
+  /** token 用量明细，键名由后端决定（如 prompt_tokens、completion_tokens） */
+  tokenUsage: Record<string, number>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * WebSocket 推送消息（AI 答案流式生成）。
+ * - token：增量文本片段
+ * - done：生成完成，携带完整内容与来源
+ * - error：生成出错
+ */
+export type WSMessage =
+  | { type: "token"; content: string }
+  | {
+      type: "done";
+      content: string;
+      sources: AnswerSource[];
+      confidence: AIConfidence;
+      retrievalPath: AIRetrievalPath;
+    }
+  | { type: "error"; message: string };
 
 /** 回复 */
 export interface Reply {

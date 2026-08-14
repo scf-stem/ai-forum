@@ -178,3 +178,22 @@ export async function apiPatch<T>(
 export async function apiDelete<T>(url: string): Promise<T> {
   return request<T>(url, { method: "DELETE" });
 }
+
+/** 重新生成 AI 答案的响应（经 convertToCamelCase 转换后） */
+interface RegenerateAIAnswerResponse {
+  message: string;
+  aiAnswerId: string;
+}
+
+/**
+ * 重新生成指定帖子的 AI 答案。
+ * 触发后后端会异步生成，前端通过 WebSocket 接收流式结果。
+ * @param postId 帖子 ID
+ */
+export async function regenerateAIAnswer(
+  postId: string
+): Promise<RegenerateAIAnswerResponse> {
+  return apiPost<RegenerateAIAnswerResponse>(
+    `/api/posts/${postId}/ai-answer/regenerate`
+  );
+}

@@ -28,6 +28,7 @@ import { MarkdownEditor } from "@/components/MarkdownEditor";
 import { VoteButton } from "@/components/VoteButton";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { Pagination } from "@/components/Pagination";
+import { AIAnswer } from "@/components/AIAnswer";
 
 /**
  * 帖子详情页：展示帖子正文、作者信息卡、回复列表。
@@ -368,6 +369,15 @@ export default function PostDetailPage() {
               )}
             </div>
           </article>
+
+          {/* AI 答案区：仅提问帖展示 */}
+          {post.type === "question" && (
+            <AIAnswer
+              postId={post.id}
+              initialAIAnswer={post.aiAnswer}
+              isAuthor={isAuthor}
+            />
+          )}
 
           {/* 回复区 */}
           <section className="space-y-4" aria-label="回复">
