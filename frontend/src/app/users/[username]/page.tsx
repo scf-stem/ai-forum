@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
 import { apiGet, ApiRequestError } from "@/lib/api";
 import type {
   User,
@@ -30,6 +31,7 @@ import { Pagination } from "@/components/Pagination";
 type Tab = "question" | "share" | "reply";
 
 export default function UserProfilePage() {
+  const { currentUser } = useAuth();
   const params = useParams<{ username: string }>();
   const username = decodeURIComponent(params.username);
 
@@ -216,6 +218,14 @@ export default function UserProfilePage() {
               <span>注册于 {formatDate(user.createdAt)}</span>
               <span>最近活跃 {formatRelativeTime(user.lastActiveAt)}</span>
             </div>
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+              <div className="rounded-md bg-aidev-muted p-3"><strong className="block text-lg text-aidev-foreground">Lv{user.level}</strong><span className="text-xs text-aidev-muted-foreground">等级</span></div>
+              <div className="rounded-md bg-aidev-muted p-3"><strong className="block text-lg text-aidev-foreground">{formatCount(user.reputation)}</strong><span className="text-xs text-aidev-muted-foreground">声望</span></div>
+              <div className="rounded-md bg-aidev-muted p-3"><strong className="block text-lg text-aidev-foreground">{formatCount(user.receivedUpvotes || 0)}</strong><span className="text-xs text-aidev-muted-foreground">获赞</span></div>
+              <div className="rounded-md bg-aidev-muted p-3"><strong className="block text-lg text-aidev-foreground">{formatCount(user.acceptedCount || 0)}</strong><span className="text-xs text-aidev-muted-foreground">被采纳</span></div>
+            </div>
+            {user.badges && user.badges.length > 0 && <div className="mt-4"><p className="mb-2 text-sm font-medium text-aidev-foreground">徽章墙</p><div className="flex flex-wrap gap-2">{user.badges.map((badge) => <span key={badge.code} className="rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs text-amber-800">🏅 {badge.code}</span>)}</div></div>}
+            {currentUser?.id === user.id && <p className="mt-3 text-sm font-medium text-aidev-primary">可用积分：{user.pointsBalance}</p>}
           </div>
         </div>
       </section>

@@ -10,16 +10,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useAIAnswerStream } from "@/hooks/useAIAnswerStream";
-import { regenerateAIAnswer, ApiRequestError } from "@/lib/api";
+import { regenerateAIAnswer, apiPost, ApiRequestError } from "@/lib/api";
 import { MarkdownRenderer } from "./MarkdownRenderer";
 import { cn, formatDateTime } from "@/lib/utils";
-import type { AIAnswer, AnswerSource, AIConfidence } from "@/lib/types";
+import type { AIAnswer, AnswerSource, AIConfidence, Reply } from "@/lib/types";
 
 interface AIAnswerProps {
   postId: string;
   initialAIAnswer: AIAnswer | null;
   /** 当前用户是否是帖子作者（控制重新生成按钮可见性） */
   isAuthor: boolean;
+  correctedReply?: Reply;
 }
 
 /** 置信度标签配置：文案 + 样式 */
@@ -55,15 +56,21 @@ function extractDomain(url: string): string {
   }
 }
 
-export function AIAnswer({ postId, initialAIAnswer, isAuthor }: AIAnswerProps) {
+export function AIAnswer({ postId, initialAIAnswer, isAuthor, correctedReply }: AIAnswerProps) {
   const { aiAnswer, isStreaming, error, reconnect } = useAIAnswerStream({
     postId,
     initialAIAnswer,
   });
   const [regenerating, setRegenerating] = useState(false);
+  const [showOriginal, setShowOriginal] = useState(false);
+  const [feedback, setFeedback] = useState(initialAIAnswer?.myFeedback || null);
+  const [followUp, setFollowUp] = useState("");
+  const [followUpResult, setFollowUpResult] = useState<{ answer: string; mode: string; glossary: Array<{ term: string; description: string }> } | null>(null);
+  const [asking, setAsking] = useState(false);
 
   // 无 AI 答案时不渲染
   if (!aiAnswer) return null;
+  const answerId = aiAnswer.id;
 
   const isGenerating = aiAnswer.status === "generating" || isStreaming;
   const confidenceConfig =
@@ -82,6 +89,23 @@ export function AIAnswer({ postId, initialAIAnswer, isAuthor }: AIAnswerProps) {
       }
     } finally {
       setRegenerating(false);
+    }
+  }
+
+  async function submitFeedback(value: "helpful" | "not_helpful") {
+    await apiPost(`/api/ai-answers/${answerId}/feedback`, { value });
+    setFeedback(value);
+  }
+
+  async function submitFollowUp() {
+    if (!followUp.trim()) return;
+    setAsking(true);
+    try {
+      const result = await apiPost<{ answer: string; mode: string; glossary: Array<{ term: string; description: string }> }>(`/api/ai-answers/${answerId}/follow-ups`, { question: followUp.trim() });
+      setFollowUpResult(result);
+      setFollowUp("");
+    } finally {
+      setAsking(false);
     }
   }
 
@@ -185,8 +209,17 @@ export function AIAnswer({ postId, initialAIAnswer, isAuthor }: AIAnswerProps) {
           </div>
         )}
 
+      {correctedReply && !showOriginal && (
+        <div className="rounded-md border border-green-200 bg-green-50 p-4">
+          <p className="mb-2 text-sm font-semibold text-green-800">已采纳的社区纠错 · {correctedReply.author.username}</p>
+          <MarkdownRenderer content={correctedReply.content} className="text-body" />
+          <button type="button" onClick={() => setShowOriginal(true)} className="mt-3 text-xs font-medium text-green-800 underline">展开原 AI 答案</button>
+        </div>
+      )}
+
       {/* 答案内容 */}
-      {isGenerating && !aiAnswer.content ? (
+      {(!correctedReply || showOriginal) && (
+      isGenerating && !aiAnswer.content ? (
         // 生成中且尚未收到任何 token：显示等待提示
         <p className="py-4 text-caption text-aidev-muted-foreground">
           正在分析问题并检索相关资料…
@@ -204,6 +237,7 @@ export function AIAnswer({ postId, initialAIAnswer, isAuthor }: AIAnswerProps) {
             </span>
           )}
         </div>
+      )
       )}
 
       {/* 来源标注卡片 */}
@@ -230,6 +264,22 @@ export function AIAnswer({ postId, initialAIAnswer, isAuthor }: AIAnswerProps) {
           <time dateTime={aiAnswer.updatedAt}>
             生成于 {formatDateTime(aiAnswer.updatedAt)}
           </time>
+        </div>
+      )}
+
+      {!isGenerating && (
+        <div className="mt-4 space-y-3 border-t border-aidev-border pt-3">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-aidev-muted-foreground">
+            <span>这个答案有帮助吗？</span>
+            <button type="button" onClick={() => submitFeedback("helpful")} className={cn("rounded border px-2 py-1", feedback === "helpful" && "border-green-500 bg-green-50 text-green-700")}>有帮助 {aiAnswer.helpfulCount || 0}</button>
+            <button type="button" onClick={() => submitFeedback("not_helpful")} className={cn("rounded border px-2 py-1", feedback === "not_helpful" && "border-red-400 bg-red-50 text-red-700")}>没帮助 {aiAnswer.notHelpfulCount || 0}</button>
+            <button type="button" onClick={() => apiPost("/api/reports", { target_type: "ai_answer", target_id: aiAnswer.id, reason: "other" })} className="ml-auto hover:underline">举报</button>
+          </div>
+          <div className="flex gap-2">
+            <input value={followUp} onChange={(event) => setFollowUp(event.target.value)} placeholder="继续追问；看不懂时可要求通俗解释" className="min-w-0 flex-1 rounded-md border border-aidev-input bg-aidev-card px-3 py-2 text-sm" />
+            <button type="button" disabled={asking || !followUp.trim()} onClick={submitFollowUp} className="rounded-md bg-aidev-primary px-3 py-2 text-sm text-white disabled:opacity-50">{asking ? "回答中" : "追问"}</button>
+          </div>
+          {followUpResult && <div className="rounded-md bg-aidev-card p-3"><p className="mb-2 text-xs font-medium text-aidev-primary">{followUpResult.mode === "simplified" ? "通俗模式" : "追问回答"}</p><MarkdownRenderer content={followUpResult.answer} /></div>}
         </div>
       )}
     </section>

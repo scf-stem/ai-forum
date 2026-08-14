@@ -32,6 +32,7 @@ class Post(Base):
     title: Mapped[str] = mapped_column(String(200), nullable=False)
     # 正文（Markdown）
     content: Mapped[str] = mapped_column(Text, nullable=False)
+    summary: Mapped[str | None] = mapped_column(Text, nullable=True)
     # 类型：question（提问）/ share（分享）
     type: Mapped[str] = mapped_column(String(10), nullable=False)
     # 标签数组
@@ -48,6 +49,11 @@ class Post(Base):
     reply_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     # 已采纳回复 ID：Phase 2 预留
     accepted_reply_id: Mapped[str | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    origin_type: Mapped[str] = mapped_column(String(20), nullable=False, default="user")
+    source_url: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    source_title: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    source_published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    crawl_item_id: Mapped[str | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     # 是否折叠（达到举报阈值后自动折叠）
     is_folded: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     # 创建时间

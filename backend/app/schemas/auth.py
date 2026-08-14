@@ -26,6 +26,11 @@ class UserPublic(BaseModel):
     bio: str | None = None
     created_at: datetime
     last_active_at: datetime
+    reputation: int = 0
+    level: int = 1
+    points_balance: int = 100
+    is_admin: bool = False
+    personalization_enabled: bool = True
 
     @classmethod
     def from_orm_user(cls, user: User) -> "UserPublic":
@@ -40,6 +45,11 @@ class UserPublic(BaseModel):
             bio=user.bio,
             created_at=user.created_at,
             last_active_at=user.last_active_at,
+            reputation=user.reputation,
+            level=user.level,
+            points_balance=user.points_balance,
+            is_admin=user.is_admin,
+            personalization_enabled=user.personalization_enabled,
         )
 
 

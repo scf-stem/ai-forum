@@ -35,72 +35,23 @@ def _make_snippet(content: str, length: int = 200) -> str:
 
 
 async def _search_forum_impl(query: str, limit: int) -> list[dict]:
-    """论坛路检索实现：搜索 posts 与 replies，排除已删除/已折叠内容。"""
-    results: list[dict] = []
-    seen_post_ids: set[str] = set()
-
+    """Search the normalized, quality-controlled lexical SearchIndex."""
     async with AsyncSessionLocal() as session:
-        # 1) 帖子全文检索：to_tsvector 表达式须与 ix_posts_content_fts 索引定义完全一致，否则无法命中索引
-        posts_sql = text(
-            """
-            SELECT id, title, content
-            FROM posts
-            WHERE deleted_at IS NULL
-              AND is_folded = false
-              AND to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(content, ''))
+        sql = text("""
+            SELECT post_id, title, content, source_type,
+                   ts_rank(to_tsvector('simple', coalesce(title,'') || ' ' || coalesce(content,'')),
+                           plainto_tsquery('simple', :query)) AS rank
+            FROM search_documents
+            WHERE is_active = true
+              AND to_tsvector('simple', coalesce(title,'') || ' ' || coalesce(content,''))
                   @@ plainto_tsquery('simple', :query)
-            ORDER BY ts_rank(
-                to_tsvector('simple', coalesce(title, '') || ' ' || coalesce(content, '')),
-                plainto_tsquery('simple', :query)
-            ) DESC
+            ORDER BY rank DESC, quality_score DESC, indexed_at DESC
             LIMIT :limit
-            """
-        )
-        posts_res = await session.execute(posts_sql, {"query": query, "limit": limit})
-        for row in posts_res:
-            post_id = str(row.id)
-            results.append({
-                "type": "forum",
-                "title": row.title,
-                "snippet": _make_snippet(row.content),
-                "url": f"/posts/{post_id}",
-                "post_id": post_id,
-            })
-            seen_post_ids.add(post_id)
-
-        # 2) 回复全文检索：JOIN posts 取帖子标题作为展示标题，命中同一帖子的回复跳过避免重复链接
-        replies_sql = text(
-            """
-            SELECT r.post_id, r.content, p.title AS post_title
-            FROM replies r
-            JOIN posts p ON p.id = r.post_id
-            WHERE r.deleted_at IS NULL
-              AND to_tsvector('simple', coalesce(r.content, ''))
-                  @@ plainto_tsquery('simple', :query)
-            ORDER BY ts_rank(
-                to_tsvector('simple', coalesce(r.content, '')),
-                plainto_tsquery('simple', :query)
-            ) DESC
-            LIMIT :limit
-            """
-        )
-        replies_res = await session.execute(replies_sql, {"query": query, "limit": limit})
-        for row in replies_res:
-            post_id = str(row.post_id)
-            if post_id in seen_post_ids:
-                continue
-            results.append({
-                "type": "forum",
-                "title": row.post_title,
-                "snippet": _make_snippet(row.content),
-                "url": f"/posts/{post_id}",
-                "post_id": post_id,
-            })
-            seen_post_ids.add(post_id)
-            if len(results) >= limit:
-                break
-
-    return results
+        """)
+        rows = (await session.execute(sql, {"query": query, "limit": limit})).all()
+    return [{"type": "forum", "title": row.title, "snippet": _make_snippet(row.content),
+             "url": f"/posts/{row.post_id}", "post_id": str(row.post_id),
+             "source_type": row.source_type} for row in rows]
 
 
 def _infer_web_type(url: str) -> str:

@@ -14,24 +14,30 @@ from app.models.post import Post
 from app.models.reply import Reply
 from app.models.report import Report
 from app.models.user import User
+from app.models.ai_answer import AIAnswer
 from app.schemas.report import ReportCreate
+from app.services.community_service import deactivate_index, deactivate_post_index
+from app.services.growth_service import record_event
 
 router = APIRouter()
 
 
 async def _get_target(
     target_type: str, target_id: str, db: AsyncSession
-) -> Post | Reply:
+) -> Post | Reply | AIAnswer:
     """根据目标类型查询目标实体，并校验未删除。"""
     if target_type == "post":
         result = await db.execute(
             select(Post).where(Post.id == target_id, Post.deleted_at.is_(None))
         )
         target = result.scalar_one_or_none()
-    else:
+    elif target_type == "reply":
         result = await db.execute(
             select(Reply).where(Reply.id == target_id, Reply.deleted_at.is_(None))
         )
+        target = result.scalar_one_or_none()
+    else:
+        result = await db.execute(select(AIAnswer).where(AIAnswer.id == target_id))
         target = result.scalar_one_or_none()
 
     if target is None:
@@ -76,9 +82,25 @@ async def create_report(
 
     # 达到阈值则折叠目标
     folded = False
-    if report_count >= settings.REPORT_THRESHOLD and not target.is_folded:
-        target.is_folded = True
-        folded = True
+    if report_count >= settings.REPORT_THRESHOLD:
+        if isinstance(target, AIAnswer):
+            if target.status != "folded":
+                target.status = "folded"
+                await deactivate_index(db, "high_confidence_ai_answer", target.id)
+                folded = True
+        elif not target.is_folded:
+            target.is_folded = True
+            if isinstance(target, Post):
+                await deactivate_post_index(db, target.id)
+            else:
+                await deactivate_index(db, "accepted_reply", target.id)
+            folded = True
+
+    post_id = (target.id if isinstance(target, Post) else
+               target.post_id if isinstance(target, (Reply, AIAnswer)) else None)
+    await record_event(db, event_name="negative_feedback", user_id=user.id,
+                       post_id=post_id,
+                       properties={"target_type": payload.target_type, "reason": payload.reason})
 
     await db.commit()
 

@@ -7,6 +7,6 @@ from pydantic import BaseModel, Field
 class ReportCreate(BaseModel):
     """创建举报请求体。"""
 
-    target_type: Literal["post", "reply"]
+    target_type: Literal["post", "reply", "ai_answer"]
     target_id: str
     reason: str = Field(min_length=1, max_length=500)

@@ -23,7 +23,7 @@ export type ReplyKind = "supplement" | "correction" | "discussion";
 export type VoteDirection = "up" | "down";
 
 /** 投票/举报目标类型 */
-export type TargetType = "post" | "reply";
+export type TargetType = "post" | "reply" | "ai_answer";
 
 /** 用户 */
 export interface User {
@@ -36,6 +36,14 @@ export interface User {
   bio: string | null;
   createdAt: string;
   lastActiveAt: string;
+  reputation: number;
+  level: number;
+  pointsBalance: number;
+  isAdmin?: boolean;
+  personalizationEnabled?: boolean;
+  badges?: Array<{ code: string; metadata: Record<string, unknown>; awardedAt: string }>;
+  receivedUpvotes?: number;
+  acceptedCount?: number;
 }
 
 /** 当前登录用户（含敏感字段） */
@@ -69,6 +77,8 @@ export interface PostListItem {
   updatedAt: string;
   author: Pick<User, "id" | "username" | "avatar">;
   board: Pick<Board, "id" | "name" | "tier">;
+  recommendationReason?: string;
+  recommendationScore?: number;
 }
 
 /** 帖子详情 */
@@ -81,6 +91,11 @@ export interface PostDetail extends PostListItem {
   myVote: VoteDirection | null;
   /** 关联的 AI 答案（仅提问帖可能有，无答案时为 null） */
   aiAnswer: AIAnswer | null;
+  summary: string | null;
+  acceptedReplyId: string | null;
+  originType: "user" | "seed_summary";
+  sourceUrl: string | null;
+  sourceTitle: string | null;
 }
 
 /** AI 答案来源标注类型 */
@@ -123,6 +138,11 @@ export interface AIAnswer {
   tokenUsage: Record<string, number>;
   createdAt: string;
   updatedAt: string;
+  correctedByReplyId: string | null;
+  promptVersion: string;
+  myFeedback: "helpful" | "not_helpful" | null;
+  helpfulCount: number;
+  notHelpfulCount: number;
 }
 
 /**
@@ -160,6 +180,58 @@ export interface Reply {
   children?: Reply[];
   /** 当前用户对该回复的投票方向 */
   myVote: VoteDirection | null;
+  targetAiAnswerId: string | null;
+}
+
+export interface Notification {
+  id: string;
+  type: "reply" | "upvote" | "accepted" | "reward" | "reputation" | "system";
+  title: string;
+  body: string;
+  postId: string | null;
+  replyId: string | null;
+  actorCount: number;
+  readAt: string | null;
+  createdAt: string;
+}
+
+export interface FeedItem extends PostListItem {
+  recommendationReason: string;
+  recommendationScore: number;
+}
+
+export interface ContentReward {
+  id: string;
+  fromUserId: string;
+  toUserId: string;
+  targetType: "post" | "reply";
+  targetId: string;
+  postId: string;
+  amount: number;
+  createdAt: string;
+}
+
+export interface PointLedgerItem {
+  id: string;
+  delta: number;
+  balanceAfter: number;
+  reason: string;
+  refId: string | null;
+  createdAt: string;
+}
+
+export interface RecommendationReason {
+  reason: string;
+  score: number;
+}
+
+export interface AIFollowUp {
+  id: string;
+  answer: string;
+  mode: "normal" | "simplified";
+  glossary: Array<{ term: string; description: string }>;
+  promptVersion: string;
+  createdAt: string;
 }
 
 /** 分页响应 */

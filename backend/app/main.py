@@ -2,10 +2,13 @@
 
 负责创建应用实例、配置 CORS 中间件、挂载路由与提供健康检查接口。
 """
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
+from app.database import AsyncSessionLocal
+from app.redis_client import redis_client
+from sqlalchemy import text
 
 app = FastAPI(
     title="AI开发者论坛 API",
@@ -23,7 +26,7 @@ app.add_middleware(
 )
 
 # 挂载业务路由
-from app.routers import auth, users, boards, posts, replies, votes, reports, ai, ws  # noqa: E402
+from app.routers import auth, users, boards, posts, replies, votes, reports, ai, ws, community, notifications, growth, ops  # noqa: E402
 
 app.include_router(auth.router, prefix="/api/auth", tags=["认证"])
 app.include_router(users.router, prefix="/api/users", tags=["用户"])
@@ -37,12 +40,28 @@ app.include_router(reports.router, prefix="/api", tags=["举报"])
 app.include_router(ai.router, prefix="/api", tags=["AI 答案"])
 # WebSocket 流式推送端点（/api/ws/ai-answer/{post_id}）
 app.include_router(ws.router, prefix="/api", tags=["WebSocket"])
+app.include_router(community.router, prefix="/api", tags=["社区沉淀"])
+app.include_router(notifications.router, prefix="/api", tags=["通知"])
+app.include_router(growth.router, prefix="/api", tags=["增长与 AI 辅助"])
+app.include_router(ops.router, prefix="/api", tags=["埋点与运营"])
 
 
 @app.get("/api/health")
 async def health_check() -> dict:
     """健康检查接口，用于容器探针与负载均衡。"""
     return {"status": "ok"}
+
+
+@app.get("/api/health/ready")
+async def readiness_check() -> dict:
+    """Readiness probe verifies the database and Redis dependencies."""
+    try:
+        async with AsyncSessionLocal() as db:
+            await db.execute(text("SELECT 1"))
+        await redis_client.ping()
+    except Exception as exc:
+        raise HTTPException(status_code=503, detail="依赖服务未就绪") from exc
+    return {"status": "ready", "database": "ok", "redis": "ok"}
 
 
 @app.get("/")

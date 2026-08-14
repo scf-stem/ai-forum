@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { PostFeed } from "@/components/PostFeed";
-import { convertToCamelCase } from "@/lib/utils";
-import type { PaginatedResponse, PostListItem } from "@/lib/types";
 
 // 首页始终动态渲染，确保帖子列表实时更新
 export const dynamic = "force-dynamic";
@@ -11,30 +9,6 @@ export const dynamic = "force-dynamic";
  * 交由 PostFeed 客户端组件处理排序切换与分页。
  */
 export default async function Home() {
-  const backendUrl = process.env.BACKEND_URL || "http://localhost:8000";
-  let initialPosts: PostListItem[] = [];
-  let initialTotal = 0;
-  let fetchError = false;
-
-  try {
-    // 服务端直接请求后端，不走 Next.js rewrites
-    const res = await fetch(
-      `${backendUrl}/api/posts?page=1&page_size=20&sort=hot`,
-      { cache: "no-store" }
-    );
-    if (res.ok) {
-      // 后端返回 snake_case，SSR 需转换为前端 camelCase 契约
-      const rawData = await res.json();
-      const data = convertToCamelCase<PaginatedResponse<PostListItem>>(rawData);
-      initialPosts = data.items;
-      initialTotal = data.total;
-    } else {
-      fetchError = true;
-    }
-  } catch {
-    fetchError = true;
-  }
-
   return (
     <div className="space-y-6">
       {/* 欢迎标语 */}
@@ -60,19 +34,7 @@ export default async function Home() {
       </section>
 
       {/* 帖子列表 */}
-      {fetchError && initialPosts.length === 0 ? (
-        <PostFeed
-          apiPath="/api/posts"
-          emptyMessage="暂时无法加载帖子，请稍后刷新"
-        />
-      ) : (
-        <PostFeed
-          apiPath="/api/posts"
-          initialPosts={initialPosts}
-          initialTotal={initialTotal}
-          emptyMessage="还没有内容，成为第一个发帖的人"
-        />
-      )}
+      <PostFeed apiPath="/api/feed" feedModes emptyMessage="还没有内容，成为第一个发帖的人" />
     </div>
   );
 }

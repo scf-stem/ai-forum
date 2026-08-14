@@ -52,6 +52,10 @@ class Settings(BaseSettings):
     # AI 答案生成参数
     AI_ANSWER_MAX_TOKENS: int = 2048
     AI_ANSWER_TEMPERATURE: float = 0.3
+    AI_PROMPT_VERSION: str = "answer-v1"
+    PUBLIC_APP_URL: str = "http://localhost:3000"
+    CRAWLER_USER_AGENT: str = "AIForumSeedBot/1.0 (+https://example.com/crawler)"
+    RAW_EVENT_RETENTION_DAYS: int = 180
 
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod

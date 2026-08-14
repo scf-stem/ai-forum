@@ -21,6 +21,12 @@ class UserProfile(BaseModel):
     bio: str | None = None
     created_at: datetime
     last_active_at: datetime
+    reputation: int = 0
+    level: int = 1
+    points_balance: int = 0
+    badges: list[dict] = Field(default_factory=list)
+    received_upvotes: int = 0
+    accepted_count: int = 0
 
 
 class UserUpdate(BaseModel):
@@ -29,6 +35,7 @@ class UserUpdate(BaseModel):
     avatar: str | None = Field(default=None, max_length=500)
     bio: str | None = None
     tech_stack: list[str] | None = None
+    personalization_enabled: bool | None = None
 
 
 class UserPostItem(BaseModel):

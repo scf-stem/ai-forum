@@ -34,6 +34,7 @@ function AuthContent() {
   // 初始模式：默认登录
   const initialMode = searchParams.get("mode") === "register" ? "register" : "login";
   const redirect = searchParams.get("redirect") || "/";
+  const inviteToken = searchParams.get("invite");
 
   const [mode, setMode] = useState<"login" | "register">(initialMode);
 
@@ -56,6 +57,7 @@ function AuthContent() {
 
   /** 表单校验：返回错误信息，无错误返回 null */
   function validate(): string | null {
+    if (inviteToken) return isValidPassword(password) ? null : "密码至少 8 位，且需包含字母与数字";
     if (!isValidEmail(email)) return "请输入有效的邮箱地址";
     if (!isValidPassword(password))
       return "密码至少 8 位，且需包含字母与数字";
@@ -84,6 +86,12 @@ function AuthContent() {
     router.push("/");
   }
 
+  async function handleInvite() {
+    const data = await apiPost<AuthResponse>("/api/auth/accept-invite", { token: inviteToken, password });
+    await login(data.accessToken, data.user);
+    router.push("/");
+  }
+
   /** 表单提交 */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -97,7 +105,9 @@ function AuthContent() {
 
     setLoading(true);
     try {
-      if (mode === "login") {
+      if (inviteToken) {
+        await handleInvite();
+      } else if (mode === "login") {
         await handleLogin();
       } else {
         await handleRegister();
@@ -117,7 +127,7 @@ function AuthContent() {
     <div className="mx-auto flex min-h-[calc(100vh-200px)] max-w-md flex-col justify-center py-8">
       <div className="rounded-lg border border-aidev-border bg-aidev-card p-6 shadow-md sm:p-8">
         {/* 模式切换 Tab */}
-        <div className="mb-6 flex gap-1 rounded-md bg-aidev-muted p-1" role="tablist">
+        {!inviteToken && <div className="mb-6 flex gap-1 rounded-md bg-aidev-muted p-1" role="tablist">
           {(["login", "register"] as const).map((m) => (
             <button
               key={m}
@@ -138,20 +148,20 @@ function AuthContent() {
               {m === "login" ? "登录" : "注册"}
             </button>
           ))}
-        </div>
+        </div>}
 
         <h1 className="mb-1 text-headline text-aidev-foreground">
-          {mode === "login" ? "欢迎回来" : "加入社区"}
+          {inviteToken ? "激活种子用户邀请" : mode === "login" ? "欢迎回来" : "加入社区"}
         </h1>
         <p className="mb-6 text-caption text-aidev-muted-foreground">
-          {mode === "login"
+          {inviteToken ? "设置密码后即可加入社区" : mode === "login"
             ? "登录后参与讨论与投票"
             : "注册后即可发帖、回复与投票"}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* 邮箱 */}
-          <div>
+          {!inviteToken && <div>
             <label htmlFor="auth-email" className="mb-1 block text-caption font-medium text-aidev-foreground">
               邮箱
             </label>
@@ -165,10 +175,10 @@ function AuthContent() {
               placeholder="you@example.com"
               required
             />
-          </div>
+          </div>}
 
           {/* 用户名（仅注册） */}
-          {mode === "register" && (
+          {mode === "register" && !inviteToken && (
             <div>
               <label htmlFor="auth-username" className="mb-1 block text-caption font-medium text-aidev-foreground">
                 用户名
@@ -204,7 +214,7 @@ function AuthContent() {
           </div>
 
           {/* 角色选择（仅注册） */}
-          {mode === "register" && (
+          {mode === "register" && !inviteToken && (
             <div>
               <label className="mb-1 block text-caption font-medium text-aidev-foreground">
                 角色
@@ -239,7 +249,7 @@ function AuthContent() {
           )}
 
           {/* 技术栈（仅注册） */}
-          {mode === "register" && (
+          {mode === "register" && !inviteToken && (
             <div>
               <label className="mb-1.5 block text-caption font-medium text-aidev-foreground">
                 技术栈 <span className="text-aidev-muted-foreground">（可选，多选）</span>
@@ -280,14 +290,14 @@ function AuthContent() {
           >
             {loading && <LoadingSpinner size={16} />}
             {loading
-              ? mode === "login" ? "登录中…" : "注册中…"
-              : mode === "login" ? "登录" : "注册"
+              ? inviteToken ? "激活中…" : mode === "login" ? "登录中…" : "注册中…"
+              : inviteToken ? "激活账号" : mode === "login" ? "登录" : "注册"
             }
           </button>
         </form>
 
         {/* 底部切换链接 */}
-        <p className="mt-4 text-center text-caption text-aidev-muted-foreground">
+        {!inviteToken && <p className="mt-4 text-center text-caption text-aidev-muted-foreground">
           {mode === "login" ? (
             <>
               还没有账号？{" "}
@@ -317,7 +327,7 @@ function AuthContent() {
               </button>
             </>
           )}
-        </p>
+        </p>}
       </div>
 
       {/* 返回首页 */}

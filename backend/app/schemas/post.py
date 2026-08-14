@@ -37,6 +37,7 @@ class PostCreate(BaseModel):
 
     title: str = Field(min_length=5, max_length=200)
     content: str = Field(min_length=10)
+    summary: str | None = Field(default=None, max_length=2000)
     board_id: str
     type: Literal["question", "share"]
     tags: list[str] = Field(default_factory=list)
@@ -47,6 +48,7 @@ class PostUpdate(BaseModel):
 
     title: str | None = Field(default=None, min_length=5, max_length=200)
     content: str | None = Field(default=None, min_length=10)
+    summary: str | None = Field(default=None, max_length=2000)
     tags: list[str] | None = None
 
 
@@ -63,6 +65,11 @@ class PostListItem(BaseModel):
     view_count: int
     reply_count: int
     is_folded: bool
+    summary: str | None = None
+    accepted_reply_id: UUID | None = None
+    origin_type: str = "user"
+    source_url: str | None = None
+    source_title: str | None = None
     created_at: datetime
     updated_at: datetime
     author: AuthorBrief
@@ -75,6 +82,8 @@ class PostDetail(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     id: UUID
+    author_id: UUID
+    board_id: UUID
     title: str
     content: str
     type: str
@@ -84,6 +93,11 @@ class PostDetail(BaseModel):
     view_count: int
     reply_count: int
     is_folded: bool
+    summary: str | None = None
+    accepted_reply_id: UUID | None = None
+    origin_type: str = "user"
+    source_url: str | None = None
+    source_title: str | None = None
     created_at: datetime
     updated_at: datetime
     author: AuthorBrief

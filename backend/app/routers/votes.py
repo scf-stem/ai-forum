@@ -2,6 +2,9 @@
 
 提供投票（赞/踩/取消）与批量查询投票状态接口。
 """
+from datetime import datetime, timezone
+from uuid import uuid4
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,6 +16,9 @@ from app.models.reply import Reply
 from app.models.user import User
 from app.models.vote import Vote
 from app.schemas.vote import VoteCreate, VoteStatusResponse
+from app.services.community_service import apply_reputation, create_notification, reverse_active_reputation
+from app.services.growth_service import record_event
+from app.routers.notifications import push_notification
 
 router = APIRouter()
 
@@ -46,6 +52,8 @@ async def vote(
     """投票：支持赞、踩、取消与切换方向，原子操作保证一致性。"""
     # 校验目标存在
     target = await _get_target(payload.target_type, payload.target_id, db)
+    if str(target.author_id) == str(user.id):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="不能给自己的内容投票")
 
     # 查询是否已有投票记录
     existing_result = await db.execute(
@@ -60,6 +68,7 @@ async def vote(
     # 投票方向对应的计数增量：up=+1, down=-1
     delta = 1 if payload.direction == "up" else -1
 
+    old_direction = existing_vote.direction if existing_vote is not None else None
     if existing_vote is None:
         # 无记录：创建新投票
         new_vote = Vote(
@@ -69,20 +78,54 @@ async def vote(
             direction=payload.direction,
         )
         db.add(new_vote)
+        await db.flush()
         target.vote_count = (target.vote_count or 0) + delta
         message = "投票成功"
+        transition = "created"
     elif existing_vote.direction == payload.direction:
         # 方向相同：取消投票
         await db.delete(existing_vote)
         target.vote_count = (target.vote_count or 0) - delta
         message = "已取消投票"
+        transition = "cancelled"
     else:
         # 方向不同：切换方向（净变化为新方向的 2 倍）
         existing_vote.direction = payload.direction
         target.vote_count = (target.vote_count or 0) + 2 * delta
         message = "已切换投票方向"
+        transition = "switched"
+
+    vote_ref = existing_vote.id if existing_vote is not None else new_vote.id
+    rep_delta = 1 if payload.target_type == "post" else 2
+    notification = None
+    if payload.direction == "up" and transition in ("created", "switched"):
+        await apply_reputation(
+            db, user_id=target.author_id, delta=rep_delta, reason="content_upvoted",
+            event_key=f"vote:{vote_ref}:award:{uuid4()}",
+            ref_type=payload.target_type, ref_id=payload.target_id, cap_vote_daily=True,
+        )
+        hour = datetime.now(timezone.utc).strftime("%Y%m%d%H")
+        notification = await create_notification(
+            db, user_id=target.author_id, type="upvote", actor_id=user.id,
+            post_id=target.id if payload.target_type == "post" else target.post_id,
+            reply_id=target.id if payload.target_type == "reply" else None,
+            title=f"{user.username} 等人赞了你的内容",
+            aggregation_key=f"upvote:{target.author_id}:{payload.target_type}:{payload.target_id}:{hour}",
+        )
+    elif old_direction == "up" and transition in ("cancelled", "switched"):
+        await reverse_active_reputation(db, user_id=target.author_id,
+                                        reason="content_upvoted",
+                                        ref_type=payload.target_type,
+                                        ref_id=payload.target_id,
+                                        event_key_prefix=f"vote:{vote_ref}:award:")
+
+    await record_event(db, event_name="vote_cast", user_id=user.id,
+                       post_id=target.id if payload.target_type == "post" else target.post_id,
+                       properties={"target_type": payload.target_type,
+                                   "direction": payload.direction, "transition": transition})
 
     await db.commit()
+    await push_notification(notification)
     return {
         "detail": message,
         "vote_count": target.vote_count,

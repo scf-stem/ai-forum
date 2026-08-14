@@ -29,6 +29,7 @@ export function Header() {
   const [boardsOpen, setBoardsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const boardsRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -47,6 +48,28 @@ export function Header() {
       cancelled = true;
     };
   }, []);
+
+  useEffect(() => {
+    if (!token) {
+      setUnreadCount(0);
+      return;
+    }
+    let websocket: WebSocket | null = null;
+    let cancelled = false;
+    const refresh = () => apiGet<{ count: number }>("/api/notifications/unread-count")
+      .then((data) => { if (!cancelled) setUnreadCount(data.count); })
+      .catch(() => undefined);
+    refresh();
+    const timer = window.setInterval(refresh, 60000);
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    websocket = new WebSocket(`${protocol}//${window.location.host}/api/ws/notifications?token=${encodeURIComponent(token)}`);
+    websocket.onmessage = () => setUnreadCount((value) => value + 1);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+      websocket?.close();
+    };
+  }, [token]);
 
   // 点击外部关闭下拉菜单
   useEffect(() => {
@@ -167,6 +190,19 @@ export function Header() {
                 发帖
               </Link>
 
+              <Link
+                href="/notifications"
+                className="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-lg text-aidev-muted-foreground transition hover:bg-aidev-muted"
+                aria-label={`通知，${unreadCount} 条未读`}
+              >
+                <span aria-hidden="true">🔔</span>
+                {unreadCount > 0 && (
+                  <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-aidev-error px-1 text-center text-[10px] leading-5 text-white">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                )}
+              </Link>
+
               <div ref={userMenuRef} className="relative">
                 <button
                   type="button"
@@ -207,6 +243,7 @@ export function Header() {
                           个人主页
                         </Link>
                       </li>
+                      <li><Link href="/leaderboard" className="block rounded-md px-3 py-2 text-sm text-aidev-foreground transition hover:bg-aidev-muted" onClick={() => setUserMenuOpen(false)}>声望榜</Link></li>
                       <li>
                         <Link
                           href="/settings"
@@ -216,6 +253,17 @@ export function Header() {
                           设置
                         </Link>
                       </li>
+                      {currentUser.isAdmin && (
+                        <li>
+                          <Link
+                            href="/ops"
+                            className="block rounded-md px-3 py-2 text-sm text-aidev-foreground transition hover:bg-aidev-muted"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            运营后台
+                          </Link>
+                        </li>
+                      )}
                       <li>
                         <button
                           type="button"

@@ -24,7 +24,7 @@ class AnswerSource(BaseModel):
 class AIAnswerDetail(BaseModel):
     """AI 答案详情，用于 published 态完整展示。"""
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
 
     id: UUID
     content: str
@@ -34,6 +34,11 @@ class AIAnswerDetail(BaseModel):
     status: Literal["generating", "published", "verified", "corrected", "folded"]
     model_name: str
     token_usage: dict
+    corrected_by_reply_id: UUID | None = None
+    prompt_version: str = "answer-v1"
+    my_feedback: str | None = None
+    helpful_count: int = 0
+    not_helpful_count: int = 0
     created_at: datetime
     updated_at: datetime
 

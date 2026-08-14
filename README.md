@@ -41,7 +41,7 @@
 
 ## 核心特性
 
-- **双路检索 AI 问答**：论坛向量匹配 + 实时联网搜索并行调度，结构化答案带来源标注与置信度。
+- **双路检索 AI 问答**：PostgreSQL 全文检索 + 实时联网搜索并行调度，结构化答案带来源标注与置信度。
 - **流式实时推送**：FastAPI WebSocket 支撑答案逐字生成与补充/纠错实时推送。
 - **入门 / 深度分区**：版块分层，入门区服务零基础用户（术语降维辅助），深度区服务开发者。
 - **社区自治机制**：点赞 / 踩 / 举报 / 折叠，低质 AI 答案可被社区纠错降权。
@@ -63,7 +63,7 @@
 | **ORM / 迁移** | SQLAlchemy 2 (async) · Alembic | 异步 ORM + 数据库版本迁移 |
 | **鉴权** | JWT (python-jose + passlib) | Access Token + Refresh Token |
 | **AI 服务** | 大模型 API · 联网搜索 API · Embedding 服务 | 双路检索 + 流式生成 + 向量化沉淀 |
-| **检索（规划）** | 向量数据库 · Elasticsearch | 内容语义检索 + 全文搜索 |
+| **检索** | PostgreSQL FTS | 统一 SearchIndex 的词法检索与质量排序 |
 | **基础设施** | Docker Compose | 一键启动 PostgreSQL + Redis |
 
 ---
@@ -144,6 +144,15 @@ alembic upgrade head
 
 # 启动开发服务
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# 另开终端启动独立 worker（徽章、抓取、指标、清理、AI 评测）
+python -m app.worker
+
+# 首位运营管理员由 CLI 显式授权
+python -m app.cli set-admin admin@example.com
+
+# 初始化 v1 版 100 条金标集（每领域 20 条）
+python -m app.cli seed-gold-set admin@example.com
 ```
 
 后端启动后访问：
@@ -188,6 +197,11 @@ python seed_boards.py
 | 回复 | `/api/posts/{id}/replies`、`/api/replies/{id}` | 回复、补充、纠错 |
 | 投票 | `/api` | 点赞 / 踩 |
 | 举报 | `/api` | 内容举报 |
+| 声望 / 采纳 | `/api/reputation`、`/api/posts/{id}/accepted-reply` | 榜单、采纳、回滚与 SearchIndex 回流 |
+| 通知 | `/api/notifications`、`/api/ws/notifications` | 持久通知、偏好、未读数与实时推送 |
+| 积分 / 推荐 | `/api/rewards`、`/api/points`、`/api/feed` | 幂等打赏、账本与规则/共现推荐 |
+| AI 辅助 | `/api/ai/writing-assist`、`/api/ai-answers/{id}/follow-ups` | 写作辅助、追问与术语降维 |
+| 运营 | `/api/ops` | 指标、抓取审核、邀请、任务和金标评测（管理员专用） |
 | 健康 | `/api/health` | 容器探针 |
 
 ---
@@ -203,6 +217,8 @@ python seed_boards.py
 | 个人主页 | `/users/[username]` | 资料、声望徽章、内容历史 |
 | 登录 / 注册 | `/auth` | 账号注册登录 |
 | 设置 | `/settings` | 账号、通知偏好、隐私 |
+| 通知中心 | `/notifications` | 分类、已读与历史补拉 |
+| 运营后台 | `/ops` | 指标、抓取、邀请、任务与 AI 评测 |
 
 ---
 
@@ -216,7 +232,10 @@ python seed_boards.py
 | **Phase 3** 推荐与打赏 | 提升留存与创作者激励 | 个性化推荐、内容打赏、AI 辅助写作、术语降维 |
 | **Phase 4** 冷启动运营与验证 | 种子内容与数据验证 | 种子用户、指标埋点、AI 准确率评估 |
 
-> 当前进度：**Phase 0**（基础骨架已完成，前后端可运行）
+> 当前进度：**Phase 2–4 已实现**。生产采用整包发布，Phase 2、3、4 仍作为研发验收门槛。
+
+Phase 2–4 的数据字典、指标口径、上线步骤、抓取运营手册与 AI 评测 SOP 见
+[`docs/phase-2-4-operations.md`](./docs/phase-2-4-operations.md)。
 
 ---
 

@@ -2,6 +2,8 @@
 
 提供注册、登录、登出、刷新 Token 接口。
 """
+import hashlib
+import re
 from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -13,6 +15,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.middleware.auth import get_current_user
 from app.models.user import User
+from app.models.ops import SeedInvitation
+from app.models.growth import PointLedger
 from app.schemas.auth import (
     RefreshRequest,
     TokenResponse,
@@ -20,6 +24,7 @@ from app.schemas.auth import (
     UserPublic,
     UserRegister,
 )
+from app.schemas.platform import SeedInviteAccept
 from app.services.auth_service import (
     create_access_token,
     create_refresh_token,
@@ -36,6 +41,34 @@ router = APIRouter()
 
 # 用于 logout 接口再次提取 Access Token（auto_error=False 避免与 get_current_user 重复报错）
 _token_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
+
+
+@router.post("/accept-invite", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
+async def accept_invite(payload: SeedInviteAccept, db: AsyncSession = Depends(get_db)) -> TokenResponse:
+    """Activate an operations-created seed-user invitation."""
+    if not re.search(r"[a-zA-Z]", payload.password) or not re.search(r"\d", payload.password):
+        raise HTTPException(status_code=422, detail="密码必须同时包含字母与数字")
+    token_hash = hashlib.sha256(payload.token.encode()).hexdigest()
+    invite = (await db.execute(select(SeedInvitation).where(
+        SeedInvitation.token_hash == token_hash, SeedInvitation.accepted_at.is_(None),
+        SeedInvitation.expires_at > datetime.now(timezone.utc)).with_for_update())).scalar_one_or_none()
+    if invite is None:
+        raise HTTPException(status_code=400, detail="邀请链接无效或已过期")
+    duplicate = (await db.execute(select(User).where(
+        (User.email == invite.email) | (User.username == invite.username)))).scalar_one_or_none()
+    if duplicate:
+        raise HTTPException(status_code=409, detail="邮箱或用户名已被使用")
+    user = User(email=invite.email, username=invite.username,
+                password_hash=hash_password(payload.password), role=invite.role,
+                tech_stack=invite.tech_stack)
+    db.add(user); await db.flush(); invite.accepted_at = datetime.now(timezone.utc)
+    db.add(PointLedger(user_id=user.id, delta=100, balance_after=100,
+                       reason="welcome", event_key=f"welcome:{user.id}"))
+    await db.commit(); await db.refresh(user)
+    access_token = create_access_token(str(user.id)); refresh_token = create_refresh_token(str(user.id))
+    await store_refresh_token(str(user.id), decode_token(refresh_token)["jti"])
+    return TokenResponse(access_token=access_token, refresh_token=refresh_token,
+                         user=UserPublic.from_orm_user(user))
 
 
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
@@ -65,6 +98,9 @@ async def register(payload: UserRegister, db: AsyncSession = Depends(get_db)) ->
     )
     db.add(user)
     try:
+        await db.flush()
+        db.add(PointLedger(user_id=user.id, delta=100, balance_after=100,
+                           reason="welcome", event_key=f"welcome:{user.id}"))
         await db.commit()
     except IntegrityError:
         await db.rollback()
@@ -94,7 +130,8 @@ async def login(payload: UserLogin, db: AsyncSession = Depends(get_db)) -> Token
     )
 
     result = await db.execute(
-        select(User).where(User.email == payload.email, User.deleted_at.is_(None))
+        select(User).where(User.email == payload.email, User.deleted_at.is_(None),
+                           User.is_system.is_(False))
     )
     user = result.scalar_one_or_none()
     if user is None or not verify_password(payload.password, user.password_hash):

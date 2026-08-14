@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { apiPatch, ApiRequestError } from "@/lib/api";
+import { apiGet, apiPatch, ApiRequestError } from "@/lib/api";
 import type { User } from "@/lib/types";
 import { cn, getAvatarColor, getInitials } from "@/lib/utils";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -27,6 +27,11 @@ export default function SettingsPage() {
   const [avatar, setAvatar] = useState("");
   const [bio, setBio] = useState("");
   const [techStack, setTechStack] = useState<string[]>([]);
+  const [personalization, setPersonalization] = useState(true);
+  const [notificationPrefs, setNotificationPrefs] = useState<Record<string, boolean>>({
+    replyEnabled: true, upvoteEnabled: true, acceptedEnabled: true,
+    rewardEnabled: true, reputationEnabled: true, systemEnabled: true,
+  });
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,6 +50,9 @@ export default function SettingsPage() {
       setAvatar(currentUser.avatar || "");
       setBio(currentUser.bio || "");
       setTechStack(currentUser.techStack || []);
+      setPersonalization(currentUser.personalizationEnabled ?? true);
+      apiGet<Record<string, boolean>>("/api/notification-preferences")
+        .then(setNotificationPrefs).catch(() => undefined);
     }
   }, [currentUser]);
 
@@ -67,7 +75,11 @@ export default function SettingsPage() {
         avatar: avatar.trim() || null,
         bio: bio.trim() || null,
         tech_stack: techStack,
+        personalization_enabled: personalization,
       });
+      await apiPatch("/api/notification-preferences", Object.fromEntries(
+        Object.entries(notificationPrefs).map(([key, value]) => [key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`), value])
+      ));
       updateUser(data);
       setSuccess(true);
       // 3 秒后清除成功提示
@@ -169,6 +181,25 @@ export default function SettingsPage() {
                 {tag}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* 错误提示 */}
+        <div className="space-y-3 rounded-lg border border-aidev-border p-4">
+          <label className="flex items-center justify-between gap-4 text-sm font-medium text-aidev-foreground">
+            <span>个性化推荐 <small className="block font-normal text-aidev-muted-foreground">关闭后只展示全站热度，行为不进入个性画像</small></span>
+            <input type="checkbox" checked={personalization} onChange={(event) => setPersonalization(event.target.checked)} className="h-4 w-4" />
+          </label>
+          <div className="border-t border-aidev-border pt-3">
+            <p className="mb-2 text-sm font-medium text-aidev-foreground">站内通知</p>
+            <div className="grid gap-2 sm:grid-cols-2">
+              {Object.entries(notificationPrefs).map(([key, enabled]) => (
+                <label key={key} className="flex items-center gap-2 text-sm text-aidev-muted-foreground">
+                  <input type="checkbox" checked={enabled} onChange={(event) => setNotificationPrefs((current) => ({ ...current, [key]: event.target.checked }))} />
+                  {{ replyEnabled: "回复", upvoteEnabled: "点赞", acceptedEnabled: "采纳", rewardEnabled: "打赏", reputationEnabled: "声望", systemEnabled: "系统" }[key] || key}
+                </label>
+              ))}
+            </div>
           </div>
         </div>
 

@@ -42,6 +42,8 @@ class AIAnswer(Base):
     model_name: Mapped[str] = mapped_column(String(100), nullable=False, default="")
     # Token 用量统计
     token_usage: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
+    corrected_by_reply_id: Mapped[str | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+    prompt_version: Mapped[str] = mapped_column(String(50), nullable=False, default="answer-v1")
     # 创建时间
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()

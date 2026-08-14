@@ -16,6 +16,7 @@ class ReplyCreate(BaseModel):
 
     content: str = Field(min_length=1)
     parent_id: str | None = None
+    target_ai_answer_id: str | None = None
     kind: Literal["supplement", "correction", "discussion"] = "discussion"
 
 
@@ -26,7 +27,9 @@ class ReplyItem(BaseModel):
 
     id: UUID
     post_id: UUID
+    author_id: UUID
     parent_id: UUID | None = None
+    target_ai_answer_id: UUID | None = None
     content: str
     kind: str
     vote_count: int

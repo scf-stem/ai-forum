@@ -14,6 +14,11 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
+PROMPT_INSTRUCTIONS = {
+    "answer-v1": "保持简洁，直击要点，不要过多寒暄",
+    "answer-v2-citations": "先核对来源能否支持每项事实；无法由来源支持的事实必须明确标为推测。保持简洁，不要寒暄",
+}
+
 # API 调用失败时的降级文案
 DEGRADED_ANSWER = (
     "抱歉，AI 答案生成服务暂时不可用。请稍后重试，或等待社区成员补充答案。\n\n"
@@ -27,7 +32,7 @@ client = AsyncOpenAI(
 )
 
 
-def build_system_prompt(sources: list[dict]) -> str:
+def build_system_prompt(sources: list[dict], prompt_version: str | None = None) -> str:
     """构建包含检索上下文的 system prompt。
 
     将 sources 列表格式化为文本，引导模型生成带来源标注的 Markdown 答案。
@@ -51,6 +56,9 @@ def build_system_prompt(sources: list[dict]) -> str:
     else:
         formatted_sources = "（无可用检索上下文）"
 
+    version = prompt_version or settings.AI_PROMPT_VERSION
+    if version not in PROMPT_INSTRUCTIONS:
+        raise ValueError(f"未知 Prompt 版本：{version}")
     return f"""你是一个 AI 技术问答助手，为开发者社区生成准确、结构化的技术答案。
 
 请基于以下检索上下文生成答案：
@@ -62,7 +70,7 @@ def build_system_prompt(sources: list[dict]) -> str:
 2. 在答案末尾以 ## 来源 标题列出引用的来源（标注来源类型和标题）
 3. 如果检索上下文不足以回答问题，基于通识生成但明确标注"以下内容基于 AI 通识生成，未经权威来源验证"
 4. 使用中文回答
-5. 保持简洁，直击要点，不要过多寒暄"""
+5. {PROMPT_INSTRUCTIONS[version]}"""
 
 
 async def generate_answer_stream(
@@ -100,7 +108,7 @@ async def generate_answer_stream(
 
 
 async def generate_answer(
-    title: str, content: str, sources: list[dict]
+    title: str, content: str, sources: list[dict], prompt_version: str | None = None,
 ) -> tuple[str, dict]:
     """非流式生成 AI 答案（流式不可用时降级使用）。
 
@@ -109,7 +117,7 @@ async def generate_answer(
     调用失败时返回降级文案与全零的 token 统计。
     """
     messages = [
-        {"role": "system", "content": build_system_prompt(sources)},
+        {"role": "system", "content": build_system_prompt(sources, prompt_version)},
         {"role": "user", "content": f"帖子标题：{title}\n\n帖子内容：{content}"},
     ]
 
@@ -136,10 +144,30 @@ async def generate_answer(
             "completion_tokens": 0,
             "total_tokens": 0,
         }
-    except Exception:  # noqa: BLE001 - 兜底捕获所有未知异常，保证调用方不中断
+    except Exception:  # noqa: BLE001 - 兜底捕获未知异常，保证调用方不中断
         logger.exception("DeepSeek 非流式答案生成出现未知异常")
         return DEGRADED_ANSWER, {
             "prompt_tokens": 0,
             "completion_tokens": 0,
             "total_tokens": 0,
         }
+
+
+async def generate_specialized(system_prompt: str, user_content: str,
+                               max_tokens: int = 1200) -> tuple[str, dict]:
+    """Run a non-streaming, versioned helper prompt and surface failures to callers."""
+    if not settings.DEEPSEEK_API_KEY:
+        raise RuntimeError("AI 服务未配置")
+    response = await client.chat.completions.create(
+        model=settings.DEEPSEEK_MODEL,
+        messages=[{"role": "system", "content": system_prompt},
+                  {"role": "user", "content": user_content}],
+        stream=False, temperature=0.2, max_tokens=max_tokens,
+    )
+    content = response.choices[0].message.content or ""
+    usage = response.usage
+    return content, {
+        "prompt_tokens": usage.prompt_tokens if usage else 0,
+        "completion_tokens": usage.completion_tokens if usage else 0,
+        "total_tokens": usage.total_tokens if usage else 0,
+    }

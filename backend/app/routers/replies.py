@@ -14,8 +14,14 @@ from app.models.post import Post
 from app.models.reply import Reply
 from app.models.user import User
 from app.models.vote import Vote
+from app.models.ai_answer import AIAnswer
 from app.schemas.post import AuthorBrief
 from app.schemas.reply import ReplyCreate, ReplyItem
+from app.services.community_service import (create_notification, deactivate_index,
+    index_content, reverse_active_reputation)
+from app.services.community_service import restore_ai_answer_if_allowed
+from app.services.growth_service import record_event
+from app.routers.notifications import push_notification
 
 router = APIRouter()
 
@@ -41,7 +47,9 @@ async def _build_reply_item(
     return ReplyItem(
         id=str(reply.id),
         post_id=str(reply.post_id),
+        author_id=str(reply.author_id),
         parent_id=str(reply.parent_id) if reply.parent_id else None,
+        target_ai_answer_id=str(reply.target_ai_answer_id) if reply.target_ai_answer_id else None,
         content=reply.content,
         kind=reply.kind,
         vote_count=reply.vote_count,
@@ -195,6 +203,15 @@ async def create_reply(
 
     parent_reply: Reply | None = None
     kind = payload.kind
+    target_ai_answer_id = None
+    if payload.target_ai_answer_id is not None:
+        ai_answer = (await db.execute(select(AIAnswer).where(
+            AIAnswer.id == payload.target_ai_answer_id,
+            AIAnswer.post_id == post.id,
+        ))).scalar_one_or_none()
+        if ai_answer is None:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="AI 答案不属于当前帖子")
+        target_ai_answer_id = ai_answer.id
 
     if payload.parent_id is not None:
         # 校验 parent 回复存在且属于当前帖子
@@ -226,6 +243,7 @@ async def create_reply(
     reply = Reply(
         post_id=post.id,
         parent_id=parent_reply.id if parent_reply else None,
+        target_ai_answer_id=target_ai_answer_id,
         author_id=user.id,
         content=payload.content,
         kind=kind,
@@ -233,7 +251,15 @@ async def create_reply(
     db.add(reply)
     # 同步更新帖子回复数
     post.reply_count = (post.reply_count or 0) + 1
+    recipient_id = parent_reply.author_id if parent_reply else post.author_id
+    notification = await create_notification(
+        db, user_id=recipient_id, type="reply", actor_id=user.id, post_id=post.id,
+        title=f"{user.username} 回复了你的内容", body=payload.content[:200],
+    )
+    await record_event(db, event_name="reply_created", user_id=user.id, post_id=post.id,
+                       board_id=post.board_id, properties={"kind": kind})
     await db.commit()
+    await push_notification(notification)
     await db.refresh(reply)
 
     return await _build_reply_item(reply, user, None)
@@ -264,6 +290,22 @@ async def delete_reply(
     post = post_result.scalar_one_or_none()
     if post is not None and post.reply_count > 0:
         post.reply_count -= 1
+    if reply.is_accepted and post is not None:
+        reply.is_accepted = False
+        post.accepted_reply_id = None
+        await deactivate_index(db, "accepted_reply", reply.id)
+        for reason in ("answer_accepted", "correction_verified", "onboarding_help"):
+            await reverse_active_reputation(db, user_id=reply.author_id, reason=reason,
+                                            ref_type="reply", ref_id=reply.id)
+        ai_answer = (await db.execute(select(AIAnswer).where(
+            AIAnswer.post_id == post.id))).scalar_one_or_none()
+        if ai_answer and ai_answer.corrected_by_reply_id and str(ai_answer.corrected_by_reply_id) == str(reply.id):
+            ai_answer.corrected_by_reply_id = None
+            restored = await restore_ai_answer_if_allowed(db, ai_answer)
+            if restored and ai_answer.confidence == "high":
+                await index_content(db, source_type="high_confidence_ai_answer",
+                                    source_id=ai_answer.id, post=post,
+                                    content=ai_answer.content, quality_score=50)
 
     await db.commit()
     return {"detail": "回复已删除"}

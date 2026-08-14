@@ -155,10 +155,20 @@ export async function apiGet<T>(
 /** POST 请求 */
 export async function apiPost<T>(
   url: string,
-  body?: unknown
+  body?: unknown,
+  headers?: HeadersInit
 ): Promise<T> {
   return request<T>(url, {
     method: "POST",
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+    headers,
+  });
+}
+
+/** PUT 请求 */
+export async function apiPut<T>(url: string, body?: unknown): Promise<T> {
+  return request<T>(url, {
+    method: "PUT",
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 }

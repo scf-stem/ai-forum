@@ -28,6 +28,9 @@ class Reply(Base):
     parent_id: Mapped[str | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("replies.id"), nullable=True
     )
+    target_ai_answer_id: Mapped[str | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("ai_answers.id", ondelete="SET NULL"), nullable=True
+    )
     # 作者 ID：关联 users 表
     author_id: Mapped[str] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.id"), nullable=False

@@ -4,7 +4,7 @@
 """
 from datetime import datetime
 
-from sqlalchemy import DateTime, Index, String, Text
+from sqlalchemy import Boolean, DateTime, Index, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
@@ -35,6 +35,12 @@ class User(Base):
     tech_stack: Mapped[list] = mapped_column(JSONB, nullable=False, default=list)
     # 个人简介
     bio: Mapped[str | None] = mapped_column(Text, nullable=True)
+    reputation: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    level: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    points_balance: Mapped[int] = mapped_column(Integer, nullable=False, default=100)
+    is_admin: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    is_system: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    personalization_enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     # 创建时间：带时区
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()

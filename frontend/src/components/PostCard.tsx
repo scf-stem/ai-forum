@@ -11,6 +11,7 @@ import { cn, formatCount, formatRelativeTime, getAvatarColor, getInitials } from
  */
 interface PostCardProps {
   post: PostListItem;
+  onOpen?: (post: PostListItem) => void;
 }
 
 /** 帖子类型标签：提问=橙色，分享=蓝色 */
@@ -65,7 +66,7 @@ function Avatar({ username, avatar }: { username: string; avatar: string | null 
   );
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, onOpen }: PostCardProps) {
   return (
     <article className="rounded-lg border border-aidev-border bg-aidev-card p-4 shadow-sm transition hover:shadow-md sm:p-5">
       {post.isFolded ? (
@@ -87,12 +88,14 @@ export function PostCard({ post }: PostCardProps) {
                 #{tag}
               </span>
             ))}
+            {post.recommendationReason && <span className="ml-auto text-xs text-aidev-primary">✨ {post.recommendationReason}</span>}
           </div>
 
           {/* 标题 */}
           <h3 className="text-base font-semibold leading-snug">
             <Link
               href={`/posts/${post.id}`}
+              onClick={() => onOpen?.(post)}
               className="text-aidev-foreground transition hover:text-aidev-primary"
             >
               {post.title}

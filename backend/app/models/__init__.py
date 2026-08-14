@@ -43,6 +43,17 @@ from app.models.reply import Reply  # noqa: E402, F401
 from app.models.vote import Vote  # noqa: E402, F401
 from app.models.report import Report  # noqa: E402, F401
 from app.models.ai_answer import AIAnswer  # noqa: E402, F401
+from app.models.community import (  # noqa: E402, F401
+    AIAnswerFeedback, Notification, NotificationPreference, ReputationLog,
+    SearchDocument, UserBadge,
+)
+from app.models.growth import (  # noqa: E402, F401
+    AIFollowUp, AnalyticsEvent, ContentReward, PointLedger, PostSimilarity,
+)
+from app.models.ops import (  # noqa: E402, F401
+    BackgroundJob, CrawlItem, CrawlSource, DailyMetric, EvaluationCase,
+    EvaluationResult, EvaluationReview, EvaluationRun, SeedInvitation,
+)
 
 __all__ = [
     "Base",
@@ -53,4 +64,10 @@ __all__ = [
     "Vote",
     "Report",
     "AIAnswer",
+    "ReputationLog", "UserBadge", "SearchDocument", "Notification",
+    "NotificationPreference", "AIAnswerFeedback", "PointLedger",
+    "ContentReward", "AnalyticsEvent", "PostSimilarity", "AIFollowUp",
+    "BackgroundJob", "CrawlSource", "CrawlItem", "SeedInvitation",
+    "DailyMetric", "EvaluationCase", "EvaluationRun", "EvaluationResult",
+    "EvaluationReview",
 ]

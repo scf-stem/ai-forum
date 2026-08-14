@@ -12,6 +12,9 @@ from app.models.board import Board
 from app.models.post import Post
 from app.models.reply import Reply
 from app.models.user import User
+from app.models.community import ReputationLog, UserBadge
+from app.models.growth import ContentReward
+from app.models.vote import Vote
 from app.routers.boards import _build_post_list_item
 from app.schemas.auth import UserPublic
 from app.schemas.post import PostListItem
@@ -58,7 +61,50 @@ async def _get_user_by_username(username: str, db: AsyncSession) -> User:
 async def get_user_profile(username: str, db: AsyncSession = Depends(get_db)) -> UserProfile:
     """返回用户公开资料（游客可访问）。"""
     user = await _get_user_by_username(username, db)
-    return UserProfile.model_validate(user)
+    badges = (await db.execute(select(UserBadge).where(UserBadge.user_id == user.id)
+                               .order_by(UserBadge.awarded_at.desc()))).scalars().all()
+    accepted_count = (await db.execute(select(func.count()).select_from(Reply).where(
+        Reply.author_id == user.id, Reply.is_accepted.is_(True)))).scalar_one()
+    post_upvotes = (await db.execute(select(func.count()).select_from(Vote).join(
+        Post, Vote.target_id == Post.id).where(Vote.target_type == "post",
+        Vote.direction == "up", Post.author_id == user.id))).scalar_one()
+    reply_upvotes = (await db.execute(select(func.count()).select_from(Vote).join(
+        Reply, Vote.target_id == Reply.id).where(Vote.target_type == "reply",
+        Vote.direction == "up", Reply.author_id == user.id))).scalar_one()
+    return UserProfile(
+        id=user.id, username=user.username, avatar=user.avatar, role=user.role,
+        tech_stack=user.tech_stack or [], bio=user.bio, created_at=user.created_at,
+        last_active_at=user.last_active_at, reputation=user.reputation, level=user.level,
+        points_balance=user.points_balance,
+        badges=[{"code": item.badge_code, "metadata": item.metadata_json,
+                 "awarded_at": item.awarded_at.isoformat()} for item in badges],
+        received_upvotes=post_upvotes + reply_upvotes, accepted_count=accepted_count,
+    )
+
+
+@router.get("/me/reputation")
+async def my_reputation(page: int = Query(1, ge=1), page_size: int = Query(20, ge=1, le=100),
+                        user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)) -> dict:
+    total = (await db.execute(select(func.count()).select_from(ReputationLog).where(
+        ReputationLog.user_id == user.id))).scalar_one()
+    items = (await db.execute(select(ReputationLog).where(ReputationLog.user_id == user.id)
+        .order_by(ReputationLog.created_at.desc()).offset((page - 1) * page_size)
+        .limit(page_size))).scalars().all()
+    return {"items": items, "total": total, "page": page, "page_size": page_size,
+            "has_more": page * page_size < total}
+
+
+@router.get("/me/rewards")
+async def my_rewards(direction: str = Query("received", pattern="^(received|sent)$"),
+                     page: int = Query(1, ge=1), page_size: int = Query(20, ge=1, le=100),
+                     user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)) -> dict:
+    field = ContentReward.to_user_id if direction == "received" else ContentReward.from_user_id
+    total = (await db.execute(select(func.count()).select_from(ContentReward).where(field == user.id))).scalar_one()
+    items = (await db.execute(select(ContentReward).where(field == user.id)
+        .order_by(ContentReward.created_at.desc()).offset((page - 1) * page_size)
+        .limit(page_size))).scalars().all()
+    return {"items": items, "total": total, "direction": direction,
+            "page": page, "page_size": page_size, "has_more": page * page_size < total}
 
 
 @router.get("/{username}/posts")

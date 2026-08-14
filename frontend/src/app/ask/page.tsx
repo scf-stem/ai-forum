@@ -37,6 +37,10 @@ function AskContent() {
   const [type, setType] = useState<PostType>("question");
   const [tagsInput, setTagsInput] = useState("");
   const [content, setContent] = useState("");
+  const [summary, setSummary] = useState<string | null>(null);
+  const [similar, setSimilar] = useState<Array<{ postId: string; title: string; snippet: string }>>([]);
+  const [assistResult, setAssistResult] = useState<{ action: string; content?: string | null; tags?: string[] } | null>(null);
+  const [assisting, setAssisting] = useState(false);
 
   const [boards, setBoards] = useState<BoardsResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -71,6 +75,7 @@ function AskContent() {
         setType(data.type);
         setTagsInput(data.tags.join(", "));
         setContent(data.content);
+        setSummary(data.summary);
       })
       .catch((err) => {
         setError(
@@ -79,6 +84,43 @@ function AskContent() {
       })
       .finally(() => setLoading(false));
   }, [editId, token]);
+
+  useEffect(() => {
+    if (title.trim().length < 10) {
+      setSimilar([]);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      apiGet<{ items: Array<{ postId: string; title: string; snippet: string }> }>("/api/posts/similar", {
+        title: title.trim(), content: content.slice(0, 500), tags: tagsInput,
+        exclude_post_id: editId || undefined,
+      }).then((data) => setSimilar(data.items)).catch(() => setSimilar([]));
+    }, 450);
+    return () => window.clearTimeout(timer);
+  }, [title, content, tagsInput, editId]);
+
+  async function runAssist(action: "polish" | "format_code" | "summarize" | "suggest_tags") {
+    setAssisting(true);
+    setError(null);
+    try {
+      const result = await apiPost<{ action: string; content: string | null; tags: string[] }>("/api/ai/writing-assist", {
+        action, title, content,
+      });
+      setAssistResult(result);
+    } catch (err) {
+      setError(err instanceof ApiRequestError ? err.message : "AI 写作辅助暂不可用");
+    } finally {
+      setAssisting(false);
+    }
+  }
+
+  function applyAssist() {
+    if (!assistResult) return;
+    if (assistResult.action === "suggest_tags") setTagsInput((assistResult.tags || []).join(", "));
+    else if (assistResult.action === "summarize") setSummary(assistResult.content || null);
+    else if (assistResult.content) setContent(assistResult.content);
+    setAssistResult(null);
+  }
 
   /** 解析标签输入：逗号分隔，去空格去重 */
   function parseTags(input: string): string[] {
@@ -119,6 +161,7 @@ function AskContent() {
         board_id: boardId,
         type,
         tags: parseTags(tagsInput),
+        summary,
       };
 
       if (isEditMode && editId) {
@@ -127,6 +170,7 @@ function AskContent() {
           title: payload.title,
           content: payload.content,
           tags: payload.tags,
+          summary: payload.summary,
         });
         router.push(`/posts/${data.id}`);
       } else {
@@ -176,6 +220,16 @@ function AskContent() {
             required
           />
         </div>
+
+        {/* 版块 + 类型 */}
+        {similar.length > 0 && !isEditMode && (
+          <aside className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+            <p className="text-sm font-medium text-amber-900">发布前看看这些相似问题</p>
+            <ul className="mt-2 space-y-1 text-sm">
+              {similar.map((item) => <li key={item.postId}><a className="text-aidev-primary hover:underline" href={`/posts/${item.postId}`} target="_blank">{item.title}</a></li>)}
+            </ul>
+          </aside>
+        )}
 
         {/* 版块 + 类型 */}
         <div className="grid gap-4 sm:grid-cols-2">
@@ -266,6 +320,23 @@ function AskContent() {
             placeholder="详细描述你的问题或分享内容（至少 10 个字符）…"
             rows={12}
           />
+        </div>
+
+        {/* 错误提示 */}
+        <div className="rounded-lg border border-aidev-border bg-aidev-card p-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-medium text-aidev-foreground">AI 写作辅助</span>
+            {([['polish', '润色'], ['format_code', '整理代码块'], ['summarize', '生成摘要'], ['suggest_tags', '建议标签']] as const).map(([action, label]) => (
+              <button key={action} type="button" disabled={assisting || content.length === 0} onClick={() => runAssist(action)} className="rounded-md border border-aidev-border px-3 py-1.5 text-xs text-aidev-foreground hover:bg-aidev-muted disabled:opacity-50">{label}</button>
+            ))}
+          </div>
+          {assistResult && (
+            <div className="mt-3 rounded-md bg-aidev-muted p-3 text-sm">
+              <pre className="max-h-48 whitespace-pre-wrap font-sans text-aidev-foreground">{assistResult.content || (assistResult.tags || []).join(", ")}</pre>
+              <div className="mt-2 flex gap-2"><button type="button" onClick={applyAssist} className="rounded bg-aidev-primary px-3 py-1 text-white">应用结果</button><button type="button" onClick={() => setAssistResult(null)} className="px-3 py-1 text-aidev-muted-foreground">放弃</button></div>
+            </div>
+          )}
+          {summary && <p className="mt-2 text-xs text-aidev-muted-foreground">已应用摘要：{summary}</p>}
         </div>
 
         {/* 错误提示 */}

@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/auth-context";
 import {
   apiGet,
   apiPost,
+  apiPut,
   apiDelete,
   ApiRequestError,
 } from "@/lib/api";
@@ -55,12 +56,14 @@ export default function PostDetailPage() {
   const [replyPage, setReplyPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<Array<{ postId: string; title: string }>>([]);
 
   // 回复输入
   const [mainReplyContent, setMainReplyContent] = useState("");
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [subReplyContents, setSubReplyContents] = useState<Record<string, string>>({});
   const [submittingReply, setSubmittingReply] = useState(false);
+  const [mainReplyKind, setMainReplyKind] = useState<"supplement" | "correction" | "discussion">("supplement");
 
   // 折叠的回复（点击展开）
   const [expandedFolded, setExpandedFolded] = useState<Set<string>>(new Set());
@@ -78,6 +81,10 @@ export default function PostDetailPage() {
     try {
       const data = await apiGet<PostDetail>(`/api/posts/${postId}`);
       setPost(data);
+      apiGet<{ items: Array<{ postId: string; title: string }> }>("/api/posts/similar", {
+        title: data.title, content: data.content.slice(0, 500), tags: data.tags.join(","),
+        exclude_post_id: data.id,
+      }).then((result) => setRelatedPosts(result.items)).catch(() => undefined);
     } catch (err) {
       setError(
         err instanceof ApiRequestError ? err.message : "加载帖子失败"
@@ -94,7 +101,7 @@ export default function PostDetailPage() {
           { page, page_size: 20 }
         );
         // 按 vote_count 降序排列
-        const sorted = [...data.items].sort((a, b) => b.voteCount - a.voteCount);
+        const sorted = [...data.items].sort((a, b) => Number(b.isAccepted) - Number(a.isAccepted) || b.voteCount - a.voteCount);
         setReplies(sorted);
         setReplyTotal(data.total);
       } catch {
@@ -128,6 +135,8 @@ export default function PostDetailPage() {
       await apiPost<Reply>(`/api/posts/${postId}/replies`, {
         content: content.trim(),
         parent_id: parentId || undefined,
+        kind: parentId ? "discussion" : mainReplyKind,
+        target_ai_answer_id: !parentId && mainReplyKind !== "discussion" ? post?.aiAnswer?.id : undefined,
       });
       // 清空输入
       if (parentId) {
@@ -145,6 +154,24 @@ export default function PostDetailPage() {
     } finally {
       setSubmittingReply(false);
     }
+  }
+
+  async function handleAccept(replyId: string | null) {
+    await apiPut(`/api/posts/${postId}/accepted-reply`, { reply_id: replyId });
+    await Promise.all([fetchPost(), fetchReplies(replyPage)]);
+  }
+
+  async function handleReward(targetType: "post" | "reply", targetId: string) {
+    if (!token) {
+      router.push(`/auth?mode=login&redirect=/posts/${postId}`);
+      return;
+    }
+    const raw = window.prompt("打赏积分（1-500）", "10");
+    if (!raw) return;
+    const amount = Number(raw);
+    if (!Number.isInteger(amount) || amount < 1 || amount > 500) return;
+    await apiPost("/api/rewards", { target_type: targetType, target_id: targetId, amount },
+      { "Idempotency-Key": crypto.randomUUID() });
   }
 
   /** 删除帖子 */
@@ -359,13 +386,16 @@ export default function PostDetailPage() {
                 </>
               )}
               {!isAuthor && (
-                <button
-                  type="button"
-                  className="inline-flex items-center rounded-md border border-aidev-border px-3 py-1.5 text-sm text-aidev-foreground transition hover:bg-aidev-muted"
-                  onClick={() => setReportTarget({ type: "post", id: post.id })}
-                >
-                  举报
-                </button>
+                <>
+                  <button type="button" className="inline-flex items-center rounded-md border border-aidev-border px-3 py-1.5 text-sm text-aidev-foreground transition hover:bg-aidev-muted" onClick={() => handleReward("post", post.id)}>打赏积分</button>
+                  <button
+                    type="button"
+                    className="inline-flex items-center rounded-md border border-aidev-border px-3 py-1.5 text-sm text-aidev-foreground transition hover:bg-aidev-muted"
+                    onClick={() => setReportTarget({ type: "post", id: post.id })}
+                  >
+                    举报
+                  </button>
+                </>
               )}
             </div>
           </article>
@@ -376,6 +406,7 @@ export default function PostDetailPage() {
               postId={post.id}
               initialAIAnswer={post.aiAnswer}
               isAuthor={isAuthor}
+              correctedReply={replies.find((reply) => reply.id === post.aiAnswer?.correctedByReplyId)}
             />
           )}
 
@@ -394,6 +425,11 @@ export default function PostDetailPage() {
                   placeholder="写下你的回复…"
                   rows={4}
                 />
+                <div className="flex flex-wrap gap-2">
+                  {([['supplement', '补充答案'], ['correction', '纠错 AI'], ['discussion', '参与讨论']] as const).map(([value, label]) => (
+                    <button key={value} type="button" onClick={() => setMainReplyKind(value)} className={cn("rounded-full px-3 py-1 text-xs", mainReplyKind === value ? "bg-aidev-primary text-white" : "bg-aidev-muted text-aidev-muted-foreground")}>{label}</button>
+                  ))}
+                </div>
                 <div className="flex justify-end">
                   <button
                     type="button"
@@ -439,6 +475,9 @@ export default function PostDetailPage() {
                     submittingReply={submittingReply}
                     onDeleteReply={(id) => setDeleteConfirm(id)}
                     onReport={(id) => setReportTarget({ type: "reply", id })}
+                    canAccept={Boolean(isAuthor && reply.authorId !== currentUser?.id && reply.parentId === null && reply.kind !== "discussion")}
+                    onAccept={() => handleAccept(reply.isAccepted ? null : reply.id)}
+                    onReward={(id) => handleReward("reply", id)}
                   />
                 ))}
 
@@ -459,6 +498,12 @@ export default function PostDetailPage() {
               </div>
             )}
           </section>
+          {relatedPosts.length > 0 && (
+            <section className="rounded-lg border border-aidev-border bg-aidev-card p-5">
+              <h2 className="mb-3 text-title text-aidev-foreground">相关问题</h2>
+              <ul className="space-y-2 text-sm">{relatedPosts.map((item) => <li key={item.postId}><Link className="text-aidev-primary hover:underline" href={`/posts/${item.postId}`}>{item.title}</Link></li>)}</ul>
+            </section>
+          )}
         </div>
 
         {/* 右栏：作者信息卡 */}
@@ -592,6 +637,9 @@ interface ReplyItemProps {
   submittingReply: boolean;
   onDeleteReply: (id: string) => void;
   onReport: (id: string) => void;
+  canAccept: boolean;
+  onAccept: () => void;
+  onReward: (id: string) => void;
 }
 
 function ReplyItem({
@@ -607,6 +655,9 @@ function ReplyItem({
   submittingReply,
   onDeleteReply,
   onReport,
+  canAccept,
+  onAccept,
+  onReward,
 }: ReplyItemProps) {
   const isAuthor = currentUserId === reply.authorId;
   const isFolded = reply.isFolded && !expandedFolded.has(reply.id);
@@ -681,6 +732,14 @@ function ReplyItem({
           >
             回复
           </button>
+          {canAccept && (
+            <button type="button" className="text-caption font-medium text-green-700 hover:underline" onClick={onAccept}>
+              {reply.isAccepted ? "取消采纳" : "采纳"}
+            </button>
+          )}
+          {!isAuthor && (
+            <button type="button" className="text-caption text-aidev-muted-foreground hover:text-aidev-primary" onClick={() => onReward(reply.id)}>打赏</button>
+          )}
           {isAuthor && (
             <button
               type="button"

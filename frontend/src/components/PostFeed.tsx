@@ -8,6 +8,7 @@ import { PostCard } from "./PostCard";
 import { Pagination } from "./Pagination";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { EmptyState } from "./EmptyState";
+import { trackEvents } from "@/lib/analytics";
 
 /**
  * 帖子列表流：封装排序切换、分页、加载/空状态。
@@ -27,9 +28,10 @@ interface PostFeedProps {
   emptyMessage?: string;
   /** 每页条数 */
   pageSize?: number;
+  feedModes?: boolean;
 }
 
-type SortMode = "latest" | "hot";
+type SortMode = "for_you" | "latest" | "hot";
 
 export function PostFeed({
   apiPath,
@@ -38,11 +40,13 @@ export function PostFeed({
   showSortToggle = true,
   emptyMessage = "还没有内容",
   pageSize = 20,
+  feedModes = false,
 }: PostFeedProps) {
   const [posts, setPosts] = useState<PostListItem[]>(initialPosts ?? []);
   const [total, setTotal] = useState<number>(initialTotal ?? 0);
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<SortMode>("hot");
+  const [sort, setSort] = useState<SortMode>(feedModes ? "for_you" : "hot");
+  const [trackingStrategy, setTrackingStrategy] = useState<string>(feedModes ? "cold_start" : "hot");
   const [loading, setLoading] = useState(!initialPosts);
   const [error, setError] = useState<string | null>(null);
 
@@ -52,13 +56,14 @@ export function PostFeed({
       setLoading(true);
       setError(null);
       try {
-        const data = await apiGet<PaginatedResponse<PostListItem>>(apiPath, {
+        const data = await apiGet<PaginatedResponse<PostListItem> & { strategy?: string }>(apiPath, {
           page: targetPage,
           page_size: pageSize,
-          sort: targetSort,
+          ...(feedModes ? { mode: targetSort } : { sort: targetSort }),
         });
         setPosts(data.items);
         setTotal(data.total);
+        if (data.strategy) setTrackingStrategy(data.strategy);
       } catch (err) {
         if (err instanceof ApiRequestError) {
           setError(err.message);
@@ -69,7 +74,7 @@ export function PostFeed({
         setLoading(false);
       }
     },
-    [apiPath, pageSize]
+    [apiPath, pageSize, feedModes]
   );
 
   // 初始数据为空时客户端获取（如版块页）
@@ -96,6 +101,14 @@ export function PostFeed({
     // 滚动到顶部
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  useEffect(() => {
+    if (!feedModes || posts.length === 0) return;
+    trackEvents(posts.slice(0, 20).map((post, index) => ({
+      eventName: "post_impression", postId: post.id, boardId: post.board.id,
+      properties: { position: index + 1, strategy: trackingStrategy },
+    })));
+  }, [posts, trackingStrategy, feedModes]);
 
   // 加载中
   if (loading) {
@@ -134,7 +147,7 @@ export function PostFeed({
       {/* 排序切换 */}
       {showSortToggle && (
         <div className="flex items-center gap-1" role="tablist" aria-label="排序方式">
-          {(["hot", "latest"] as SortMode[]).map((mode) => (
+          {((feedModes ? ["for_you", "hot", "latest"] : ["hot", "latest"]) as SortMode[]).map((mode) => (
             <button
               key={mode}
               type="button"
@@ -148,7 +161,7 @@ export function PostFeed({
               )}
               onClick={() => handleSortChange(mode)}
             >
-              {mode === "hot" ? "热门" : "最新"}
+              {mode === "for_you" ? "为你推荐" : mode === "hot" ? "热门" : "最新"}
             </button>
           ))}
         </div>
@@ -157,7 +170,10 @@ export function PostFeed({
       {/* 帖子列表 */}
       <div className="space-y-3">
         {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post.id} post={post} onOpen={feedModes ? (item) => trackEvents([{
+            eventName: "post_open", postId: item.id, boardId: item.board.id,
+            properties: { strategy: trackingStrategy },
+          }]) : undefined} />
         ))}
       </div>
 

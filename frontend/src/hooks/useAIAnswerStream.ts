@@ -64,6 +64,11 @@ function createGeneratingPlaceholder(prev: AIAnswer | null): AIAnswer {
     status: "generating",
     modelName: prev?.modelName ?? "",
     tokenUsage: {},
+    correctedByReplyId: null,
+    promptVersion: prev?.promptVersion ?? "answer-v1",
+    myFeedback: null,
+    helpfulCount: prev?.helpfulCount ?? 0,
+    notHelpfulCount: prev?.notHelpfulCount ?? 0,
     createdAt: prev?.createdAt ?? now,
     updatedAt: now,
   };

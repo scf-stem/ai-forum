@@ -7,7 +7,6 @@ import asyncio
 import logging
 
 from sqlalchemy import select, update
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.database import AsyncSessionLocal
@@ -16,6 +15,7 @@ from app.models.post import Post
 from app.routers.ws import manager as ws_manager
 from app.services.ai_service import DEGRADED_ANSWER, generate_answer_stream
 from app.services.retrieval_service import RetrievalService
+from app.services.community_service import index_content
 
 logger = logging.getLogger(__name__)
 
@@ -74,9 +74,15 @@ async def generate_ai_answer_background(post_id: str, ai_answer_id: str):
                     confidence=confidence,
                     retrieval_path=retrieval_path,
                     model_name=settings.DEEPSEEK_MODEL,
+                    prompt_version=settings.AI_PROMPT_VERSION,
                     token_usage={},
                 )
             )
+            stored_post = (await session.execute(select(Post).where(Post.id == post_id))).scalar_one()
+            if confidence == "high":
+                await index_content(session, source_type="high_confidence_ai_answer",
+                                    source_id=ai_answer_id, post=stored_post,
+                                    content=full_content, quality_score=50)
             await session.commit()
 
         # 6. 推送完成事件
@@ -107,6 +113,7 @@ async def generate_ai_answer_background(post_id: str, ai_answer_id: str):
                         content=DEGRADED_ANSWER,
                         confidence="low",
                         model_name=settings.DEEPSEEK_MODEL,
+                        prompt_version=settings.AI_PROMPT_VERSION,
                     )
                 )
                 await session.commit()

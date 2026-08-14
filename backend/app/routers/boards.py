@@ -106,6 +106,11 @@ def _build_post_list_item(post: Post, user: User, board: Board) -> PostListItem:
         view_count=post.view_count,
         reply_count=post.reply_count,
         is_folded=post.is_folded,
+        summary=post.summary,
+        accepted_reply_id=post.accepted_reply_id,
+        origin_type=post.origin_type,
+        source_url=post.source_url,
+        source_title=post.source_title,
         created_at=post.created_at,
         updated_at=post.updated_at,
         author=AuthorBrief(
