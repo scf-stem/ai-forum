@@ -201,6 +201,9 @@ async def create_post(
         await db.flush()  # 获取 server_default 生成的 id
         post.ai_answer_id = ai_answer.id
         await db.commit()
+        # onupdate=func.now() 会使 updated_at 在 UPDATE 后失效，
+        # 需显式 refresh 避免 PostDetail 构造时触发懒加载（async 懒加载会引发 MissingGreenlet）
+        await db.refresh(post)
         # 后台生成 AI 答案，不阻塞帖子发布响应
         schedule_ai_answer_generation(str(post.id), str(ai_answer.id))
 
